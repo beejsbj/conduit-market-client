@@ -3,9 +3,8 @@
 - React - UI Library
 - TypeScript - Language
 
-- Relay - GraphQL Client
-- Radix - Component Library
-- Tailwind + SCSS - Styling
+- Tailwind + PostCSS - Styling
+- HeadlessUI + shadcn - Component Templates
 - Zustand - State Management
 - Zod - Schema Validation
 
@@ -13,3 +12,4 @@
 - ESLint + Prettier + lint-staged - Linting + Formatting
 - Commitlint - Commit Naming Conventions
 - Vitest - Testing Library
+- Storybook - UI Workshop
