@@ -18,6 +18,7 @@
     },
     "imports": {
         "@/": "./src/",
+        "@root/": "./",
         "@babel/plugin-transform-react-jsx-development": "npm:@babel/plugin-transform-react-jsx-development@^7.25.9",
         "@deno/vite-plugin": "npm:@deno/vite-plugin@^1.0.0",
         "@preact/preset-vite": "npm:@preact/preset-vite@^2.9.3",
