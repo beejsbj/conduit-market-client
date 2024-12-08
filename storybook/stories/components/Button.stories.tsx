@@ -1,24 +1,24 @@
-import type { Meta, StoryObj } from '@storybook/react';
-import Button from '@/components/Button';
+import type { Meta, StoryObj } from "@storybook/react";
+import Button from "@/components/Button";
 
 const meta: Meta<typeof Button> = {
-  title: 'Components/Button',
+  title: "Components/Button",
   component: Button,
-  tags: ['autodocs'],
+  tags: ["autodocs"],
   argTypes: {
     variant: {
-      control: { type: 'select' },
-      options: ['primary', 'secondary', 'outline'],
+      control: { type: "select" },
+      options: ["primary", "secondary", "outline"],
     },
     size: {
-      control: { type: 'select' },
-      options: ['sm', 'md', 'lg'],
+      control: { type: "select" },
+      options: ["sm", "md", "lg"],
     },
     disabled: {
-      control: 'boolean',
+      control: "boolean",
     },
     children: {
-      control: 'text',
+      control: "text",
     },
   },
 };
@@ -28,45 +28,45 @@ type Story = StoryObj<typeof Button>;
 
 export const Primary: Story = {
   args: {
-    variant: 'primary',
-    children: 'Primary Button',
-    size: 'md',
+    variant: "primary",
+    children: "Primary Button",
+    size: "md",
   },
 };
 
 export const Secondary: Story = {
   args: {
-    variant: 'secondary',
-    children: 'Secondary Button',
-    size: 'md',
+    variant: "secondary",
+    children: "Secondary Button",
+    size: "md",
   },
 };
 
 export const Outline: Story = {
   args: {
-    variant: 'outline',
-    children: 'Outline Button',
-    size: 'md',
+    variant: "outline",
+    children: "Outline Button",
+    size: "md",
   },
 };
 
 export const Small: Story = {
   args: {
-    size: 'sm',
-    children: 'Small Button',
+    size: "sm",
+    children: "Small Button",
   },
 };
 
 export const Large: Story = {
   args: {
-    size: 'lg',
-    children: 'Large Button',
+    size: "lg",
+    children: "Large Button",
   },
 };
 
 export const Disabled: Story = {
   args: {
     disabled: true,
-    children: 'Disabled Button',
+    children: "Disabled Button",
   },
 };

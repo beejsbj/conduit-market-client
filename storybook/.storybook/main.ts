@@ -1,4 +1,4 @@
-import path from 'path';
+import path from "path";
 
 /** @type { import('@storybook/react-vite').StorybookConfig } */
 const config = {
@@ -28,10 +28,13 @@ const config = {
     }
 
     // Add the alias, going up to the project root and then into src
-    config.resolve.alias['@'] = path.resolve(__dirname, '../..', 'src');
+    config.resolve.alias["@"] = path.resolve(__dirname, "../..", "src");
 
     // Debug log to verify path
-    console.log('Alias path resolved to:', path.resolve(__dirname, '../..', 'src'));
+    console.log(
+      "Alias path resolved to:",
+      path.resolve(__dirname, "../..", "src"),
+    );
 
     return config;
   },
