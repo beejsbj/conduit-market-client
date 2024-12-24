@@ -7,7 +7,11 @@
         "serve": "deno run --allow-net --allow-read jsr:@std/http@1/file-server dist/"
     },
     "compilerOptions": {
-        "lib": ["ES2020", "DOM", "DOM.Iterable"],
+        "lib": [
+            "ES2020",
+            "DOM",
+            "DOM.Iterable"
+        ],
         "jsx": "react-jsx",
         "jsxImportSource": "react",
         "jsxImportSourceTypes": "@types/react"
@@ -18,18 +22,23 @@
     },
     "imports": {
         "@/": "./src/",
-        "@root/": "./",
         "@babel/plugin-transform-react-jsx-development": "npm:@babel/plugin-transform-react-jsx-development@^7.25.9",
         "@deno/vite-plugin": "npm:@deno/vite-plugin@^1.0.0",
+        "@nostr-dev-kit/ndk": "npm:@nostr-dev-kit/ndk@^2.10.7",
         "@preact/preset-vite": "npm:@preact/preset-vite@^2.9.3",
+        "@root/": "./",
         "@types/react": "npm:@types/react@^18.3.12",
         "@types/react-dom": "npm:@types/react-dom@^18.3.1",
-        "@vitejs/plugin-react-swc": "npm:@vitejs/plugin-react-swc@^3.7.1",
+        "@vitejs/plugin-react-swc": "npm:@vitejs/plugin-react-swc@^3.7.2",
         "autoprefixer": "npm:autoprefixer@^10.4.20",
         "babel-plugin-transform-hook-names": "npm:babel-plugin-transform-hook-names@^1.0.2",
+        "lucide-react": "npm:lucide-react@^0.469.0",
+        "ndk": "npm:ndk@^1.0.0",
+        "nostr-hooks": "npm:nostr-hooks@^4.2.3",
+        "nostr-tools": "npm:nostr-tools@^2.10.4",
         "postcss": "npm:postcss@^8.4.49",
-        "react": "npm:react@^18.3.1",
-        "react-dom": "npm:react-dom@^18.3.1",
+        "react": "npm:react@^19.0.0",
+        "react-dom": "npm:react-dom@^19.0.0",
         "rollup-plugin-visualizer": "npm:rollup-plugin-visualizer@^5.12.0",
         "tailwindcss": "npm:tailwindcss@^3.4.16",
         "vite": "npm:vite@^6.0.1"
