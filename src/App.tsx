@@ -2,8 +2,9 @@
 
 import { useEffect } from "react";
 import { useNdk } from "nostr-hooks";
-import ProductGrid from "@/layouts/ProductGrid.tsx";
-import { CartDrawer } from "@root/src/layouts/CartDrawer.tsx";
+import { ProductExplorerPage } from "./pages/ProductExplorerPage.tsx";
+import { Route, Switch } from "wouter";
+import { ZapoutPage } from "@root/src/pages/ZapoutPage.tsx";
 
 function App() {
   const { initNdk, ndk } = useNdk();
@@ -22,8 +23,11 @@ function App() {
 
   return (
     <>
-      <CartDrawer />
-      <ProductGrid />
+      <Switch>
+        <Route path="/" component={ProductExplorerPage} />
+        <Route path="/zapout" component={ZapoutPage} />
+        <Route path="/checkout" component={ZapoutPage} />
+      </Switch>
     </>
   );
 }

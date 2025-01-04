@@ -2,6 +2,7 @@ import { useCartStore } from "@root/src/store/CartStore.tsx";
 import Button from "@root/src/components/Buttons/Button.tsx";
 import { ShoppingCart } from "lucide-react";
 import { useState } from "react";
+import ZapoutButton from "@/components/Buttons/ZapoutButton.tsx";
 
 export const CartDrawer = () => {
     const { cart, decreaseQuantity, addToCart } = useCartStore();
@@ -11,7 +12,7 @@ export const CartDrawer = () => {
     const handleClose = () => setIsOpen(false);
 
     return (
-        <div>
+        <div className="fixed top-0 right-0 z-50">
             <Button onClick={handleOpen}>
                 <ShoppingCart size={24} />
             </Button>
@@ -24,7 +25,7 @@ export const CartDrawer = () => {
                     <h2 className="text-lg font-bold">Cart</h2>
                     <Button onClick={handleClose}>Close</Button>
                 </header>
-                <div className="p-4">
+                <div className="p-4 flex flex-col gap-4">
                     {cart.map((product) => (
                         <div
                             key={product.id}
@@ -51,6 +52,7 @@ export const CartDrawer = () => {
                             </div>
                         </div>
                     ))}
+                    <ZapoutButton>Zapout!</ZapoutButton>
                 </div>
             </section>
         </div>

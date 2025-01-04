@@ -22,7 +22,9 @@
     "npm:tailwindcss@^3.4.16": "3.4.17_postcss@8.4.49",
     "npm:vite@*": "6.0.5_@types+node@22.5.4",
     "npm:vite@^6.0.1": "6.0.5_@types+node@22.5.4",
-    "npm:zustand@*": "5.0.2_@types+react@18.3.18_react@19.0.0"
+    "npm:wouter@^3.3.5": "3.3.5_react@19.0.0",
+    "npm:zustand@*": "5.0.2_@types+react@18.3.18_react@19.0.0",
+    "npm:zustand@5.0.2": "5.0.2_@types+react@18.3.18_react@19.0.0"
   },
   "npm": {
     "@alloc/quick-lru@5.2.0": {
@@ -1113,6 +1115,9 @@
     "minipass@7.1.2": {
       "integrity": "sha512-qOOzS1cBTWYF4BH8fVePDBOO9iptMnGUEZwNc/cMWnTV2nVLZ7VoNWEPHkYczZA0pdoA7dl6e7FL659nX9S2aw=="
     },
+    "mitt@3.0.1": {
+      "integrity": "sha512-vKivATfr97l2/QBCYAkXYDbrIWPM2IIKEl7YPhjCvKlG3kE2gm+uBo6nEXK3M5/Ffh/FLpKExzOQ3JJoJGFKBw=="
+    },
     "ms@2.0.0": {
       "integrity": "sha512-Tpp60P6IUJDTuOq/5Z8cdskzJujfwqfOTkrwIwj7IRISpnkJnT6SyJ4PCPnGMoFjC9ddhal5KVIYtAt97ix05A=="
     },
@@ -1306,6 +1311,9 @@
       "dependencies": [
         "picomatch"
       ]
+    },
+    "regexparam@3.0.0": {
+      "integrity": "sha512-RSYAtP31mvYLkAHrOlh25pCNQ5hWnT106VukGaaFfuJrZFkGRX5GhUAdPqpSDXxOhA2c4akmRuplv1mRqnBn6Q=="
     },
     "require-directory@2.1.1": {
       "integrity": "sha512-fGxEI7+wsG9xrvdjsrlmL22OMTTiHRwAMroiEeMgq8gzoLC/PQr7RsRDSTLUg/bZAZtF+TVIkHc6/4RIKrui+Q=="
@@ -1515,6 +1523,12 @@
         "picocolors"
       ]
     },
+    "use-sync-external-store@1.4.0_react@19.0.0": {
+      "integrity": "sha512-9WXSPC5fMv61vaupRkCKCxsPxBocVnwakBEkMIHHpkTTg6icbJtg6jzgtLDm4bl3cSHAca52rYWih0k4K3PfHw==",
+      "dependencies": [
+        "react"
+      ]
+    },
     "utf-8-validate@5.0.10": {
       "integrity": "sha512-Z6czzLq4u8fPOyx7TU6X3dvUZVvoJmxSQ+IcrlmagKhilxlhZgxPK6C5Jqbkw1IDUmFTM+cz9QDnnLTwDz/2gQ==",
       "dependencies": [
@@ -1568,6 +1582,15 @@
       "integrity": "sha512-BLI3Tl1TW3Pvl70l3yq3Y64i+awpwXqsGBYWkkqMtnbXgrMD+yj7rhW0kuEDxzJaYXGjEW5ogapKNMEKNMjibA==",
       "dependencies": [
         "isexe"
+      ]
+    },
+    "wouter@3.3.5_react@19.0.0": {
+      "integrity": "sha512-bx3fLQAMn+EhYbBdY3W1gw9ZfO/uchudxYMwOIBzF3HVgqNEEIT199vEoh7FLTC0Vz5+rpMO6NdFsOkGX1QQCw==",
+      "dependencies": [
+        "mitt",
+        "react",
+        "regexparam",
+        "use-sync-external-store"
       ]
     },
     "wrap-ansi@7.0.0": {
@@ -1649,7 +1672,9 @@
       "npm:react@19",
       "npm:rollup-plugin-visualizer@^5.12.0",
       "npm:tailwindcss@^3.4.16",
-      "npm:vite@^6.0.1"
+      "npm:vite@^6.0.1",
+      "npm:wouter@^3.3.5",
+      "npm:zustand@5.0.2"
     ]
   }
 }

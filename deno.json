@@ -41,6 +41,8 @@
         "react-dom": "npm:react-dom@^19.0.0",
         "rollup-plugin-visualizer": "npm:rollup-plugin-visualizer@^5.12.0",
         "tailwindcss": "npm:tailwindcss@^3.4.16",
-        "vite": "npm:vite@^6.0.1"
+        "vite": "npm:vite@^6.0.1",
+        "wouter": "npm:wouter@^3.3.5",
+        "zustand": "npm:zustand@5.0.2"
     }
 }
