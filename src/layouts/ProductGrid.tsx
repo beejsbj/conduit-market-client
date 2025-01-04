@@ -16,15 +16,18 @@ const ProductGrid: React.FC = () => {
         };
 
         createSubscription(filters);
-
-        // Log when subscription is created
-        console.log("Created subscription with filters:", filters);
     }, [createSubscription]);
 
     useEffect(() => {
         // Log whenever new events are received
         if (events && events.length > 0) {
-            console.log("Received events:", events);
+            console.log("Received events:");
+            events?.length > 0 &&
+                console.log(
+                    events[0].id,
+                    events[0].pubkey,
+                    JSON.parse(events[0].content),
+                );
         }
     }, [events]);
 

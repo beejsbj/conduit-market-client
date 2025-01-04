@@ -10,9 +10,11 @@ import Button from "@/components/Buttons/Button.tsx";
 import { Badge } from "@/components/Badge.tsx";
 import { ShoppingCart } from "lucide-react";
 import { NDKEvent } from "ndk";
+import { useCartStore } from "@root/src/store/CartStore.tsx";
 
 const ProductCard = ({ event }: { event: NDKEvent }) => {
     const { content, tags } = event;
+    const { addToCart } = useCartStore();
 
     // Extract content fields
     const {
@@ -82,8 +84,14 @@ const ProductCard = ({ event }: { event: NDKEvent }) => {
                 <Button
                     className="w-full"
                     onClick={() => {
-                        // This will be connected to Zustand store later
-                        console.log("Add to cart clicked:", content);
+                        addToCart({
+                            id: event.id,
+                            image: images[0],
+                            name,
+                            price,
+                            currency,
+                            quantity: 1,
+                        });
                     }}
                 >
                     <ShoppingCart className="mr-2 h-4 w-4" />

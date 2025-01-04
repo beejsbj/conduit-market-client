@@ -3,6 +3,7 @@
 import { useEffect } from "react";
 import { useNdk } from "nostr-hooks";
 import ProductGrid from "@/layouts/ProductGrid.tsx";
+import { CartDrawer } from "@root/src/layouts/CartDrawer.tsx";
 
 function App() {
   const { initNdk, ndk } = useNdk();
@@ -21,6 +22,7 @@ function App() {
 
   return (
     <>
+      <CartDrawer />
       <ProductGrid />
     </>
   );
