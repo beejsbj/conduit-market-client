@@ -13,7 +13,7 @@ import { NDKEvent } from "ndk";
 import { useCartStore } from "@root/src/store/CartStore.tsx";
 
 const ProductCard = ({ event }: { event: NDKEvent }) => {
-    const { content, tags } = event;
+    const { content, tags, pubkey } = event;
     const { addToCart } = useCartStore();
 
     // Extract content fields
@@ -91,6 +91,7 @@ const ProductCard = ({ event }: { event: NDKEvent }) => {
                             price,
                             currency,
                             quantity: 1,
+                            merchantPubkey: pubkey,
                         });
                     }}
                 >

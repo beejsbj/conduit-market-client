@@ -18,19 +18,6 @@ const ProductGrid: React.FC = () => {
         createSubscription(filters);
     }, [createSubscription]);
 
-    useEffect(() => {
-        // Log whenever new events are received
-        if (events && events.length > 0) {
-            console.log("Received events:");
-            events?.length > 0 &&
-                console.log(
-                    events[0].id,
-                    events[0].pubkey,
-                    JSON.parse(events[0].content),
-                );
-        }
-    }, [events]);
-
     if (isLoading) {
         return (
             <div className="flex items-center justify-center p-8">

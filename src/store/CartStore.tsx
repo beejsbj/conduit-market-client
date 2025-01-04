@@ -8,15 +8,6 @@ interface CartState {
     removeAllFromCart: (product: CartItem) => void;
 }
 
-type CartItem = {
-    id: string;
-    image: string;
-    name: string;
-    price: number;
-    currency: string;
-    quantity: number;
-};
-
 export const useCartStore = create<CartState>()(
     persist(
         (set, get) => ({
