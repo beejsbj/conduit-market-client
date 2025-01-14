@@ -1,40 +1,77 @@
 import { generateSecretKey, getPublicKey } from 'nostr-tools';
 import { getNdk } from "@root/src/lib/nostr/NdkService.ts";
-import { NDKEvent, NDKPrivateKeySigner, NDKUser } from "@nostr-dev-kit/ndk";
+import { NDKEvent, NDKTag, NDKPrivateKeySigner, NDKUser } from "@nostr-dev-kit/ndk";
 
-export async function createNostrOrder(orderData: OrderData, merchantPubkey: string): Promise<NDKEvent | { success: false, message: string }> {
+// Order Communication Flow as per upgrated NIP-99 spec (see https://github.com/gzuuus/nips/blob/7d59ffe1e81bb0bedd64752f34298118c6e57ce6/XX.md)
+
+type ItemTag = ['item', `30402:${string}:${string}`, number]; // Item in the order; follows addressable format of "30402:<pubkey>:<d-tag>"
+type ShippingTag = ['shipping', `30406:${string}:${string}`]; // Shipping method; follows addressable format of "30406:<pubkey>:<d-tag>"
+type OptionalTag = string[]
+type OrderMessage = {
+    kind: 15,
+    tags: [
+        ['p', string], // Merchant's pubkey
+        ['subject', "order-info"],
+        ['order', string], // Randomly-generated Order ID
+        ItemTag,
+        ...ItemTag[],   // Zero or more additional ItemTags
+        ShippingTag,
+        ...([OptionalTag] | OptionalTag[]) // Additional optional tags (zero or more)
+    ],
+    content: string // Note to the Merchant
+}
+
+export async function createOrder(orderData: OrderData, merchantPubkey: string): Promise<NDKEvent | { success: false, message: string }> {
     try {
-        // Create the order content following NIP-15 structure
-        const orderContent = {
-            id: crypto.randomUUID(), // Generate unique order ID
-            type: 0, // New order type
-            address: orderData.address,
-            message: orderData.message || '[Conduit Market Client] - [Order]',
-            contact: {
-                nostr: orderData.customerPubkey,
-                email: orderData.email || null,
-                phone: orderData.phone || null
-            },
-            items: orderData.items,
-            shipping_id: orderData.shipping_id
+        const { items } = orderData;
+        if (!items || items.length === 0) return { success: false, message: "No items in order" };
+
+        const itemTags: ItemTag[] = items.map(item => {
+            return [
+                'item',
+                `30402:${item.event_id}:${item.product_id}`,
+                item.quantity
+            ];
+        });
+
+        if (itemTags.length === 0) return { success: false, message: "No items in order" };
+
+        const shippingTag: ShippingTag = [
+            'shipping',
+            `30406:${orderData.event_id}:${orderData.shipping_id}`
+        ];
+
+        const orderMessage: OrderMessage = {
+            kind: 15,
+            tags: [
+                ["p", merchantPubkey],
+                ["subject", "order-info"],
+                ["order", crypto.randomUUID()],
+                itemTags[0], // First required ItemTag
+                ...itemTags.slice(1), // Rest of the ItemTags
+                shippingTag,
+                ...[ // Optional tags
+                    orderData.address ? ['address', orderData.address] : undefined,
+                    orderData.phone ? ['phone', orderData.phone] : undefined,
+                    orderData.email ? ['email', orderData.email] : undefined
+                ].filter((tag): tag is [string, string] => tag !== undefined)
+            ],
+            content: `[Conduit Market Client] - [Order] - ${orderData.message || ""}`
         };
 
         const ndk = await getNdk();
 
-        // Create the unsigned DM event (kind 14)
+        // Create the unsigned DM event (kind 4)
         const dmEvent = new NDKEvent(ndk);
-        dmEvent.kind = 14;
-        dmEvent.content = JSON.stringify(orderContent);
-        dmEvent.tags = [
-            ['p', merchantPubkey], // Merchant's pubkey
-            ['subject', 'New Order'], // Optional subject for the DM
-        ];
+        dmEvent.kind = orderMessage.kind;
+        dmEvent.content = orderMessage.content;
+        dmEvent.tags = orderMessage.tags as NDKTag[];
 
         // Create seal (kind 13)
         const sealEvent = new NDKEvent(ndk);
         sealEvent.kind = 13;
 
-        // Current time, a slight difference from NIP-17 proper, but better for order time tracking
+        // Current time; a slight difference from NIP-17 proper, but better for order time tracking
         const time = Math.floor(Date.now() / 1000);
         sealEvent.created_at = time;
 
