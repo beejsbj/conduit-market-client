@@ -7,46 +7,60 @@ import {
     CardTitle,
 } from "./CardComponents.tsx";
 import Button from "@/components/Buttons/Button.tsx";
-import { Badge } from "@/components/Badge.tsx";
 import { ShoppingCart } from "lucide-react";
 import { NDKEvent } from "ndk";
 import { useCartStore } from "@root/src/store/CartStore.tsx";
 
+function extractValuesFromTags(tags: string[]): Record<string, any> {
+    const result = {};
+
+    tags.forEach((tag) => {
+        const [key, ...values] = tag;
+        const pluralKey = key + "s";
+
+        if (key === "image") {
+            if (!result["images"]) {
+                result["images"] = [];
+            }
+            result["images"].push(...values);
+        } else if (!result[key] && !result[pluralKey]) {
+            result[key] = values.length === 1 ? values[0] : values;
+        } else {
+            const targetKey = result[key] ? key : pluralKey;
+            if (!Array.isArray(result[targetKey])) {
+                result[targetKey] = [result[targetKey]];
+            }
+            result[targetKey].push(...values);
+            if (targetKey === key) {
+                result[pluralKey] = result[targetKey];
+                delete result[key];
+            }
+        }
+    });
+    return result;
+}
+
 const ProductCard = ({ event }: { event: NDKEvent }) => {
-    const { content, tags, pubkey } = event;
+    const { content, tags, pubkey, id: eventId } = event;
     const { addToCart } = useCartStore();
 
-    // Extract content fields
+    // Extract values from tags
     const {
-        name,
-        description,
+        d: productId,
+        title: name,
         images,
-        currency,
-        price,
-        specs,
-    } = content;
+        price: priceArray,
+    } = extractValuesFromTags(tags);
 
-    // Function to render specs as badges
-    const renderSpecs = () => {
-        if (!specs || Object.keys(specs).length === 0) return null;
-
-        return (
-            <div className="flex flex-wrap gap-2 mt-4">
-                {Object.entries(specs).map(([key, value]) => (
-                    <Badge key={key} variant="secondary" className="text-sm">
-                        {`${key}: ${value}`}
-                    </Badge>
-                ))}
-            </div>
-        );
-    };
+    const price: number = parseFloat(priceArray[0] || "0");
+    const currency: string = priceArray[1] || "USD";
 
     // Format price with currency
     const formatPrice = () => {
         if (price === 0) return "Price not set";
         return new Intl.NumberFormat("en-US", {
             style: "currency",
-            currency: currency || "USD",
+            currency: currency,
         }).format(price);
     };
 
@@ -69,7 +83,7 @@ const ProductCard = ({ event }: { event: NDKEvent }) => {
             <CardHeader>
                 <CardTitle className="text-xl font-semibold">{name}</CardTitle>
                 <CardDescription className="line-clamp-2">
-                    {description}
+                    {content}
                 </CardDescription>
             </CardHeader>
 
@@ -77,7 +91,6 @@ const ProductCard = ({ event }: { event: NDKEvent }) => {
                 <div className="inline-flex px-3 py-1 text-sm font-medium bg-gray-700 text-gray-100 rounded-md mb-4">
                     {formatPrice()}
                 </div>
-                {renderSpecs()}
             </CardContent>
 
             <CardFooter className="flex justify-between items-center">
@@ -85,7 +98,9 @@ const ProductCard = ({ event }: { event: NDKEvent }) => {
                     className="w-full"
                     onClick={() => {
                         addToCart({
-                            id: event.id,
+                            eventId,
+                            productId,
+                            tags,
                             image: images[0],
                             name,
                             price,

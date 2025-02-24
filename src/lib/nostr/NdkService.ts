@@ -1,5 +1,4 @@
-import { DEFAULT_RELAYS } from "@/lib/constants/defaultRelays.ts";
-import NDK, { NDKNip07Signer } from "@nostr-dev-kit/ndk";
+import NDK from "@nostr-dev-kit/ndk";
 
 // Service for NDK usage outside of nostr-hooks. Uses the same NDK instance as nostr-hooks
 

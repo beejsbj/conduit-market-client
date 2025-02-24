@@ -29,17 +29,12 @@ export async function createOrder(orderData: OrderData, merchantPubkey: string):
         const itemTags: ItemTag[] = items.map(item => {
             return [
                 'item',
-                `30402:${item.event_id}:${item.product_id}`,
+                `30402:${item.eventId}:${item.productId}`,
                 item.quantity
             ];
         });
 
         if (itemTags.length === 0) return { success: false, message: "No items in order" };
-
-        const shippingTag: ShippingTag = [
-            'shipping',
-            `30406:${orderData.event_id}:${orderData.shipping_id}`
-        ];
 
         const orderMessage: OrderMessage = {
             kind: 15,
@@ -49,7 +44,6 @@ export async function createOrder(orderData: OrderData, merchantPubkey: string):
                 ["order", crypto.randomUUID()],
                 itemTags[0], // First required ItemTag
                 ...itemTags.slice(1), // Rest of the ItemTags
-                shippingTag,
                 ...[ // Optional tags
                     orderData.address ? ['address', orderData.address] : undefined,
                     orderData.phone ? ['phone', orderData.phone] : undefined,

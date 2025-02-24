@@ -10,7 +10,7 @@ const ProductGrid: React.FC = () => {
         // Create subscription with proper filters
         const filters = {
             filters: [{
-                kinds: [30018],
+                kinds: [30402],
                 limit: 50,
             }],
         };
@@ -41,11 +41,12 @@ const ProductGrid: React.FC = () => {
             <h1 className="text-2xl font-bold mb-6">Products</h1>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                 {events.map((event) => {
-                    const parsedContent = JSON.parse(event.content);
+                    const productDescription = JSON.parse(event.content);
                     const processedEvent = {
                         ...event,
-                        content: parsedContent,
+                        productDescription,
                     };
+                    console.log(processedEvent.tags);
                     return (
                         <ProductCard key={event.id} event={processedEvent} />
                     );

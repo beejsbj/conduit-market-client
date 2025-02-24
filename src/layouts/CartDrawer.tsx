@@ -28,7 +28,7 @@ export const CartDrawer = () => {
                 <div className="p-4 flex flex-col gap-4">
                     {cart.map((product) => (
                         <div
-                            key={product.id}
+                            key={product.productId}
                             className="flex items-center justify-between mb-4"
                         >
                             <div>

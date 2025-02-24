@@ -1,13 +1,15 @@
 import { useCartStore } from "@root/src/store/CartStore.tsx";
 import ShippingForm from "@root/src/layouts/ShippingForm.tsx";
 import { useActiveUser } from "nostr-hooks";
-import { createNostrOrder } from "@root/src/lib/nostr/createOrder.ts";
+import { createOrder } from "@root/src/lib/nostr/createOrder.ts";
 import { useCallback } from "react";
 import { LoginWidget } from "@root/src/components/LoginWidget.tsx";
+import { NDKEvent } from "@nostr-dev-kit/ndk";
+import postOrder from "@root/src/lib/nostr/postOrder.ts";
 
 async function prepareOrder(
     cart: CartItem[],
-    shippingInfo: any,
+    shippingInfo: unknown,
     pubkey: string,
 ) {
     const isMultiMerchantCart = cart.some(
@@ -21,23 +23,30 @@ async function prepareOrder(
 
     const orderData: OrderData = {
         items: cart.map((item) => ({
-            product_id: item.id,
+            eventId: item.eventId,
+            productId: item.productId,
             quantity: item.quantity,
-        })),
-        shipping_id: "shipping_id",
+            unitPrice: item.price,
+            title: item.name,
+        })) as OrderItem[],
         address: JSON.stringify(shippingInfo),
         customerPubkey: pubkey,
     };
 
-    const order = await createNostrOrder(orderData, cart[0].merchantPubkey);
-    console.log("Order", order);
+    const order = await createOrder(orderData, cart[0].merchantPubkey);
+    if (!order || !(order instanceof NDKEvent)) {
+        console.error(
+            "[ZapoutPage.prepareOrder] Failed to create order. TODO: Visualize error to user",
+        );
+    }
+    postOrder(order as NDKEvent, cart[0].merchantPubkey);
 }
 
 export const ZapoutPage = () => {
     const { cart } = useCartStore();
     const { activeUser } = useActiveUser();
 
-    const handleSubmit = useCallback((shippingInfo: any) => {
+    const handleSubmit = useCallback((shippingInfo: unknown) => {
         if (activeUser) {
             prepareOrder(cart, shippingInfo, activeUser?.pubkey);
         } else {console.error(
@@ -51,7 +60,7 @@ export const ZapoutPage = () => {
             <ul>
                 {cart.map((item) => (
                     <div
-                        key={item.id}
+                        key={item.productId}
                         className="flex items-center justify-between mb-4"
                     >
                         <div>

@@ -1,9 +1,10 @@
 import { DEFAULT_RELAYS } from "@root/src/lib/constants/defaultRelays.ts";
-import { createNostrOrder } from "@root/src/lib/nostr/createOrder.ts";
-import type { NDK } from "@root/src/types/ndk.d.ts";
+import { getNdk } from "@root/src/lib/nostr/NdkService.ts";
+import type { NDKEvent } from "@nostr-dev-kit/ndk";
+import { NDKRelay, NDKRelaySet } from "@nostr-dev-kit/ndk";
 
-const postOrder = async (ndk: NDK, orderData: OrderData, merchantPubkey: string) => {
-    const encryptedOrder = await createNostrOrder(ndk, orderData, merchantPubkey);
+const postOrder = async (orderEvent: NDKEvent, merchantPubkey: string) => {
+    const ndk = await getNdk();
 
     // Get merchant's preferred DM relays from their kind:10050 event
     const relayList = await ndk.fetchEvent({
@@ -12,6 +13,9 @@ const postOrder = async (ndk: NDK, orderData: OrderData, merchantPubkey: string)
     });
 
     let relayUrls: string[] = [...DEFAULT_RELAYS];
+    const relays: NDKRelay[] = relayUrls.map(url => new NDKRelay(url));
+    const relaySet = new Set(relays);
+    const ndkRelaySet = new NDKRelaySet(relaySet, ndk);
 
     // Publish to merchant's preferred relays
     if (relayList) {
@@ -22,9 +26,7 @@ const postOrder = async (ndk: NDK, orderData: OrderData, merchantPubkey: string)
         relayUrls = [...u, ...relayUrls];
     }
 
-    await Promise.all(relayUrls.map(url =>
-        ndk.pool.publish(url, encryptedOrder)
-    ));
+    await orderEvent.publish(ndkRelaySet)
 };
 
 export default postOrder;

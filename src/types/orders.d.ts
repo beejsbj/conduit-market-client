@@ -1,11 +1,16 @@
 interface OrderItem {
-    product_id: string;
+    eventId: string;
+    productId: string;
     quantity: number;
+    title: string;
+    unitPrice: number;
+    // shipping_tag: string | null; // TODO: Implement shipping tags
+    [key: string]: string | number | boolean | undefined | null;
 }
 
 interface OrderData {
     items: OrderItem[];
-    shipping_id: string;
+
     customerPubkey: string;
     address?: string;
     email?: string;
