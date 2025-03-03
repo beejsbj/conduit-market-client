@@ -1,7 +1,7 @@
-import { DEFAULT_RELAYS } from "@root/src/lib/constants/defaultRelays.ts";
-import { getNdk } from "@root/src/lib/nostr/NdkService.ts";
+import { DEFAULT_RELAYS } from "@/lib/constants/defaultRelays.ts";
+import { getNdk } from "@/lib/nostr/NdkService.ts";
 import type { NDKEvent } from "@nostr-dev-kit/ndk";
-import { NDKRelay, NDKRelaySet } from "@nostr-dev-kit/ndk";
+import { NDKRelay } from "@nostr-dev-kit/ndk";
 
 const postOrder = async (orderEvent: NDKEvent, merchantPubkey: string) => {
     const ndk = await getNdk();
@@ -13,20 +13,29 @@ const postOrder = async (orderEvent: NDKEvent, merchantPubkey: string) => {
     });
 
     let relayUrls: string[] = [...DEFAULT_RELAYS];
-    const relays: NDKRelay[] = relayUrls.map(url => new NDKRelay(url));
-    const relaySet = new Set(relays);
-    const ndkRelaySet = new NDKRelaySet(relaySet, ndk);
 
-    // Publish to merchant's preferred relays
+    // Add merchant's preferred relays if available
     if (relayList) {
-        const u: string[] = relayList.tags
+        const merchantRelays: string[] = relayList.tags
             .filter(tag => tag[0] === 'relay')
             .map(tag => tag[1]);
-
-        relayUrls = [...u, ...relayUrls];
+        relayUrls = [...merchantRelays, ...relayUrls];
     }
 
-    await orderEvent.publish(ndkRelaySet)
+    // Connect to all the relays directly through the NDK's pool
+    const relays = relayUrls.map(url => {
+        const relay = new NDKRelay(url, undefined, ndk);
+        ndk.pool.addRelay(relay);
+        return relay;
+    });
+
+    // Ensure the event has the NDK instance
+    orderEvent.ndk = ndk;
+
+    // Publish the order event to the connected relays
+    await orderEvent.publish();
+
+    return true;
 };
 
 export default postOrder;

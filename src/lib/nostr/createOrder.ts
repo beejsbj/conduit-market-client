@@ -1,24 +1,24 @@
 import { generateSecretKey, getPublicKey } from 'nostr-tools';
-import { getNdk } from "@root/src/lib/nostr/NdkService.ts";
-import { NDKEvent, NDKTag, NDKPrivateKeySigner, NDKUser } from "@nostr-dev-kit/ndk";
+import { getNdk } from "@/lib/nostr/NdkService.ts";
+import { NDKEvent, type NDKTag, NDKPrivateKeySigner, NDKUser } from "@nostr-dev-kit/ndk";
+import { validateOrder } from "nostr-commerce-schema";
 
-// Order Communication Flow as per upgrated NIP-99 spec (see https://github.com/gzuuus/nips/blob/7d59ffe1e81bb0bedd64752f34298118c6e57ce6/XX.md)
-
-type ItemTag = ['item', `30402:${string}:${string}`, number]; // Item in the order; follows addressable format of "30402:<pubkey>:<d-tag>"
-type ShippingTag = ['shipping', `30406:${string}:${string}`]; // Shipping method; follows addressable format of "30406:<pubkey>:<d-tag>"
-type OptionalTag = string[]
-type OrderMessage = {
-    kind: 15,
-    tags: [
-        ['p', string], // Merchant's pubkey
-        ['subject', "order-info"],
-        ['order', string], // Randomly-generated Order ID
-        ItemTag,
-        ...ItemTag[],   // Zero or more additional ItemTags
-        ShippingTag,
-        ...([OptionalTag] | OptionalTag[]) // Additional optional tags (zero or more)
-    ],
-    content: string // Note to the Merchant
+// OrderData interface to match what the function expects
+export interface OrderData {
+    items: Array<{
+        eventId: string;
+        productId: string;
+        quantity: number;
+        price: number; // For amount calculation
+    }>;
+    shipping?: {
+        eventId: string;
+        methodId: string;
+    };
+    address?: string;
+    phone?: string;
+    email?: string;
+    message?: string;
 }
 
 export async function createOrder(orderData: OrderData, merchantPubkey: string): Promise<NDKEvent | { success: false, message: string }> {
@@ -26,55 +26,64 @@ export async function createOrder(orderData: OrderData, merchantPubkey: string):
         const { items } = orderData;
         if (!items || items.length === 0) return { success: false, message: "No items in order" };
 
-        const itemTags: ItemTag[] = items.map(item => {
-            return [
-                'item',
-                `30402:${item.eventId}:${item.productId}`,
-                item.quantity
-            ];
-        });
+        // Calculate total amount
+        const totalAmount = items.reduce((sum, item) => sum + (item.price * item.quantity), 0);
 
-        if (itemTags.length === 0) return { success: false, message: "No items in order" };
+        // Generate order ID
+        const orderId = crypto.randomUUID();
 
-        const orderMessage: OrderMessage = {
-            kind: 15,
+        // Prepare the order event that matches OrderSchema
+        const orderEvent = {
+            kind: 16,
             tags: [
                 ["p", merchantPubkey],
                 ["subject", "order-info"],
-                ["order", crypto.randomUUID()],
-                itemTags[0], // First required ItemTag
-                ...itemTags.slice(1), // Rest of the ItemTags
-                ...[ // Optional tags
-                    orderData.address ? ['address', orderData.address] : undefined,
-                    orderData.phone ? ['phone', orderData.phone] : undefined,
-                    orderData.email ? ['email', orderData.email] : undefined
-                ].filter((tag): tag is [string, string] => tag !== undefined)
+                ["type", "1"],
+                ["order", orderId],
+                ["amount", Math.floor(totalAmount).toString()], // Ensure it's an integer
+                ...items.map(item => [
+                    "item",
+                    // Ensure item format matches the expected addressable format pattern
+                    `30402:${item.eventId.padEnd(64, '0')}:${item.productId.padEnd(64, '0')}`,
+                    item.quantity
+                ]),
+                ...(orderData.shipping ? [["shipping", `30406:${orderData.shipping.eventId}:${orderData.shipping.methodId}`]] : []),
+                ...(orderData.address ? [["address", orderData.address]] : []),
+                ...(orderData.phone ? [["phone", orderData.phone]] : []),
+                ...(orderData.email ? [["email", orderData.email]] : [])
             ],
             content: `[Conduit Market Client] - [Order] - ${orderData.message || ""}`
         };
 
+        // Validate against schema
+        const validationResult = validateOrder(orderEvent);
+        if (!validationResult.success) {
+            return {
+                success: false,
+                message: `Invalid order structure: ${validationResult.error.message}`
+            };
+        }
+
         const ndk = await getNdk();
 
-        // Create the unsigned DM event (kind 4)
-        const dmEvent = new NDKEvent(ndk);
-        dmEvent.kind = orderMessage.kind;
-        dmEvent.content = orderMessage.content;
-        dmEvent.tags = orderMessage.tags as NDKTag[];
+        // Create the NDK event
+        const ndkOrderEvent = new NDKEvent(ndk);
+        ndkOrderEvent.kind = orderEvent.kind;
+        ndkOrderEvent.content = orderEvent.content;
+        ndkOrderEvent.tags = orderEvent.tags as NDKTag[];
 
         // Create seal (kind 13)
         const sealEvent = new NDKEvent(ndk);
         sealEvent.kind = 13;
-
-        // Current time; a slight difference from NIP-17 proper, but better for order time tracking
         const time = Math.floor(Date.now() / 1000);
         sealEvent.created_at = time;
 
         const merchantNdkUser = new NDKUser({ pubkey: merchantPubkey });
 
-        // Encrypt the DM content
+        // Encrypt the order content
         sealEvent.content = await ndk.signer!.encrypt(
             merchantNdkUser,
-            JSON.stringify(dmEvent)
+            JSON.stringify(ndkOrderEvent)
         );
 
         await sealEvent.sign();
@@ -83,9 +92,7 @@ export async function createOrder(orderData: OrderData, merchantPubkey: string):
         const giftWrapEvent = new NDKEvent(ndk);
         giftWrapEvent.kind = 1059;
         giftWrapEvent.created_at = time;
-        giftWrapEvent.tags = [
-            ['p', merchantPubkey]
-        ];
+        giftWrapEvent.tags = [['p', merchantPubkey]];
 
         // Generate random keypair for gift wrap
         const randomPrivateKey = generateSecretKey();
@@ -98,7 +105,6 @@ export async function createOrder(orderData: OrderData, merchantPubkey: string):
             merchantNdkUser,
             JSON.stringify(sealEvent),
         );
-
 
         // Sign the gift wrap with random private key
         await giftWrapEvent.sign(randomSigner);
