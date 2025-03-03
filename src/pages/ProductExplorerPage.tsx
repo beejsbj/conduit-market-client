@@ -1,5 +1,5 @@
-import { CartDrawer } from "@root/src/layouts/CartDrawer.tsx";
-import ProductGrid from "@root/src/layouts/ProductGrid.tsx";
+import { CartDrawer } from "@/layouts/CartDrawer.tsx";
+import ProductGrid from "@/layouts/ProductGrid.tsx";
 
 export const ProductExplorerPage = () => {
     return (

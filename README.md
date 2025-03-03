@@ -12,4 +12,7 @@
 - ESLint + Prettier + lint-staged - Linting + Formatting
 - Commitlint - Commit Naming Conventions
 - Vitest - Testing Library
+
+Future:
+
 - Storybook - UI Workshop

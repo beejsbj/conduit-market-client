@@ -1,5 +1,5 @@
-import { useCartStore } from "@root/src/store/CartStore.tsx";
-import Button from "@root/src/components/Buttons/Button.tsx";
+import { useCartStore } from "@/stores/CartStore.tsx";
+import Button from "@/components/Buttons/Button.tsx";
 import { ShoppingCart } from "lucide-react";
 import { useState } from "react";
 import ZapoutButton from "@/components/Buttons/ZapoutButton.tsx";
