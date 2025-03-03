@@ -22,6 +22,7 @@ export interface OrderData {
 }
 
 export async function createOrder(orderData: OrderData, merchantPubkey: string): Promise<NDKEvent | { success: false, message: string }> {
+    console.log("Creating order event for merchant:", merchantPubkey);
     try {
         const { items } = orderData;
         if (!items || items.length === 0) return { success: false, message: "No items in order" };
@@ -86,7 +87,11 @@ export async function createOrder(orderData: OrderData, merchantPubkey: string):
             JSON.stringify(ndkOrderEvent)
         );
 
+        console.log("Signing seal event for merchant:", merchantPubkey);
+
         await sealEvent.sign();
+
+        console.log("Creating gift wrap event for merchant:", merchantPubkey);
 
         // Create gift wrap (kind 1059)
         const giftWrapEvent = new NDKEvent(ndk);
@@ -94,10 +99,14 @@ export async function createOrder(orderData: OrderData, merchantPubkey: string):
         giftWrapEvent.created_at = time;
         giftWrapEvent.tags = [['p', merchantPubkey]];
 
+        console.log("Generating random keypair for gift wrap");
+
         // Generate random keypair for gift wrap
         const randomPrivateKey = generateSecretKey();
         const randomPubkey = getPublicKey(randomPrivateKey);
         const randomSigner = new NDKPrivateKeySigner(randomPrivateKey);
+
+        console.log("Encrypting seal event for merchant:", merchantPubkey);
 
         // Encrypt the seal
         giftWrapEvent.pubkey = randomPubkey;
@@ -106,8 +115,12 @@ export async function createOrder(orderData: OrderData, merchantPubkey: string):
             JSON.stringify(sealEvent),
         );
 
+        console.log("Signing gift wrap event for merchant:", merchantPubkey);
+
         // Sign the gift wrap with random private key
         await giftWrapEvent.sign(randomSigner);
+
+        console.log("Order event created for merchant:", merchantPubkey);
 
         return giftWrapEvent;
     } catch (e) {

@@ -4,6 +4,7 @@ import type { NDKEvent } from "@nostr-dev-kit/ndk";
 import { NDKRelay } from "@nostr-dev-kit/ndk";
 
 const postOrder = async (orderEvent: NDKEvent, merchantPubkey: string) => {
+    console.log("Posting order event to merchant:", merchantPubkey);
     const ndk = await getNdk();
 
     // Get merchant's preferred DM relays from their kind:10050 event
@@ -34,6 +35,8 @@ const postOrder = async (orderEvent: NDKEvent, merchantPubkey: string) => {
 
     // Publish the order event to the connected relays
     await orderEvent.publish();
+
+    console.log("Order event published to relays:", relayUrls);
 
     return true;
 };
