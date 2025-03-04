@@ -1,4 +1,4 @@
-import React, { useMemo } from "react";
+import React, { useMemo, useState } from "react";
 import { NDKEvent } from "@nostr-dev-kit/ndk";
 import {
     type ProductListing,
@@ -16,6 +16,8 @@ import {
 import Button from "@/components/Buttons/Button.tsx";
 import { ShoppingCart } from "lucide-react";
 import { useCartStore } from "@/stores/CartStore.tsx";
+
+const PLACEHOLDER_IMAGE = "/api/placeholder/400/300";
 
 interface ProductCardProps {
     event: NDKEvent;
@@ -47,6 +49,8 @@ const ProductCard: React.FC<ProductCardProps> = ({ event }) => {
     const { pubkey } = event;
     const { addToCart } = useCartStore();
 
+    const [imageError, setImageError] = useState(false);
+
     // Use schema functions to extract data
     const productId = ProductListingUtils.getProductId(productEvent);
     const title = ProductListingUtils.getProductTitle(productEvent);
@@ -74,9 +78,9 @@ const ProductCard: React.FC<ProductCardProps> = ({ event }) => {
         }).format(parseFloat(price.amount));
     };
 
-    const mainImage = images.length > 0
+    const mainImage = images.length > 0 && !imageError
         ? images[0].url
-        : "/api/placeholder/400/300";
+        : PLACEHOLDER_IMAGE;
 
     const handleAddToCart = () => {
         addToCart({
@@ -99,12 +103,8 @@ const ProductCard: React.FC<ProductCardProps> = ({ event }) => {
                     src={mainImage}
                     alt={title}
                     className="w-full h-full object-cover"
-                    onError={(e) => {
-                        (e.target as HTMLImageElement).src =
-                            "/api/placeholder/400/300";
-                        (e.target as HTMLImageElement).alt =
-                            "Product image placeholder";
-                    }}
+                    onError={() => setImageError(true)}
+                    loading="lazy"
                 />
                 {stock !== null && stock <= 5 && stock > 0 && (
                     <span className="absolute top-2 right-2 bg-amber-500 text-xs font-bold px-2 py-1 rounded">
