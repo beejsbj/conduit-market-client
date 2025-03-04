@@ -1,13 +1,8 @@
 import React, { useMemo } from "react";
 import { NDKEvent } from "@nostr-dev-kit/ndk";
 import {
-    getProductId,
-    getProductImages,
-    getProductPrice,
-    getProductStock,
-    getProductSummary,
-    getProductTitle,
     type ProductListing,
+    ProductListingUtils,
     validateProductListing,
 } from "nostr-commerce-schema";
 import {
@@ -53,12 +48,12 @@ const ProductCard: React.FC<ProductCardProps> = ({ event }) => {
     const { addToCart } = useCartStore();
 
     // Use schema functions to extract data
-    const productId = getProductId(productEvent);
-    const title = getProductTitle(productEvent);
-    const price = getProductPrice(productEvent);
-    const images = getProductImages(productEvent);
-    const stock = getProductStock(productEvent);
-    const summary = getProductSummary(productEvent);
+    const productId = ProductListingUtils.getProductId(productEvent);
+    const title = ProductListingUtils.getProductTitle(productEvent);
+    const price = ProductListingUtils.getProductPrice(productEvent);
+    const images = ProductListingUtils.getProductImages(productEvent);
+    const stock = ProductListingUtils.getProductStock(productEvent);
+    const summary = ProductListingUtils.getProductSummary(productEvent);
 
     // If any required field is missing, don't render the card
     if (!productId || !title || !price) {
