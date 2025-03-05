@@ -1,9 +1,8 @@
 import { generateSecretKey, getPublicKey } from 'nostr-tools';
 import { getNdk } from "@/lib/nostr/NdkService.ts";
 import { NDKEvent, type NDKTag, NDKPrivateKeySigner, NDKUser } from "@nostr-dev-kit/ndk";
-import { validateOrder } from "nostr-commerce-schema";
+import { OrderUtils, validateOrder } from "nostr-commerce-schema";
 
-// OrderData interface to match what the function expects
 export interface OrderData {
     items: Array<{
         eventId: string;
@@ -22,16 +21,13 @@ export interface OrderData {
 }
 
 export async function createOrder(orderData: OrderData, merchantPubkey: string): Promise<NDKEvent | { success: false, message: string }> {
-    console.log("Creating order event for merchant:", merchantPubkey);
     try {
         const { items } = orderData;
         if (!items || items.length === 0) return { success: false, message: "No items in order" };
 
-        // Calculate total amount
         const totalAmount = items.reduce((sum, item) => sum + (item.price * item.quantity), 0);
 
-        // Generate order ID
-        const orderId = crypto.randomUUID();
+        const orderId = OrderUtils.generateOrderId();
 
         // Prepare the order event that matches OrderSchema
         const orderEvent = {
@@ -45,8 +41,8 @@ export async function createOrder(orderData: OrderData, merchantPubkey: string):
                 ...items.map(item => [
                     "item",
                     // Ensure item format matches the expected addressable format pattern
-                    `30402:${item.eventId.padEnd(64, '0')}:${item.productId.padEnd(64, '0')}`,
-                    item.quantity
+                    `30402:${merchantPubkey}:${item.productId}`,
+                    item.quantity.toString()
                 ]),
                 ...(orderData.shipping ? [["shipping", `30406:${orderData.shipping.eventId}:${orderData.shipping.methodId}`]] : []),
                 ...(orderData.address ? [["address", orderData.address]] : []),
@@ -56,7 +52,6 @@ export async function createOrder(orderData: OrderData, merchantPubkey: string):
             content: `[Conduit Market Client] - [Order] - ${orderData.message || ""}`
         };
 
-        // Validate against schema
         const validationResult = validateOrder(orderEvent);
         if (!validationResult.success) {
             return {
