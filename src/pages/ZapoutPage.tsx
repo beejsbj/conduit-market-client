@@ -1,4 +1,4 @@
-import { useCartStore } from "@/stores/CartStore.tsx";
+import { useCartStore } from "@/stores/useCartStore";
 import ShippingForm from "@/layouts/ShippingForm.tsx";
 import { useActiveUser } from "nostr-hooks";
 import { createOrder } from "@/lib/nostr/createOrder.ts";

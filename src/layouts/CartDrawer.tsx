@@ -1,4 +1,4 @@
-import { useCartStore } from "@/stores/CartStore.tsx";
+import { useCartStore } from "@/stores/useCartStore";
 import Button from "@/components/Buttons/Button.tsx";
 import { ShoppingCart } from "lucide-react";
 import { useState } from "react";
@@ -12,12 +12,13 @@ export const CartDrawer = () => {
     const handleClose = () => setIsOpen(false);
 
     return (
-        <div className="fixed top-0 right-0 z-50">
+        <div className="fixed top-16 right-2 z-20">
             <Button onClick={handleOpen}>
                 <ShoppingCart size={24} />
+                Cart
             </Button>
             <section
-                className={`fixed top-0 right-0 h-full w-64 bg-white shadow-lg transform transition-transform ${
+                className={`fixed top-12 right-0 h-full w-64 bg-white shadow-lg transform transition-transform ${
                     isOpen ? "translate-x-0" : "translate-x-full"
                 }`}
             >

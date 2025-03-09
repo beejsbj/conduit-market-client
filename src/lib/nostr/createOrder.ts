@@ -1,5 +1,5 @@
 import { generateSecretKey, getPublicKey } from 'nostr-tools';
-import { getNdk } from "@/lib/nostr/NdkService.ts";
+import { getNdk } from "@/services/ndkService";
 import { NDKEvent, type NDKTag, NDKPrivateKeySigner, NDKUser } from "@nostr-dev-kit/ndk";
 import { OrderUtils, validateOrder } from "nostr-commerce-schema";
 

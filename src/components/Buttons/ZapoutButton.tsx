@@ -5,7 +5,7 @@ export interface ZapoutButtonProps {
     variant?: "primary" | "secondary" | "outline";
     size?: "sm" | "md" | "lg";
     disabled?: boolean;
-    to: string;
+    to?: string;
     children: React.ReactNode;
 }
 
@@ -14,6 +14,7 @@ const ZapoutButton: React.FC<ZapoutButtonProps> = ({
     size = "md",
     disabled = false,
     children,
+    to = "/zapout",
 }) => {
     const baseStyles =
         "font-semibold rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2";
@@ -33,7 +34,7 @@ const ZapoutButton: React.FC<ZapoutButtonProps> = ({
 
     return (
         <Link
-            to="/zapout"
+            to={to}
             className={`${baseStyles} ${variantStyles[variant]} ${
                 sizeStyles[size]
             } ${disabledStyles}`}

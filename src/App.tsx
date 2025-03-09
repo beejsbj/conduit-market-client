@@ -1,36 +1,31 @@
-import { useEffect } from "react";
-import { NDKNip07Signer } from "@nostr-dev-kit/ndk";
-import { useNdk } from "nostr-hooks";
 import { ProductExplorerPage } from "./pages/ProductExplorerPage.tsx";
 import { Route, Switch } from "wouter";
 import { ZapoutPage } from "@/pages/ZapoutPage.tsx";
-import { NDKService } from "@/lib/nostr/NdkService.ts";
-import { DEFAULT_RELAYS } from "@/lib/constants/defaultRelays.ts";
+import Header from "./components/Header.tsx";
+import { WindowTypes } from "./stores/useWindowState.ts";
+import SubWindows from "./layouts/windows/SubWindows.tsx";
+import AppInitializer from "./AppInitializer.tsx";
+
+const UnknownWindow: React.FC<{ windowId: WindowTypes }> = ({ windowId }) => (
+  <div className="p-4 text-center">
+    <div className="text-amber-500 mb-2">⚠️</div>
+    <p>
+      No component found for window type: <strong>{windowId}</strong>
+    </p>
+  </div>
+);
 
 function App() {
-  const { initNdk, ndk } = useNdk();
-
-  useEffect(() => {
-    initNdk({
-      explicitRelayUrls: DEFAULT_RELAYS,
-      signer: new NDKNip07Signer(),
-    });
-  }, []);
-
-  useEffect(() => {
-    if (!ndk) return;
-    new NDKService(ndk);
-    ndk.connect();
-  }, [ndk]);
-
   return (
-    <>
+    <AppInitializer>
+      <Header />
+      <SubWindows defaultComponent={UnknownWindow} />
       <Switch>
         <Route path="/" component={ProductExplorerPage} />
         <Route path="/zapout" component={ZapoutPage} />
         <Route path="/checkout" component={ZapoutPage} />
       </Switch>
-    </>
+    </AppInitializer>
   );
 }
 

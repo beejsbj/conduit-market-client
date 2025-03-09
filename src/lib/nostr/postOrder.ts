@@ -1,5 +1,5 @@
 import { DEFAULT_RELAYS } from "@/lib/constants/defaultRelays.ts";
-import { getNdk } from "@/lib/nostr/NdkService.ts";
+import { getNdk } from "@/services/ndkService";
 import type { NDKEvent } from "@nostr-dev-kit/ndk";
 import { NDKRelay } from "@nostr-dev-kit/ndk";
 

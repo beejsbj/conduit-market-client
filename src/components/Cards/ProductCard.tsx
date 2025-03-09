@@ -15,7 +15,7 @@ import {
 } from "./CardComponents.tsx";
 import Button from "@/components/Buttons/Button.tsx";
 import { ShoppingCart } from "lucide-react";
-import { useCartStore } from "@/stores/CartStore.tsx";
+import { useCartStore } from "@/stores/useCartStore.ts";
 
 const PLACEHOLDER_IMAGE = "/api/placeholder/400/300";
 
@@ -119,6 +119,9 @@ const ProductCard: React.FC<ProductCardProps> = ({ event }) => {
             </div>
             <CardHeader>
                 <CardTitle className="text-xl font-semibold">{title}</CardTitle>
+                <p className="text-xs text-gray-500">
+                    {pubkey}
+                </p>
                 {summary && (
                     <CardDescription className="line-clamp-2">
                         {summary}
