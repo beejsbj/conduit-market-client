@@ -2,11 +2,12 @@ import React from "react";
 import { Link } from "wouter";
 
 export interface ZapoutButtonProps {
+    children: React.ReactNode;
     variant?: "primary" | "secondary" | "outline";
     size?: "sm" | "md" | "lg";
     disabled?: boolean;
     to?: string;
-    children: React.ReactNode;
+    onClick?: () => void;
 }
 
 const ZapoutButton: React.FC<ZapoutButtonProps> = ({
@@ -15,6 +16,7 @@ const ZapoutButton: React.FC<ZapoutButtonProps> = ({
     disabled = false,
     children,
     to = "/zapout",
+    onClick = () => {},
 }) => {
     const baseStyles =
         "font-semibold rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2";
@@ -35,6 +37,7 @@ const ZapoutButton: React.FC<ZapoutButtonProps> = ({
     return (
         <Link
             to={to}
+            onClick={onClick}
             className={`${baseStyles} ${variantStyles[variant]} ${
                 sizeStyles[size]
             } ${disabledStyles}`}
