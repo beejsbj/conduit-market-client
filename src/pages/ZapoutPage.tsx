@@ -84,9 +84,6 @@ export const ZapoutPage = () => {
     const { user, isLoggedIn, fetchUser } = useAccountStore();
     const { pushWindow } = useWindowState();
 
-    // Force the component to read from the store on every render
-    const [renderCount, setRenderCount] = useState(0);
-
     // Format functions
     const formatCurrency = (amount) => {
         return new Intl.NumberFormat("en-US", {
@@ -138,7 +135,6 @@ export const ZapoutPage = () => {
         const handleStorageChange = (event) => {
             if (event.key === "nostr-merchant-auth") {
                 console.log("Auth storage changed, refreshing state");
-                setRenderCount((prev) => prev + 1);
                 // Re-fetch user if logged in
                 if (isLoggedIn) {
                     fetchUser();
@@ -149,14 +145,8 @@ export const ZapoutPage = () => {
         // Set up listeners
         window.addEventListener("storage", handleStorageChange);
 
-        // Check for auth changes periodically
-        const intervalId = setInterval(() => {
-            setRenderCount((prev) => prev + 1);
-        }, 1000);
-
         return () => {
             window.removeEventListener("storage", handleStorageChange);
-            clearInterval(intervalId);
         };
     }, [fetchUser, isLoggedIn]);
 
@@ -246,15 +236,9 @@ export const ZapoutPage = () => {
                         : null}
                 </div>
 
-                {/* Shipping Form Section - force re-render when auth state changes */}
-                <div
-                    className="lg:col-span-1"
-                    key={`auth-state-${isLoggedIn}-${renderCount}`}
-                >
-                    <div
-                        className="bg-neutral-100 dark:bg-neutral-800 rounded-lg p-6 sticky top-4"
-                        key={`auth-state-inner-${isLoggedIn}-${user?.npub}`}
-                    >
+                {/* Shipping Form Section - without the constant re-rendering */}
+                <div className="lg:col-span-1">
+                    <div className="bg-neutral-100 dark:bg-neutral-800 rounded-lg p-6 sticky top-4">
                         {isLoggedIn && user
                             ? (
                                 <>
