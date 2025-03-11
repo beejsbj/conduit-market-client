@@ -1,10 +1,11 @@
 import { ProductExplorerPage } from "./pages/ProductExplorerPage.tsx";
 import { Route, Switch } from "wouter";
-import { ZapoutPage } from "@/pages/ZapoutPage.tsx";
+import ZapoutPage from "@/pages/ZapoutPage.tsx";
 import Header from "./components/Header.tsx";
 import { WindowTypes } from "./stores/useWindowState.ts";
 import SubWindows from "./layouts/windows/SubWindows.tsx";
 import AppInitializer from "./AppInitializer.tsx";
+import OrdersPage from "./pages/OrdersPage.tsx";
 
 const UnknownWindow: React.FC<{ windowId: WindowTypes }> = ({ windowId }) => (
   <div className="p-4 text-center">
@@ -24,6 +25,7 @@ function App() {
         <Route path="/" component={ProductExplorerPage} />
         <Route path="/zapout" component={ZapoutPage} />
         <Route path="/checkout" component={ZapoutPage} />
+        <Route path="/orders" component={OrdersPage} />
       </Switch>
     </AppInitializer>
   );

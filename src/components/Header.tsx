@@ -4,15 +4,14 @@ import Button from "./Buttons/Button";
 import useWindowState, { WindowTypes } from "@/stores/useWindowState";
 import { ShoppingCart } from "lucide-react";
 import { useCartStore } from "@/stores/useCartStore";
-import { CartDrawer } from "@/layouts/CartDrawer.tsx";
+import OrderPageButton from "./Buttons/OrderPageButton";
 
 const Header: React.FC = () => {
     const [dropdownOpen, setDropdownOpen] = useState(false);
-    const [cartOpen, setCartOpen] = useState(false);
     const [displayName, setDisplayName] = useState<string>("");
     const { user, isLoggedIn, logout } = useAccountStore();
     const { pushWindow } = useWindowState();
-    const { cart } = useCartStore();
+    const { cart, openCart } = useCartStore();
 
     const openLoginWindow = (): void => {
         pushWindow(WindowTypes.LOGIN, {
@@ -20,14 +19,6 @@ const Header: React.FC = () => {
             isFullScreen: true,
             disableClickOutside: true,
         });
-    };
-
-    const handleOpenCart = () => {
-        setCartOpen(true);
-    };
-
-    const handleCloseCart = () => {
-        setCartOpen(false);
     };
 
     const dropdownRef = useRef<HTMLDivElement>(null);
@@ -97,7 +88,7 @@ const Header: React.FC = () => {
                     <div className="flex items-center space-x-4">
                         {/* Cart Button */}
                         <Button
-                            onClick={handleOpenCart}
+                            onClick={openCart}
                             className="bg-primary text-white px-4 py-2 rounded-md flex items-center gap-2 hover:bg-primary-dark transition-colors"
                         >
                             <ShoppingCart size={20} />
@@ -109,6 +100,8 @@ const Header: React.FC = () => {
                                 </span>
                             )}
                         </Button>
+                        {/* Orders Page Button */}
+                        <OrderPageButton />
 
                         {/* Account Component */}
                         {isLoggedIn && user
@@ -183,9 +176,6 @@ const Header: React.FC = () => {
                     </div>
                 </div>
             </header>
-
-            {/* Cart Drawer */}
-            <CartDrawer isOpen={cartOpen} onClose={handleCloseCart} />
         </>
     );
 };

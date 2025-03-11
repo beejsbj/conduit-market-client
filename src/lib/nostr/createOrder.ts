@@ -54,6 +54,7 @@ export async function createOrder(orderData: OrderData, merchantPubkey: string):
 
         const validationResult = validateOrder(orderEvent);
         if (!validationResult.success) {
+            console.error("There was an issue creating the order:", validationResult.error.message);
             return {
                 success: false,
                 message: `Invalid order structure: ${validationResult.error.message}`
@@ -76,11 +77,18 @@ export async function createOrder(orderData: OrderData, merchantPubkey: string):
 
         const merchantNdkUser = new NDKUser({ pubkey: merchantPubkey });
 
+        if (!ndk.signer) {
+            console.error("[createOrder.ts]: No signer available");
+            return { success: false, message: "[createOrder.ts]: Failed: No signer available" };
+        }
+
+        console.log("A")
         // Encrypt the order content
         sealEvent.content = await ndk.signer!.encrypt(
             merchantNdkUser,
             JSON.stringify(ndkOrderEvent)
         );
+        console.log("B")
 
         console.log("Signing seal event for merchant:", merchantPubkey);
 

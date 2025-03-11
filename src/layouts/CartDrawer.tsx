@@ -3,13 +3,15 @@ import { Minus, Plus, ShoppingCart, X } from "lucide-react";
 import { useEffect, useState } from "react";
 import ZapoutButton from "@/components/Buttons/ZapoutButton.tsx";
 
-interface CartDrawerProps {
-    isOpen: boolean;
-    onClose: () => void;
-}
+export const CartDrawer = () => {
+    const {
+        cart,
+        decreaseQuantity,
+        addToCart,
+        isCartOpen,
+        closeCart,
+    } = useCartStore();
 
-export const CartDrawer = ({ isOpen, onClose }: CartDrawerProps) => {
-    const { cart, decreaseQuantity, addToCart } = useCartStore();
     const [cartTotal, setCartTotal] = useState(0);
 
     // Calculate cart total whenever cart changes
@@ -33,14 +35,14 @@ export const CartDrawer = ({ isOpen, onClose }: CartDrawerProps) => {
         <>
             <div
                 className={`fixed inset-0 bg-black/40 bg-opacity-50 transition-opacity z-10 ${
-                    isOpen ? "opacity-100" : "opacity-0 pointer-events-none"
+                    isCartOpen ? "opacity-100" : "opacity-0 pointer-events-none"
                 }`}
-                onClick={onClose}
+                onClick={closeCart}
             />
 
             <section
                 className={`fixed top-0 right-0 h-full w-80 bg-white dark:bg-neutral-800 shadow-lg transform transition-transform duration-300 ease-in-out z-20 ${
-                    isOpen ? "translate-x-0" : "translate-x-full"
+                    isCartOpen ? "translate-x-0" : "translate-x-full"
                 } flex flex-col`}
             >
                 <header className="flex items-center justify-between p-4 border-b border-neutral-200 dark:border-neutral-700">
@@ -48,7 +50,7 @@ export const CartDrawer = ({ isOpen, onClose }: CartDrawerProps) => {
                         Your Cart
                     </h2>
                     <button
-                        onClick={onClose}
+                        onClick={closeCart}
                         className="p-1 rounded-full hover:bg-neutral-100 dark:hover:bg-neutral-700 transition-colors"
                         aria-label="Close cart"
                     >
@@ -74,9 +76,9 @@ export const CartDrawer = ({ isOpen, onClose }: CartDrawerProps) => {
                         )
                         : (
                             <div className="p-4 flex flex-col gap-4">
-                                {cart.map((product) => (
+                                {cart.map((product, i) => (
                                     <div
-                                        key={product.id}
+                                        key={product.id + `-${i}`}
                                         className="flex items-center p-3 rounded-lg bg-neutral-50 dark:bg-neutral-700 shadow-sm"
                                     >
                                         <div className="w-10 h-10 rounded-md overflow-hidden flex-shrink-0 bg-white mr-3">
@@ -130,7 +132,7 @@ export const CartDrawer = ({ isOpen, onClose }: CartDrawerProps) => {
                             </span>
                         </div>
                         <ZapoutButton
-                            onClick={onClose}
+                            onClick={closeCart}
                             className="w-full py-3 bg-primary hover:bg-primary-dark text-white font-medium rounded-md transition-colors"
                         >
                             Proceed to Checkout

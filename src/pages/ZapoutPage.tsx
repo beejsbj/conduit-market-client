@@ -1,13 +1,12 @@
 import { useCartStore } from "@/stores/useCartStore";
 import ShippingForm from "@/layouts/ShippingForm.tsx";
-import { useActiveUser } from "nostr-hooks";
 import { createOrder } from "@/lib/nostr/createOrder.ts";
-import { useCallback, useEffect, useState } from "react";
-import { LoginWidget } from "@/components/LoginWidget.tsx";
+import { useCallback, useEffect } from "react";
 import { NDKEvent } from "@nostr-dev-kit/ndk";
 import postOrder from "@/lib/nostr/postOrder.ts";
 import { useAccountStore } from "@/stores/useAccountStore";
 import useWindowState, { WindowTypes } from "@/stores/useWindowState";
+import BackButton from "@/components/Buttons/BackButton";
 
 interface CartItem {
     eventId: string;
@@ -79,7 +78,7 @@ async function prepareOrder(
     postOrder(order, cart[0].merchantPubkey);
 }
 
-export const ZapoutPage = () => {
+export default function ZapoutPage() {
     const { cart } = useCartStore();
     const { user, isLoggedIn, fetchUser } = useAccountStore();
     const { pushWindow } = useWindowState();
@@ -152,12 +151,7 @@ export const ZapoutPage = () => {
 
     return (
         <div className="container mx-auto px-4 py-8 max-w-5xl">
-            <button
-                onClick={() => window.history.back()}
-                className="flex items-center text-primary mb-4 hover:underline"
-            >
-                <span className="mr-2">←</span> Back to shopping
-            </button>
+            <BackButton text="Back to Shopping" />
             <h1 className="text-3xl font-bold mb-8 text-primary">Checkout</h1>
 
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
@@ -280,4 +274,4 @@ export const ZapoutPage = () => {
             </div>
         </div>
     );
-};
+}
