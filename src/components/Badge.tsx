@@ -1,23 +1,32 @@
+import { cn } from '../lib/utils'
+
 export const Badge = ({
   children,
   className = '',
-  variant = 'default'
+  variant = 'primary'
 }: {
   children: React.ReactNode
   className?: string
-  variant?: 'default' | 'secondary'
+  variant?:
+    | 'primary'
+    | 'secondary'
+    | 'muted'
+    | 'destructive'
+    | 'success'
+    | 'warning'
 }) => {
-  const variantClasses = {
-    default: 'bg-gray-800 text-gray-200',
-    secondary: 'bg-gray-700 text-gray-200'
-  }
-
-  return (
-    <span
-      className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium
-        ${variantClasses[variant]} ${className}`}
-    >
-      {children}
-    </span>
+  const classNameValue = cn(
+    'inline-flex items-center px-4 py-1 rounded-full solid-voice',
+    {
+      'bg-primary text-primary-foreground': variant === 'primary',
+      'bg-secondary text-secondary-foreground': variant === 'secondary',
+      'bg-muted text-muted-foreground': variant === 'muted',
+      'bg-destructive text-destructive-foreground': variant === 'destructive',
+      'bg-success text-success-foreground': variant === 'success',
+      'bg-warning text-warning-foreground animate-bounce': variant === 'warning'
+    },
+    className
   )
+
+  return <span className={classNameValue}>{children}</span>
 }
