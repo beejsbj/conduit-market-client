@@ -2,7 +2,7 @@ import { useCartStore } from '@/stores/useCartStore'
 import { Minus, Plus, ShoppingCart, X } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import ZapoutButton from '@/components/Buttons/ZapoutButton.tsx'
-
+import { formatPrice } from '@/lib/utils'
 export const CartDrawer = () => {
   const { cart, decreaseQuantity, addToCart, isCartOpen, closeCart } =
     useCartStore()
@@ -19,12 +19,6 @@ export const CartDrawer = () => {
   }, [cart])
 
   // Format currency
-  const formatCurrency = (amount) => {
-    return new Intl.NumberFormat('en-US', {
-      style: 'currency',
-      currency: 'USD'
-    }).format(amount)
-  }
 
   return (
     <>
@@ -81,7 +75,7 @@ export const CartDrawer = () => {
                       {product.name}
                     </h3>
                     <div className="text-primary font-bold text-sm">
-                      {formatCurrency(product.price)}
+                      {formatPrice(product.price)}
                     </div>
                   </div>
                   <div className="flex items-center border border-neutral-200 dark:border-neutral-600 rounded-md overflow-hidden h-8">
@@ -113,7 +107,7 @@ export const CartDrawer = () => {
           <div className="border-t border-neutral-200 dark:border-neutral-700 p-4">
             <div className="flex justify-between mb-4">
               <span className="font-medium">Subtotal:</span>
-              <span className="font-bold">{formatCurrency(cartTotal)}</span>
+              <span className="font-bold">{formatPrice(cartTotal)}</span>
             </div>
             <ZapoutButton
               onClick={closeCart}
