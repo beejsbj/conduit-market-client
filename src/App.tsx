@@ -7,6 +7,9 @@ import SubWindows from './layouts/windows/SubWindows.tsx'
 import AppInitializer from './AppInitializer.tsx'
 import OrdersPage from './pages/OrdersPage.tsx'
 import StyleGuidePage from './pages/StyleGuide.tsx'
+import Footer from './components/Footer.tsx'
+import { CartDrawer } from './layouts/CartDrawer.tsx'
+
 const UnknownWindow: React.FC<{ windowId: WindowTypes }> = ({ windowId }) => (
   <div className="p-4 text-center">
     <div className="text-amber-500 mb-2">⚠️</div>
@@ -28,6 +31,8 @@ function App() {
         <Route path="/orders" component={OrdersPage} />
         <Route path="/style-guide" component={StyleGuidePage} />
       </Switch>
+      <CartDrawer />
+      {/* <Footer /> */}
     </AppInitializer>
   )
 }
