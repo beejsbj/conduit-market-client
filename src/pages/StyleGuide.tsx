@@ -40,9 +40,7 @@ export default function StyleGuidePage() {
       </section>
 
       <section>
-        <div className="inner-column wide">
-          <ComponentsGuide />
-        </div>
+        <div className="inner-column wide">{/* <ComponentsGuide /> */}</div>
       </section>
     </main>
   )
