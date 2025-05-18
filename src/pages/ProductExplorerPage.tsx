@@ -24,7 +24,6 @@ const content = {
   ]
 }
 
-//
 export const ProductExplorerPage: React.FC = () => {
   const shopName = 'Conduit Market'
 
