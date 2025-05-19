@@ -122,7 +122,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
     >
       <div className="relative">
         {/* floating indicators */}
-        <div className="w-full absolute top-0 p-4 flex items-center justify-between">
+        <div className="w-full absolute top-0 p-2 flex items-center justify-between">
           {/* left */}
           <div>{badge}</div>
           {/* right */}

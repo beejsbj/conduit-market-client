@@ -8,6 +8,7 @@ import { ComponentsGuide } from '@/components/StyleGuide/ComponentsGuide'
 import PageSection from '@/layouts/PageSection'
 import { useParams } from 'wouter'
 import Breadcrumbs from '@/components/Breadcumbs'
+import { CardsGuide } from '@/components/StyleGuide/CardsGuide'
 export default function StyleGuidePage() {
   const params = useParams()
 
@@ -29,13 +30,15 @@ export default function StyleGuidePage() {
             <TabsTrigger value="voices">Typography & Voices</TabsTrigger>
             <TabsTrigger value="buttons">Buttons</TabsTrigger>
             <TabsTrigger value="components">Components</TabsTrigger>
+            <TabsTrigger value="cards">Cards</TabsTrigger>
           </TabsList>
 
           <TabsContent value="all" className="mt-6 grid gap-20">
-            <ColorGuide />
-            <VoicesGuide />
-            <ButtonGuide />
+            {/* <ColorGuide /> */}
+            {/* <VoicesGuide /> */}
+            {/* <ButtonGuide /> */}
             <ComponentsGuide />
+            <CardsGuide />
           </TabsContent>
 
           <TabsContent value="colors" className="mt-6">
@@ -51,6 +54,10 @@ export default function StyleGuidePage() {
 
           <TabsContent value="components" className="mt-6">
             <ComponentsGuide />
+          </TabsContent>
+
+          <TabsContent value="cards" className="mt-6">
+            <CardsGuide />
           </TabsContent>
         </Tabs>
       </PageSection>

@@ -23,6 +23,7 @@ import {
 import Avatar from '../Avatar'
 import NewsletterSignup from '../NewsletterSignup'
 import ContactHelp from '../Buttons/ContactHelp'
+import Hero from '@/components/HomePage/Hero'
 
 interface Component {
   name: string
@@ -334,6 +335,17 @@ const components: Component[] = [
         }
       }
     ]
+  },
+  {
+    name: 'Hero',
+    component: Hero,
+    fullWidth: true,
+    states: [
+      {
+        label: 'Default',
+        props: {}
+      }
+    ]
   }
 ]
 
@@ -373,7 +385,6 @@ export function ComponentsGuide() {
       ))}
 
       {/* Cards */}
-      <CardsGuide />
     </div>
   )
 }

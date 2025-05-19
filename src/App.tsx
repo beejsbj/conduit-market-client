@@ -9,7 +9,7 @@ import OrdersPage from './pages/OrdersPage.tsx'
 import StyleGuidePage from './pages/StyleGuide.tsx'
 import Footer from './components/Footer.tsx'
 import { CartDrawer } from './layouts/CartDrawer.tsx'
-
+import HomePage from './pages/HomePage.tsx'
 const UnknownWindow: React.FC<{ windowId: WindowTypes }> = ({ windowId }) => (
   <div className="p-4 text-center">
     <div className="text-amber-500 mb-2">⚠️</div>
@@ -26,7 +26,8 @@ function App() {
       <main>
         <SubWindows defaultComponent={UnknownWindow} />
         <Switch>
-          <Route path="/" component={ProductExplorerPage} />
+          <Route path="/" component={HomePage} />
+          <Route path="/products" component={ProductExplorerPage} />
           <Route path="/zapout" component={ZapoutPage} />
           <Route path="/checkout" component={ZapoutPage} />
           <Route path="/orders" component={OrdersPage} />

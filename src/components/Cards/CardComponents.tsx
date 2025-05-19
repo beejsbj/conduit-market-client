@@ -2,10 +2,12 @@ import { cn } from '@/lib/utils'
 
 export const Card = ({
   children,
-  className = ''
+  className = '',
+  style = {}
 }: {
   children: React.ReactNode
   className?: string
+  style?: React.CSSProperties
 }) => {
   return (
     <div
@@ -13,6 +15,7 @@ export const Card = ({
         'bg-paper border-base-700 border rounded-lg shadow-md overflow-hidden hover:border-accent-500 transition-colors duration-300',
         className
       )}
+      style={style}
     >
       {children}
     </div>
