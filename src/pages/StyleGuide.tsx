@@ -6,19 +6,23 @@ import { VoicesGuide } from '@/components/StyleGuide/VoicesGuide'
 import { ButtonGuide } from '@/components/StyleGuide/ButtonGuide'
 import { ComponentsGuide } from '@/components/StyleGuide/ComponentsGuide'
 import PageSection from '@/layouts/PageSection'
-
+import { useParams } from 'wouter'
+import Breadcrumbs from '@/components/Breadcumbs'
 export default function StyleGuidePage() {
+  const params = useParams()
+
   return (
     <main className="grid gap-8">
       <PageSection width="wide">
         <div className="mb-8">
+          <Breadcrumbs />
           <h1 className="booming-voice mb-6">Style Guide</h1>
           <p className="text-muted-foreground">
             A comprehensive guide to the design system and components.
           </p>
         </div>
 
-        <Tabs defaultValue="all" className="w-full">
+        <Tabs defaultValue={params.page || 'all'} className="w-full">
           <TabsList className="w-full justify-start">
             <TabsTrigger value="all">All</TabsTrigger>
             <TabsTrigger value="colors">Colors</TabsTrigger>

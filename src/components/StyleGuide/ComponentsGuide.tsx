@@ -11,7 +11,7 @@ import Breadcrumbs from '../Breadcumbs'
 import Field from '../Form/Field'
 import { SearchIcon, XIcon } from 'lucide-react'
 import RankingTable from '../RankingTable'
-import CategoryHeader from '../CategoryHeader/CategoryHeader'
+import CategoryHeader from '../CategoryHeader'
 import {
   Pill,
   CategoryPill,

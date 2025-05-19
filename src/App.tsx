@@ -30,7 +30,7 @@ function App() {
           <Route path="/zapout" component={ZapoutPage} />
           <Route path="/checkout" component={ZapoutPage} />
           <Route path="/orders" component={OrdersPage} />
-          <Route path="/style-guide" component={StyleGuidePage} />
+          <Route path="/style-guide/:page?" component={StyleGuidePage} />
         </Switch>
         <CartDrawer />
       </main>

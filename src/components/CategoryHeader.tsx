@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react'
-import Button from '../Buttons/Button'
+import Button from './Buttons/Button'
 import { cn } from '@/lib/utils'
 
 interface CategoryHeaderProps {
