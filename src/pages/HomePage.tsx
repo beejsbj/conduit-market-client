@@ -13,6 +13,9 @@ import CollectionCard from '@/components/Cards/CollectionCard'
 import StoreCard from '@/components/Cards/StoreCard'
 import ArticleCard from '@/components/Cards/ArticleCard'
 import RankingTable from '@/components/RankingTable'
+import ContactHelp from '@/components/Buttons/ContactHelp'
+import NewsletterSignup from '@/components/NewsletterSignup'
+import Banner from '@/components/Banner'
 const content = [
   {
     header: 'For You',
@@ -129,6 +132,15 @@ const HomePage: React.FC = () => {
             return <ArticleCard key={index} event={event} />
           })}
         </Carousel>
+      </PageSection>
+
+      <Banner />
+
+      <PageSection width="wide">
+        <div className="flex gap-30">
+          <NewsletterSignup />
+          <ContactHelp />
+        </div>
       </PageSection>
     </>
   )

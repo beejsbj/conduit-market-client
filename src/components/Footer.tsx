@@ -177,7 +177,7 @@ const legalLinks = [
 
 const Footer = () => {
   return (
-    <footer className="bg-paper overflow-hidden">
+    <footer className="bg-paper overflow-hidden mt-10">
       <section className="links">
         <div className="inner-column wide pt-12 grid gap-8 grid-cols-[repeat(auto-fill,minmax(200px,1fr))]">
           <picture className="max-w-50">
