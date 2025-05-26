@@ -135,13 +135,6 @@ const HomePage: React.FC = () => {
       </PageSection>
 
       <Banner />
-
-      <PageSection width="wide">
-        <div className="flex gap-30">
-          <NewsletterSignup />
-          <ContactHelp />
-        </div>
-      </PageSection>
     </>
   )
 }
