@@ -1,16 +1,12 @@
-import { useLogin } from "nostr-hooks";
-import Button from "@/components/Buttons/Button.tsx";
+import { useLogin } from 'nostr-hooks'
+import Button from '@/components/Buttons/Button.tsx'
 
 export const LoginWidget = () => {
-    const {
-        loginWithExtension,
-    } = useLogin();
+  const { loginWithExtension } = useLogin()
 
-    return (
-        <div>
-            <Button onClick={loginWithExtension}>
-                Login with Nostr Extension
-            </Button>
-        </div>
-    );
-};
+  return (
+    <div>
+      <Button onClick={loginWithExtension}>Login with Nostr Extension</Button>
+    </div>
+  )
+}

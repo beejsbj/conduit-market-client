@@ -295,11 +295,12 @@
 
   /* Shadows */
 
-  --text-shadow: 0 0 0.625em var(--color-primary-500),
-    0 0 1.25em var(--color-primary-400), 0 0 2.5em var(--color-primary-300),
-    0 0 5em var(--color-primary-200);
+  --text-shadow:
+    0 0 0.625em var(--color-primary-500), 0 0 1.25em var(--color-primary-400),
+    0 0 2.5em var(--color-primary-300), 0 0 5em var(--color-primary-200);
 
-  --shadow-border-glow: 0 0 0.1rem var(--color-ink), 0 0 0.1rem var(--color-ink),
+  --shadow-border-glow:
+    0 0 0.1rem var(--color-ink), 0 0 0.1rem var(--color-ink),
     0 0 1rem var(--tw-shadow-color), 0 0 0.1rem var(--tw-shadow-color),
     0 0 0.15rem var(--tw-shadow-color), inset 0 0 0.2rem var(--tw-shadow-color);
 
