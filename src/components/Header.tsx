@@ -1,36 +1,36 @@
-import React, { useEffect, useRef, useState } from "react";
-import { useAccountStore } from "@/stores/useAccountStore";
-import Button from "./Buttons/Button";
-import useWindowState, { WindowTypes } from "@/stores/useWindowState";
-import { ShoppingCart } from "lucide-react";
-import { useCartStore } from "@/stores/useCartStore";
-import OrderPageButton from "./Buttons/OrderPageButton";
+import React, { useEffect, useRef, useState } from 'react'
+import { useAccountStore } from '@/stores/useAccountStore'
+import Button from './Buttons/Button'
+import useWindowState, { WindowTypes } from '@/stores/useWindowState'
+import { ShoppingCart } from 'lucide-react'
+import { useCartStore } from '@/stores/useCartStore'
+import OrderPageButton from './Buttons/OrderPageButton'
 
 const Header: React.FC = () => {
-  const [dropdownOpen, setDropdownOpen] = useState(false);
-  const [displayName, setDisplayName] = useState<string>("");
-  const { user, isLoggedIn, logout } = useAccountStore();
-  const { pushWindow } = useWindowState();
-  const { cart, openCart } = useCartStore();
+  const [dropdownOpen, setDropdownOpen] = useState(false)
+  const [displayName, setDisplayName] = useState<string>('')
+  const { user, isLoggedIn, logout } = useAccountStore()
+  const { pushWindow } = useWindowState()
+  const { cart, openCart } = useCartStore()
 
   const openLoginWindow = (): void => {
     pushWindow(WindowTypes.LOGIN, {
-      title: "Lock In",
+      title: 'Lock In',
       isFullScreen: true,
-      disableClickOutside: true,
-    });
-  };
+      disableClickOutside: true
+    })
+  }
 
-  const dropdownRef = useRef<HTMLDivElement>(null);
+  const dropdownRef = useRef<HTMLDivElement>(null)
 
   const formatNpub = (npub: string): string => {
-    if (!npub) return "";
-    return `${npub.substring(0, 8)}...${npub.substring(npub.length - 8)}`;
-  };
+    if (!npub) return ''
+    return `${npub.substring(0, 8)}...${npub.substring(npub.length - 8)}`
+  }
 
   const handleLogout = async () => {
-    logout();
-  };
+    logout()
+  }
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -38,40 +38,40 @@ const Header: React.FC = () => {
         dropdownRef.current &&
         !dropdownRef.current.contains(event.target as Node)
       ) {
-        setDropdownOpen(false);
+        setDropdownOpen(false)
       }
-    };
+    }
 
-    document.addEventListener("mousedown", handleClickOutside);
+    document.addEventListener('mousedown', handleClickOutside)
     return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, []);
+      document.removeEventListener('mousedown', handleClickOutside)
+    }
+  }, [])
 
   useEffect(() => {
     const fetchUserMetadata = async () => {
       if (user && user.npub) {
         try {
-          const userProfile = await user.fetchProfile();
+          const userProfile = await user.fetchProfile()
 
           if (userProfile && userProfile.displayName) {
-            setDisplayName(userProfile.displayName);
+            setDisplayName(userProfile.displayName)
           } else if (userProfile && userProfile.name) {
-            setDisplayName(userProfile.name);
+            setDisplayName(userProfile.name)
           } else {
-            setDisplayName(formatNpub(user.npub));
+            setDisplayName(formatNpub(user.npub))
           }
         } catch (error) {
-          console.error("Error fetching user metadata:", error);
-          setDisplayName(formatNpub(user.npub));
+          console.error('Error fetching user metadata:', error)
+          setDisplayName(formatNpub(user.npub))
         }
       }
-    };
+    }
 
     if (isLoggedIn) {
-      fetchUserMetadata();
+      fetchUserMetadata()
     }
-  }, [user, isLoggedIn]);
+  }, [user, isLoggedIn])
 
   return (
     <>
@@ -109,7 +109,7 @@ const Header: React.FC = () => {
                 >
                   {/* User Avatar - Default to a circle with first letter or icon */}
                   <div className="w-8 h-8 rounded-full bg-purple-600 flex items-center justify-center text-white font-semibold">
-                    {displayName ? displayName.charAt(0).toUpperCase() : "N"}
+                    {displayName ? displayName.charAt(0).toUpperCase() : 'N'}
                   </div>
 
                   <span className="hidden sm:inline text-sm font-medium">
@@ -119,7 +119,7 @@ const Header: React.FC = () => {
                   {/* Dropdown Arrow */}
                   <svg
                     className={`w-4 h-4 transition-transform ${
-                      dropdownOpen ? "rotate-180" : ""
+                      dropdownOpen ? 'rotate-180' : ''
                     }`}
                     fill="none"
                     viewBox="0 0 24 24"
@@ -161,7 +161,7 @@ const Header: React.FC = () => {
         </div>
       </header>
     </>
-  );
-};
+  )
+}
 
-export default Header;
+export default Header
