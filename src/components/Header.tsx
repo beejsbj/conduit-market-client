@@ -85,13 +85,7 @@ const Header: React.FC = () => {
       <div className="inner-column wide">
         <div className="flex justify-between items-center gap-4">
           <picture className="max-w-50">
-            <img
-              src={
-                new URL('@/assets/images/logo/logo-full.svg', import.meta.url)
-                  .href
-              }
-              alt="Conduit Market"
-            />
+            <img src="/images/logo/logo-full.svg" alt="Conduit Market" />
           </picture>
 
           {/* actions */}

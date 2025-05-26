@@ -7,9 +7,9 @@ import {
   CardTitle
 } from '@/components/Cards/CardComponents'
 
-// Base card style that applies to all cards
+// Base card style that applies to all cards #todo
 const baseCardStyle =
-  'h-full border-none bg-center bg-no-repeat transition-all hover:bg-size-[120%]  hover:scale-102 bg-size-[110%]'
+  'h-full border-none bg-center bg-no-repeat transition-all hover:bg-size-[120%]  hover:scale-102 bg-size-[100%]'
 
 const heroCards = [
   {
@@ -19,42 +19,42 @@ const heroCards = [
       'The open social e-commerce platform powered by NOSTR, ensuring privacy and control over your transactions.',
     isMainCard: true,
     gridClass: 'col-span-2 row-span-2',
-    cardClass: `${baseCardStyle} bg-[url('../assets/images/hero1.jpg')] `
+    cardClass: `${baseCardStyle} bg-[url('/images/hero1.jpg')] `
   },
   {
     id: 2,
     title: 'Instant payments with lightning BTC',
     description: null,
     gridClass: '',
-    cardClass: `${baseCardStyle} bg-[url('../assets/images/hero2.jpg')] `
+    cardClass: `${baseCardStyle} bg-[url('/images/hero2.jpg')] `
   },
   {
     id: 3,
     title: 'Discover curated legal products from visionary brands and artisans',
     description: null,
     gridClass: 'row-span-3',
-    cardClass: `${baseCardStyle} bg-[url('../assets/images/hero3.jpg')] `
+    cardClass: `${baseCardStyle} bg-[url('/images/hero3.jpg')] `
   },
   {
     id: 4,
     title: 'Build trust through a network of verified, meaningful interactions',
     description: null,
     gridClass: 'row-span-2',
-    cardClass: `${baseCardStyle} bg-[url('../assets/images/hero4.jpg')] `
+    cardClass: `${baseCardStyle} bg-[url('/images/hero4.jpg')] `
   },
   {
     id: 5,
     title: 'Customize algorithms or create your own',
     description: null,
     gridClass: '',
-    cardClass: `${baseCardStyle} bg-[url('../assets/images/hero5.jpg')] `
+    cardClass: `${baseCardStyle} bg-[url('/images/hero5.jpg')] `
   },
   {
     id: 6,
     title: 'Your data, your rules. No tracking, no manipulation.',
     description: null,
     gridClass: '',
-    cardClass: `${baseCardStyle} bg-[url('../assets/images/hero6.jpg')] `
+    cardClass: `${baseCardStyle} bg-[url('/images/hero6.jpg')] `
   }
 ]
 

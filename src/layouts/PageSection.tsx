@@ -20,7 +20,7 @@ const PageSection: React.FC<PageSectionProps> = ({
     lg: 'gap-6'
   }[gap]
 
-  const sectionClassName = cn('inner-column grwid', gapClass, width, className)
+  const sectionClassName = cn('inner-column grid', gapClass, width, className)
   return (
     <section>
       <div className={sectionClassName}>{children}</div>
