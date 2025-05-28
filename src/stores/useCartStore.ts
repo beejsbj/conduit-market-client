@@ -18,6 +18,7 @@ interface CartState {
   addToCart: (product: CartItem) => void
   decreaseQuantity: (product: CartItem) => void
   removeAllFromCart: (product: CartItem) => void
+  getItemCount: (product: CartItem) => number
 }
 
 export const useCartStore = create<CartState>()(
@@ -69,7 +70,15 @@ export const useCartStore = create<CartState>()(
       removeAllFromCart: (product: CartItem) =>
         set((state) => ({
           cart: state.cart.filter((p) => p.productId !== product.productId)
-        }))
+        })),
+      getItemCount: (product: CartItem) =>
+        get().cart.reduce(
+          (count, item) =>
+            item.productId === product.productId
+              ? count + item.quantity
+              : count,
+          0
+        )
     }),
     {
       name: 'conduit-market-cart',
