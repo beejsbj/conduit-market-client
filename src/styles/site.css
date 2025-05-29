@@ -74,11 +74,6 @@ layer(base);
 /* then other contextual styles */
 
 @layer components {
-  /* Style code elements, but not when they're inside pre tags */
-  code:not(pre code) {
-    @apply text-[.5rem] max-w-[25em] bg-white/95 p-1.5 rounded border shadow-sm;
-  }
-
   /*  */
 
   /* scrollbar */
@@ -127,60 +122,6 @@ layer(base);
   );
   background-size: 1rem 1rem;
   background-repeat: round;
-}
-
-/* #todo maybe remove the bottom */
-
-@utility card {
-  background-color: white;
-  border-radius: var(--radius-lg);
-  box-shadow: var(--shadow-md);
-  overflow: hidden;
-  transition:
-    transform var(--transition-normal),
-    box-shadow var(--transition-normal);
-
-  &:hover {
-    transform: translateY(-4px);
-    box-shadow: var(--shadow-lg);
-  }
-}
-@utility btn-primary {
-  background-color: var(--color-primary);
-  color: white;
-  padding: 0.5rem 1rem;
-  border: none;
-  font-weight: var(--font-weight-medium);
-
-  &:hover {
-    background-color: var(--color-primary-dark);
-  }
-}
-@utility btn-secondary {
-  background-color: var(--color-secondary);
-  color: white;
-  padding: 0.5rem 1rem;
-  border: none;
-  font-weight: var(--font-weight-medium);
-
-  &:hover {
-    background-color: var(--color-secondary-dark);
-  }
-}
-@utility badge {
-  display: inline-block;
-  padding: 0.25rem 0.5rem;
-  border-radius: var(--radius-full);
-  font-size: 0.75rem;
-  font-weight: var(--font-weight-medium);
-}
-@utility badge-primary {
-  background-color: var(--color-primary-light);
-  color: var(--color-primary-dark);
-}
-@utility badge-secondary {
-  background-color: var(--color-secondary-light);
-  color: var(--color-secondary-dark);
 }
 
 /* components */
