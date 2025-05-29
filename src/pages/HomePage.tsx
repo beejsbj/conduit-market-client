@@ -49,7 +49,7 @@ const HomePage: React.FC = () => {
       {/* For You */}
       <PageSection>
         <h2 className="attention-voice">For You</h2>
-        <Carousel visibleItems={1}>
+        <Carousel>
           {products.map((event, index) => {
             return <PromoCard key={index} variant="1item" event={event} />
           })}
