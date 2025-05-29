@@ -2,13 +2,14 @@
 
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/Tabs'
 import { ColorGuide } from '@/components/StyleGuide/ColorGuide'
-import { VoicesGuide } from '@/components/StyleGuide/VoicesGuide'
+import { TypographyGuide } from '@/components/StyleGuide/TypographyGuide'
 import { ButtonGuide } from '@/components/StyleGuide/ButtonGuide'
 import { ComponentsGuide } from '@/components/StyleGuide/ComponentsGuide'
 import PageSection from '@/layouts/PageSection'
 import { useParams } from 'wouter'
 import Breadcrumbs from '@/components/Breadcumbs'
 import { CardsGuide } from '@/components/StyleGuide/CardsGuide'
+
 export default function StyleGuidePage() {
   const params = useParams()
 
@@ -22,45 +23,56 @@ export default function StyleGuidePage() {
             A comprehensive guide to the design system and components.
           </p>
         </div>
+      </PageSection>
 
-        <Tabs defaultValue={params.page || 'all'} className="w-full">
-          <TabsList className="w-full justify-start">
-            <TabsTrigger value="all">All</TabsTrigger>
+      <Tabs defaultValue={params.page || 'design-system'} className="w-full">
+        <PageSection width="wide">
+          <TabsList className="w-full justify-start sticky top-0 bg-background z-10">
+            <TabsTrigger value="design-system">Design System</TabsTrigger>
             <TabsTrigger value="colors">Colors</TabsTrigger>
             <TabsTrigger value="voices">Typography & Voices</TabsTrigger>
             <TabsTrigger value="buttons">Buttons</TabsTrigger>
             <TabsTrigger value="components">Components</TabsTrigger>
             <TabsTrigger value="cards">Cards</TabsTrigger>
           </TabsList>
+        </PageSection>
 
-          <TabsContent value="all" className="mt-6 grid gap-20">
-            {/* <ColorGuide /> */}
-            {/* <VoicesGuide /> */}
-            {/* <ButtonGuide /> */}
-            <ComponentsGuide />
-            <CardsGuide />
-          </TabsContent>
-
-          <TabsContent value="colors" className="mt-6">
+        <TabsContent value="design-system" className="mt-6 grid gap-20">
+          <PageSection width="wide">
             <ColorGuide />
-          </TabsContent>
-          <TabsContent value="voices" className="mt-6">
-            <VoicesGuide />
-          </TabsContent>
+            <TypographyGuide />
+          </PageSection>
+        </TabsContent>
 
-          <TabsContent value="buttons" className="mt-6">
+        <TabsContent value="colors" className="mt-6">
+          <PageSection width="wide">
+            <ColorGuide />
+          </PageSection>
+        </TabsContent>
+        <TabsContent value="voices" className="mt-6">
+          <PageSection width="wide">
+            <TypographyGuide />
+          </PageSection>
+        </TabsContent>
+
+        <TabsContent value="buttons" className="mt-6">
+          <PageSection width="wide">
             <ButtonGuide />
-          </TabsContent>
+          </PageSection>
+        </TabsContent>
 
-          <TabsContent value="components" className="mt-6">
+        <TabsContent value="components" className="mt-6">
+          <PageSection width="wide">
             <ComponentsGuide />
-          </TabsContent>
+          </PageSection>
+        </TabsContent>
 
-          <TabsContent value="cards" className="mt-6">
+        <TabsContent value="cards" className="mt-6">
+          <PageSection width="wide">
             <CardsGuide />
-          </TabsContent>
-        </Tabs>
-      </PageSection>
+          </PageSection>
+        </TabsContent>
+      </Tabs>
     </main>
   )
 }
