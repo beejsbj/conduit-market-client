@@ -12,6 +12,8 @@ import {
 import { useCartStore } from '@/stores/useCartStore'
 import OrderPageButton from './Buttons/OrderPageButton'
 import Field from './Form/Field'
+import Logo from './Logo'
+import MobileMenu from './MobileMenu'
 
 const Header: React.FC = () => {
   const [dropdownOpen, setDropdownOpen] = useState(false)
@@ -81,15 +83,13 @@ const Header: React.FC = () => {
   }, [user, isLoggedIn])
 
   return (
-    <header>
+    <header className="relative">
       <div className="inner-column wide">
         <div className="flex justify-between items-center gap-4">
-          <picture className="max-w-50">
-            <img src="/images/logo/logo-full.svg" alt="Conduit Market" />
-          </picture>
+          <Logo className="max-w-50" />
 
-          {/* actions */}
-          <div className="flex items-center flex-1 justify-end gap-4">
+          {/* Desktop Navigation */}
+          <div className="hidden lg:flex items-center flex-1 justify-end gap-4">
             <Button variant="ghost" isLink to="/shop">
               <ShoppingCart />
               <span className="">Shop</span>
@@ -141,6 +141,9 @@ const Header: React.FC = () => {
               </Button>
             )}
           </div>
+
+          {/* Mobile Menu */}
+          <MobileMenu />
         </div>
       </div>
     </header>
