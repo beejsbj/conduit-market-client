@@ -105,7 +105,7 @@ const Carousel: React.FC<CarouselProps> = ({
 
       {canScrollPrev && (
         <Button
-          variant="ink"
+          variant="primary"
           size="icon"
           rounded={false}
           className="absolute -left-4 top-1/2 -translate-y-1/2 z-10"
@@ -117,7 +117,7 @@ const Carousel: React.FC<CarouselProps> = ({
 
       {canScrollNext && (
         <Button
-          variant="ink"
+          variant="primary"
           size="icon"
           rounded={false}
           className="absolute -right-4 top-1/2 -translate-y-1/2 z-10"
