@@ -8,11 +8,13 @@ interface CarouselProps {
   children: React.ReactNode
   className?: string
   visibleItems?: number
+  visibleItemsMobile?: number
 }
 
 const Carousel: React.FC<CarouselProps> = ({
   children,
   visibleItems = 4,
+  visibleItemsMobile = 1,
   className,
   ...props
 }) => {
@@ -79,21 +81,22 @@ const Carousel: React.FC<CarouselProps> = ({
   }
 
   // Calculate item width based on visibleItems
-  const itemWidth = `calc((100% / ${visibleItems}) - (${
-    visibleItems - 1
-  } * 1rem / ${visibleItems}))`
+  const itemBasis = Math.floor(100 / visibleItems) + -2 + '%'
+  const itemBasisMobile = Math.floor(100 / visibleItemsMobile) + -2 + '%'
 
   return (
-    <div className={cn('relative mt-4', className)}>
+    <div className={cn('grid relative mt-4', className)}>
       <ul
         ref={carouselRef}
-        className="flex gap-4 overflow-hidden scroll-smooth"
+        className="flex gap-4 overflow-hidden scroll-smooth "
       >
         {Children.map(children, (child, index) => (
           <li
             key={index}
-            className="flex-shrink-0"
-            style={{ width: itemWidth }}
+            className="flex-shrink-0 min-w-fit md:min-w-min"
+            style={{
+              flexBasis: itemBasis
+            }}
           >
             {child}
           </li>
