@@ -115,9 +115,9 @@ const ProductCard: React.FC<ProductCardProps> = ({
   return (
     <Card
       className={cn(
-        'w-full max-w-sm overflow-hidden',
+        'w-full overflow-hidden max-w-sm',
         isOutOfStock && 'grayscale',
-        isHomeCard && 'max-w-50'
+        isHomeCard && 'max-w-xs'
       )}
     >
       <div className="relative">
