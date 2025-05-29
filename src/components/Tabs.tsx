@@ -62,7 +62,10 @@ function TabsList({ className, children, ...props }: TabsListProps) {
   return (
     <div
       role="tablist"
-      className={cn('flex items-center relative', className)}
+      className={cn(
+        'flex items-center relative flex-wrap gap-2 gap-y-4',
+        className
+      )}
       {...props}
     >
       {children}
