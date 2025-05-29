@@ -155,6 +155,9 @@
 }
 
 @theme {
+  /* breakpoints */
+  --breakpoint-3xl: 120rem;
+
   /* typography */
   /* Font families */
   --font-display: 'Whyte Inktrap Variable', system-ui, sans-serif;
@@ -165,9 +168,11 @@
   --font-secondary: var(--font-display);
 
   /* Line heights */
+
   --leading-tight: 1.2;
+  --leading-snug: 1.35;
   --leading-normal: 1.5;
-  --leading-relaxed: 1.75;
+  --leading-relaxed: 1.625;
 
   /* Border radius */
 
