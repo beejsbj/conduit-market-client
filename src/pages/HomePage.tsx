@@ -12,7 +12,7 @@ import { NDKEvent } from '@nostr-dev-kit/ndk'
 import CollectionCard from '@/components/Cards/CollectionCard'
 import StoreCard from '@/components/Cards/StoreCard'
 import ArticleCard from '@/components/Cards/ArticleCard'
-import RankingTable from '@/components/RankingTable'
+import RankingTable, { DualRankingTable } from '@/components/RankingTable'
 import ContactHelp from '@/components/Buttons/ContactHelp'
 import NewsletterSignup from '@/components/NewsletterSignup'
 import Banner from '@/components/Banner'
@@ -41,6 +41,7 @@ const HomePage: React.FC = () => {
 
     fetchProducts()
   }, [])
+
   return (
     <>
       <Hero />
@@ -48,7 +49,7 @@ const HomePage: React.FC = () => {
       {/* For You */}
       <PageSection>
         <h2 className="attention-voice">For You</h2>
-        <Carousel>
+        <Carousel visibleItems={1}>
           {products.map((event, index) => {
             return <PromoCard key={index} variant="1item" event={event} />
           })}
@@ -58,10 +59,7 @@ const HomePage: React.FC = () => {
       {/* Whats HOt */}
       <PageSection>
         <h2 className="attention-voice">What's Hot</h2>
-        <div className="grid grid-cols-2 gap-12">
-          <RankingTable />
-          <RankingTable />
-        </div>
+        <DualRankingTable />
       </PageSection>
 
       {/* Holiday discounts */}
@@ -107,7 +105,7 @@ const HomePage: React.FC = () => {
       {/* Handmade Goods */}
       <PageSection>
         <h2 className="attention-voice">Handmade Goods</h2>
-        <Carousel visibleItems={6}>
+        <Carousel visibleItems={6} visibleItemsMobile={2}>
           {products.map((event, index) => {
             return <ProductCard key={index} event={event} isHomeCard />
           })}
