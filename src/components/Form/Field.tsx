@@ -7,6 +7,8 @@ export type FieldProps = {
   name: string
   type?: string
   className?: string
+  inputWrapperClassName?: string
+  inputClassName?: string
   disabled?: boolean
   hidden?: boolean
   placeholder?: string
@@ -21,6 +23,8 @@ const Field = React.forwardRef<HTMLInputElement, FieldProps>(
       name,
       type = 'text',
       className,
+      inputWrapperClassName,
+      inputClassName,
       disabled,
       hidden,
       placeholder,
@@ -32,10 +36,14 @@ const Field = React.forwardRef<HTMLInputElement, FieldProps>(
   ) => {
     const id = React.useId()
 
-    const containerClassNames = cn('grid gap-1 relative', className, {
-      'cursor-not-allowed opacity-50': disabled,
-      hidden: hidden
-    })
+    const containerClassNames = cn(
+      'grid gap-1 relative',
+      {
+        'cursor-not-allowed opacity-50': disabled,
+        hidden: hidden
+      },
+      className
+    )
 
     const labelClassNames = cn(
       // Typography - Using design system voice level for consistent text styling
@@ -70,13 +78,19 @@ const Field = React.forwardRef<HTMLInputElement, FieldProps>(
       {
         'file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground':
           type === 'file'
-      }
+      },
+
+      inputWrapperClassName
     )
 
-    const inputClassNames = cn('w-full bg-transparent outline-none', {
-      'pl-6': leftIcon,
-      'pr-6': rightIcon
-    })
+    const inputClassNames = cn(
+      'w-full bg-transparent outline-none',
+      {
+        'pl-6': leftIcon,
+        'pr-6': rightIcon
+      },
+      inputClassName
+    )
 
     return (
       <div className={containerClassNames}>
