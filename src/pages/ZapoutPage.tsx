@@ -1,4 +1,7 @@
-import { useCartStore } from '@/stores/useCartStore'
+import {
+  useCartStore,
+  type CartItem as StoreCartItem
+} from '@/stores/useCartStore'
 import ShippingForm from '@/layouts/ShippingForm.tsx'
 import { createOrder } from '@/lib/nostr/createOrder.ts'
 import { useCallback, useEffect } from 'react'
@@ -80,40 +83,42 @@ async function prepareOrder(
 }
 
 export default function ZapoutPage() {
-  const { cart } = useCartStore()
+  const { carts, getCartsTotal } = useCartStore()
   const { user, isLoggedIn, fetchUser } = useAccountStore()
   const { pushWindow } = useWindowState()
 
   // Format functions
-  const formatCurrency = (amount) => {
+  const formatCurrency = (amount: number) => {
     return new Intl.NumberFormat('en-US', {
       style: 'currency',
       currency: 'USD'
     }).format(amount)
   }
 
-  const formatPubkey = (pubkey) => {
+  const formatPubkey = (pubkey: string) => {
     if (!pubkey) return ''
     return `${pubkey.substring(0, 8)}...${pubkey.substring(pubkey.length - 4)}`
   }
 
   // Calculate cart totals
-  const subtotal = cart.reduce(
-    (acc, item) => acc + item.price * item.quantity,
-    0
-  )
+  const subtotal = getCartsTotal()
 
   const handleSubmit = useCallback(
     (shippingInfo: unknown) => {
       if (user && isLoggedIn) {
-        prepareOrder(cart, shippingInfo, user.npub)
+        // Flatten all cart items for the order and convert to order format
+        const allCartItems = carts.flatMap((cart) => ({
+          ...cart.items,
+          eventId: cart.merchantPubkey // Using merchantPubkey as eventId for now
+        })) as CartItem[]
+        prepareOrder(allCartItems, shippingInfo, user.npub)
       } else {
         console.error(
           '[ZapoutPage.handleSubmit] No active user, cannot submit order'
         )
       }
     },
-    [user, isLoggedIn, cart]
+    [user, isLoggedIn, carts]
   )
 
   // Open login window function
@@ -133,7 +138,7 @@ export default function ZapoutPage() {
     }
 
     // Monitor localStorage for changes
-    const handleStorageChange = (event) => {
+    const handleStorageChange = (event: StorageEvent) => {
       if (event.key === 'nostr-merchant-auth') {
         console.log('Auth storage changed, refreshing state')
         // Re-fetch user if logged in
@@ -162,35 +167,37 @@ export default function ZapoutPage() {
           <div className="bg-neutral-100 dark:bg-neutral-800 rounded-lg p-6 mb-6">
             <h2 className="text-xl font-bold mb-4 text-secondary">Your Cart</h2>
 
-            {cart.length === 0 ? (
+            {carts.length === 0 ? (
               <p className="text-neutral-600 dark:text-neutral-400">
                 Your cart is empty.
               </p>
             ) : (
               <div className="space-y-4">
-                {cart.map((item) => (
-                  <div
-                    key={item.productId}
-                    className="flex items-center gap-4 p-4 bg-white dark:bg-neutral-700 rounded-md shadow-xs"
-                  >
-                    <div className="w-16 h-16 shrink-0">
-                      <img
-                        src={item.image}
-                        alt={item.name}
-                        className="w-full h-full object-cover rounded-md"
-                      />
-                    </div>
-                    <div className="grow">
-                      <h3 className="font-medium text-lg">{item.name}</h3>
-                      <div className="text-neutral-600 dark:text-neutral-400 text-sm">
-                        Quantity: {item.quantity}
+                {carts.map((cart) =>
+                  cart.items.map((item) => (
+                    <div
+                      key={item.productId}
+                      className="flex items-center gap-4 p-4 bg-white dark:bg-neutral-700 rounded-md shadow-xs"
+                    >
+                      <div className="w-16 h-16 shrink-0">
+                        <img
+                          src={item.image}
+                          alt={item.name}
+                          className="w-full h-full object-cover rounded-md"
+                        />
+                      </div>
+                      <div className="grow">
+                        <h3 className="font-medium text-lg">{item.name}</h3>
+                        <div className="text-neutral-600 dark:text-neutral-400 text-sm">
+                          Quantity: {item.quantity}
+                        </div>
+                      </div>
+                      <div className="font-bold text-lg">
+                        {formatCurrency(item.price)}
                       </div>
                     </div>
-                    <div className="font-bold text-lg">
-                      {formatCurrency(item.price)}
-                    </div>
-                  </div>
-                ))}
+                  ))
+                )}
 
                 <div className="flex justify-between pt-4 border-t border-neutral-200 dark:border-neutral-600">
                   <span className="font-medium">Subtotal:</span>
