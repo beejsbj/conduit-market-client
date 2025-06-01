@@ -20,7 +20,7 @@ const Header: React.FC = () => {
   const [displayName, setDisplayName] = useState<string>('')
   const { user, isLoggedIn, logout } = useAccountStore()
   const { pushWindow } = useWindowState()
-  const { cart, openCart } = useCartStore()
+  const { carts, toggleHUD } = useCartStore()
 
   const openLoginWindow = (): void => {
     pushWindow(WindowTypes.LOGIN, {
