@@ -31,10 +31,10 @@ const RankingTable: React.FC<RankingTableProps> = ({ limit = 5 }) => {
       <ul className="grid gap-4 min-w-[650px]">
         {/* header */}
         <li className="grid grid-cols-5 items-center justify-items-cendter gap-4 border-b border-ink-500 pb-2 mb-2">
-          <p className="solid-voice">Rank</p>
-          <p className="solid-voice col-span-2">Product</p>
-          <p className="solid-voice">Sales</p>
-          <p className="solid-voice">Store</p>
+          <p className="voice-sm font-bold">Rank</p>
+          <p className="voice-sm font-bold col-span-2">Product</p>
+          <p className="voice-sm font-bold">Sales</p>
+          <p className="voice-sm font-bold">Store</p>
         </li>
         {/* rows */}
         {products.map((event, index) => (

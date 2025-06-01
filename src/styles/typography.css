@@ -35,7 +35,7 @@ label {
   font-family: var(--font-body);
 }
 
-.type--2,
+/* previously voice-xs */
 .voice-xs,
 .micro-voice {
   font-family: var(--font-body);
@@ -44,16 +44,25 @@ label {
   line-height: var(--leading-snug);
 }
 
-.type--1,
+/* previously solid-voice and whisper-voice */
 .voice-sm,
-.whisper-voice {
+.whisper-voice,
+.solid-voice {
   font-family: var(--font-body);
   font-size: var(--font-size--1);
   font-weight: var(--font-weight-normal);
   line-height: var(--leading-snug);
 }
 
-.type-0,
+.whisper-voice {
+  @apply text-muted-foreground;
+}
+
+.solid-voice {
+  @apply font-bold;
+}
+
+/* previously calm-voice */
 .voice-base,
 .calm-voice {
   font-family: var(--font-body);
@@ -63,7 +72,7 @@ label {
 }
 
 /* Heading 6 from figma */
-.type-1,
+/* previously notice-voice */
 .voice-lg,
 .notice-voice {
   font-family: var(--font-body);
@@ -77,7 +86,7 @@ label {
 }
 
 /* Heading 5 from figma */
-.type-2,
+/* previously firm-voice */
 .voice-2l,
 .firm-voice {
   font-family: var(--font-display);
@@ -91,7 +100,7 @@ label {
 }
 
 /* Heading 4 from figma */
-.type-3,
+/* previously attention-voice */
 .voice-3l,
 .attention-voice {
   font-family: var(--font-body);
@@ -114,7 +123,7 @@ label {
 }
 
 /* Heading 2 from figma */
-.type-5,
+/* previously loud-voice */
 .voice-5l,
 .loud-voice {
   font-family: var(--font-display);
@@ -124,7 +133,7 @@ label {
 }
 
 /* Heading 1 from figma */
-.type-6,
+/* previously booming-voice */
 .voice-6l,
 .booming-voice {
   font-family: var(--font-display);

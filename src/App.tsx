@@ -53,7 +53,7 @@ function App() {
           />
           <Route path="/product/:productId" component={ProductDetailPage} />
           <Route path="/carts" component={CartsPage} />
-          <Route path="/cart/:merchantId" component={CartDetailPage} />
+          <Route path="/carts/:merchantId" component={CartDetailPage} />
           <Route path="/profile" component={ProfilePage} />
           <Route path="/profile/orders" component={OrdersPage} />
           <Route path="/zapout" component={ZapoutPage} />

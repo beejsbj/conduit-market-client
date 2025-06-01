@@ -48,7 +48,7 @@ const HomePage: React.FC = () => {
 
       {/* For You */}
       <PageSection>
-        <h2 className="attention-voice">For You</h2>
+        <h2 className="voice-3l">For You</h2>
         <Carousel>
           {products.map((event, index) => {
             return <PromoCard key={index} variant="1item" event={event} />
@@ -58,13 +58,13 @@ const HomePage: React.FC = () => {
 
       {/* Whats HOt */}
       <PageSection>
-        <h2 className="attention-voice">What's Hot</h2>
+        <h2 className="voice-3l">What's Hot</h2>
         <DualRankingTable />
       </PageSection>
 
       {/* Holiday discounts */}
       <PageSection>
-        <h2 className="attention-voice">Holiday discounts</h2>
+        <h2 className="voice-3l">Holiday discounts</h2>
         <Carousel visibleItems={6}>
           {products.map((event, index) => {
             return <ProductCard key={index} event={event} isHomeCard />
@@ -74,7 +74,7 @@ const HomePage: React.FC = () => {
 
       {/* Curated by the community */}
       <PageSection>
-        <h2 className="attention-voice">Curated by the community</h2>
+        <h2 className="voice-3l">Curated by the community</h2>
         <Carousel>
           {products.map((event, index) => {
             return <CollectionCard key={index} event={event} />
@@ -84,7 +84,7 @@ const HomePage: React.FC = () => {
 
       {/* Trending Stores */}
       <PageSection>
-        <h2 className="attention-voice">Trending Stores</h2>
+        <h2 className="voice-3l">Trending Stores</h2>
         <Carousel>
           {products.map((event, index) => {
             return <StoreCard key={index} event={event} />
@@ -94,7 +94,7 @@ const HomePage: React.FC = () => {
 
       {/* Real Coffee Beans */}
       <PageSection>
-        <h2 className="attention-voice">Real Coffee Beans</h2>
+        <h2 className="voice-3l">Real Coffee Beans</h2>
         <Carousel>
           {products.map((event, index) => {
             return <ProductCard key={index} event={event} />
@@ -104,7 +104,7 @@ const HomePage: React.FC = () => {
 
       {/* Handmade Goods */}
       <PageSection>
-        <h2 className="attention-voice">Handmade Goods</h2>
+        <h2 className="voice-3l">Handmade Goods</h2>
         <Carousel visibleItems={6} visibleItemsMobile={2}>
           {products.map((event, index) => {
             return <ProductCard key={index} event={event} isHomeCard />
@@ -114,7 +114,7 @@ const HomePage: React.FC = () => {
 
       {/* Tech Gadgets */}
       <PageSection>
-        <h2 className="attention-voice">Tech Gadgets</h2>
+        <h2 className="voice-3l">Tech Gadgets</h2>
         <Carousel>
           {products.map((event, index) => {
             return <PromoCard key={index} variant="1item" event={event} />
@@ -124,7 +124,7 @@ const HomePage: React.FC = () => {
 
       {/* Nostr 101 */}
       <PageSection>
-        <h2 className="attention-voice">Nostr 101</h2>
+        <h2 className="voice-3l">Nostr 101</h2>
         <Carousel>
           {products.map((event, index) => {
             return <ArticleCard key={index} event={event} />

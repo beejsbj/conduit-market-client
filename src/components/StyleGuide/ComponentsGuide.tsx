@@ -382,7 +382,7 @@ const components: Component[] = [
 export function ComponentsGuide() {
   return (
     <div className="space-y-8">
-      <h2 className="attention-voice mb-12">Components</h2>
+      <h2 className="voice-3l mb-12">Components</h2>
 
       <Tabs defaultValue="all" className="w-full">
         <TabsList className="w-full justify-start">
@@ -401,7 +401,7 @@ export function ComponentsGuide() {
           <div className="space-y-12">
             {components.map((componentGroup, groupIndex) => (
               <div key={groupIndex} className="space-y-4">
-                <h3 className="firm-voice">{componentGroup.name}</h3>
+                <h3 className="voice-2l">{componentGroup.name}</h3>
                 <ul className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
                   {componentGroup.states.map((state, stateIndex) => {
                     const Component = componentGroup.component
@@ -414,7 +414,7 @@ export function ComponentsGuide() {
                       >
                         <Card className="border-base-900">
                           <CardHeader>
-                            <CardTitle className="solid-voice">
+                            <CardTitle className="voice-sm font-bold">
                               {state.label}
                             </CardTitle>
                           </CardHeader>
@@ -438,7 +438,7 @@ export function ComponentsGuide() {
             className="mt-12"
           >
             <div className="space-y-4">
-              <h3 className="firm-voice">{component.name}</h3>
+              <h3 className="voice-2l">{component.name}</h3>
               <ul className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
                 {component.states.map((state, stateIndex) => {
                   const Component = component.component
@@ -451,7 +451,7 @@ export function ComponentsGuide() {
                     >
                       <Card className="border-base-900">
                         <CardHeader>
-                          <CardTitle className="solid-voice">
+                          <CardTitle className="voice-sm font-bold">
                             {state.label}
                           </CardTitle>
                         </CardHeader>

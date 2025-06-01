@@ -18,7 +18,7 @@ export default function StyleGuidePage() {
       <PageSection width="wide">
         <div className="mb-8">
           <Breadcrumbs />
-          <h1 className="booming-voice mb-6">Style Guide</h1>
+          <h1 className="voice-6l mb-6">Style Guide</h1>
           <p className="text-muted-foreground">
             A comprehensive guide to the design system and components.
           </p>

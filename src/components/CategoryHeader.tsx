@@ -31,14 +31,11 @@ const CategoryHeader: React.FC<CategoryHeaderProps> = ({
 
   return (
     <div className="grid gap-2">
-      <h2 className="loud-voice">{title}</h2>
+      <h2 className="voice-5l">{title}</h2>
       <div className="grid">
         <p
           ref={textRef}
-          className={cn(
-            'notice-voice max-w-prose',
-            !isExpanded && 'line-clamp-3'
-          )}
+          className={cn('voice-lg max-w-prose', !isExpanded && 'line-clamp-3')}
         >
           {description}
         </p>

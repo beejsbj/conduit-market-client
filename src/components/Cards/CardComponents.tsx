@@ -49,7 +49,7 @@ export const CardDescription = ({
   children: React.ReactNode
   className?: string
 }) => {
-  return <p className={cn('mt-1 calm-voice', className)}>{children}</p>
+  return <p className={cn('mt-1 voice-base', className)}>{children}</p>
 }
 
 export const CardContent = ({

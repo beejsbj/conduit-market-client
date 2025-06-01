@@ -230,7 +230,7 @@ const Footer = () => {
           <Logo className="max-w-50" />
           {navs.map((nav) => (
             <nav key={nav.heading}>
-              <h3 className="calm-voice font-bold">{nav.heading}</h3>
+              <h3 className="voice-base font-bold">{nav.heading}</h3>
               <ul className="mt-4 grid gap-1 justify-start">
                 {nav.links.map((link) => (
                   <li key={link.name}>
@@ -255,7 +255,7 @@ const Footer = () => {
       <PageSection width="wide">
         <div className="border-t border-base py-8 flex flex-col md:flex-row justify-between items-center">
           <div className="legal flex items-center flex-wrap gap-4">
-            <span className="whisper-voice">
+            <span className="voice-sm text-muted-foreground">
               © 2025 Conduit. All rights reserved.
             </span>
             {legalLinks.map((link) => (
