@@ -27,7 +27,7 @@ export function CardsGuide() {
     const fetchProducts = async () => {
       try {
         const events = (await ProductListingMocks.generateEventsArray(
-          10
+          3
         )) as unknown as NDKEvent[]
 
         // Modify stock for specific products after fetching
@@ -64,7 +64,23 @@ export function CardsGuide() {
       component: ProductCard,
       variants: products.map((event) => ({
         event,
-        isHomeCard: false
+        variant: 'card'
+      }))
+    },
+    {
+      name: 'Product Card',
+      component: ProductCard,
+      variants: products.map((event) => ({
+        event,
+        variant: 'home'
+      }))
+    },
+    {
+      name: 'Product Card',
+      component: ProductCard,
+      variants: products.map((event) => ({
+        event,
+        variant: 'slide'
       }))
     },
     {
@@ -114,22 +130,24 @@ export function CardsGuide() {
 
   return (
     <div>
-      <h3 className="firm-voice">Cards</h3>
+      <h3 className="voice-2l">Cards</h3>
       <div className="grid gap-8">
         {cards.map(
           (card) =>
             card.component &&
             card.variants && (
               <div key={card.name}>
-                <h4 className="notice-voice font-bold mt-4">{card.name}</h4>
-                <div className="relative">
-                  <Carousel className="  ">
-                    {card.variants.map((variant, index) => {
-                      const Component = card.component!
-                      return <Component key={index} {...variant} />
-                    })}
-                  </Carousel>
-                </div>
+                <h4 className="voice-lg font-bold mt-4">{card.name}</h4>
+                <ul className="relative grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 list-none p-0">
+                  {card.variants.map((variant, index) => {
+                    const Component = card.component!
+                    return (
+                      <li key={index}>
+                        <Component {...variant} />
+                      </li>
+                    )
+                  })}
+                </ul>
               </div>
             )
         )}
