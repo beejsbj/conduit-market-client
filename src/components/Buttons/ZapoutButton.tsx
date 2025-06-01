@@ -10,6 +10,7 @@ const ZapoutButton: React.FC<ZapoutButtonProps> = ({
   size = 'md',
   disabled = false,
   children,
+  rounded = true,
 
   ...props
 }) => {
@@ -21,6 +22,7 @@ const ZapoutButton: React.FC<ZapoutButtonProps> = ({
       disabled={disabled}
       isLink={true}
       to={'/zapout'}
+      rounded={rounded}
     >
       <picture>
         <Zap />
