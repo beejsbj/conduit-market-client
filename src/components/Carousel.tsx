@@ -20,55 +20,83 @@ const Carousel: React.FC<CarouselProps> = ({
 }) => {
   const carouselRef = useRef<HTMLUListElement>(null)
   const childrenCount = Children.count(children)
+  const [currentPage, setCurrentPage] = useState(0)
+  const [totalPages, setTotalPages] = useState(1)
 
   const [canScrollPrev, setCanScrollPrev] = useState(false)
   const [canScrollNext, setCanScrollNext] = useState(
     childrenCount > visibleItems
   )
 
-  const updateScrollButtons = () => {
+  const calculateCurrentPage = (
+    scrollLeft: number,
+    clientWidth: number,
+    scrollWidth: number
+  ) => {
+    // If we can't scroll, we're always on page 0
+    if (scrollWidth <= clientWidth) return 0
+
+    // Calculate the progress through the scrollable area (0 to 1)
+    const maxScroll = scrollWidth - clientWidth
+    const progress = Math.max(0, Math.min(1, scrollLeft / maxScroll))
+
+    // Convert progress to page number
+    return Math.round(progress * (totalPages - 1))
+  }
+
+  const updateScrollInfo = () => {
     const carousel = carouselRef.current
     if (carousel) {
-      // Only allow prev scroll if we've scrolled right
-      setCanScrollPrev(carousel.scrollLeft > 0)
+      const { scrollLeft, clientWidth, scrollWidth } = carousel
 
-      // Check if we can scroll further right
-      const hasMoreToScroll =
-        Math.ceil(carousel.scrollLeft + carousel.clientWidth) <
-        carousel.scrollWidth
-      setCanScrollNext(hasMoreToScroll)
+      // Update scroll buttons visibility
+      setCanScrollPrev(scrollLeft > 0)
+      setCanScrollNext(Math.ceil(scrollLeft + clientWidth) < scrollWidth)
+
+      // Update current page
+      const newPage = calculateCurrentPage(scrollLeft, clientWidth, scrollWidth)
+      setCurrentPage(newPage)
     }
   }
 
-  // Run on mount and when children or visibleItems change
+  // Calculate total pages whenever the content changes
   useEffect(() => {
-    setCanScrollNext(childrenCount > visibleItems)
-
-    // Run on next tick to ensure DOM is updated
-    setTimeout(updateScrollButtons, 0)
-  }, [children, visibleItems, childrenCount])
-
-  useEffect(() => {
-    updateScrollButtons()
     const carousel = carouselRef.current
     if (carousel) {
-      carousel.addEventListener('scroll', updateScrollButtons)
-      window.addEventListener('resize', updateScrollButtons)
-    }
+      const { clientWidth, scrollWidth } = carousel
+      const newTotalPages = Math.max(1, Math.ceil(scrollWidth / clientWidth))
+      setTotalPages(newTotalPages)
 
-    return () => {
-      if (carousel) {
-        carousel.removeEventListener('scroll', updateScrollButtons)
-        window.removeEventListener('resize', updateScrollButtons)
+      // Also update current page when total pages changes
+      updateScrollInfo()
+    }
+  }, [children, visibleItems])
+
+  // Add scroll event listener
+  useEffect(() => {
+    const carousel = carouselRef.current
+    if (carousel) {
+      const handleScroll = () => {
+        requestAnimationFrame(updateScrollInfo)
+      }
+
+      carousel.addEventListener('scroll', handleScroll, { passive: true })
+      window.addEventListener('resize', handleScroll, { passive: true })
+
+      // Initial update
+      handleScroll()
+
+      return () => {
+        carousel.removeEventListener('scroll', handleScroll)
+        window.removeEventListener('resize', handleScroll)
       }
     }
-  }, [])
+  }, [totalPages]) // Re-run when totalPages changes
 
   const handleScrollPrev = () => {
     const carousel = carouselRef.current
     if (carousel) {
       carousel.scrollLeft -= carousel.clientWidth
-      updateScrollButtons()
     }
   }
 
@@ -76,7 +104,19 @@ const Carousel: React.FC<CarouselProps> = ({
     const carousel = carouselRef.current
     if (carousel) {
       carousel.scrollLeft += carousel.clientWidth
-      updateScrollButtons()
+    }
+  }
+
+  const scrollToPage = (pageIndex: number) => {
+    const carousel = carouselRef.current
+    if (carousel) {
+      const { clientWidth, scrollWidth } = carousel
+      const maxScroll = scrollWidth - clientWidth
+      const targetScroll = (maxScroll * pageIndex) / (totalPages - 1)
+      carousel.scrollTo({
+        left: targetScroll,
+        behavior: 'smooth'
+      })
     }
   }
 
@@ -88,12 +128,12 @@ const Carousel: React.FC<CarouselProps> = ({
     <div className={cn('grid relative mt-4', className)}>
       <ul
         ref={carouselRef}
-        className="flex gap-4 overflow-hidden scroll-smooth "
+        className="flex gap-4 overflow-x-auto scroll-smooth snap-x snap-mandatory [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]"
       >
         {Children.map(children, (child, index) => (
           <li
             key={index}
-            className="flex-shrink-0 min-w-fit md:min-w-min"
+            className="flex-shrink-0 min-w-fit md:min-w-min snap-start"
             style={{
               flexBasis: itemBasis
             }}
@@ -103,12 +143,32 @@ const Carousel: React.FC<CarouselProps> = ({
         ))}
       </ul>
 
+      {/* Scroll indicators */}
+      {totalPages > 1 && (
+        <div className="flex justify-center gap-2 mt-4">
+          {Array.from({ length: totalPages }).map((_, index) => (
+            <button
+              key={index}
+              onClick={() => scrollToPage(index)}
+              className={cn(
+                'w-2 h-2 rounded-full transition-all duration-300',
+                currentPage === index
+                  ? 'bg-purple-500 scale-125'
+                  : 'bg-gray-300 hover:bg-gray-400'
+              )}
+              aria-label={`Go to page ${index + 1}`}
+              aria-current={currentPage === index ? 'true' : 'false'}
+            />
+          ))}
+        </div>
+      )}
+
       {canScrollPrev && (
         <Button
           variant="primary"
           size="icon"
           rounded={false}
-          className="absolute -left-4 top-1/2 -translate-y-1/2 z-10"
+          className="absolute -left-0 top-1/2 -translate-y-1/2 z-10"
           onClick={handleScrollPrev}
         >
           <ArrowLeft className="h-4 w-4" />
@@ -120,7 +180,7 @@ const Carousel: React.FC<CarouselProps> = ({
           variant="primary"
           size="icon"
           rounded={false}
-          className="absolute -right-4 top-1/2 -translate-y-1/2 z-10"
+          className="absolute -right-0 top-1/2 -translate-y-1/2 z-10"
           onClick={handleScrollNext}
         >
           <ArrowRight className="h-4 w-4" />
