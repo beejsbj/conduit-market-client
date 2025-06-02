@@ -24,17 +24,20 @@ const AddToCartButton = ({
   disabled,
   variant = 'default'
 }: AddToCartButtonProps) => {
-  const { addToCart, getCartItemCount } = useCartStore()
-  const cartQuantity = getCartItemCount(product.merchantPubkey)
+  const { addItemToCart, getItemQuantity } = useCartStore()
+  const itemQuantity = getItemQuantity(
+    product.merchantPubkey,
+    product.productId
+  )
 
-  if (cartQuantity > 0) {
+  if (itemQuantity > 0) {
     return <UpdateCartItemQuantityButtons product={product} />
   }
 
   if (variant === 'slide') {
     return (
       <Button
-        onClick={() => addToCart(product)}
+        onClick={() => addItemToCart(product)}
         disabled={disabled}
         rounded={false}
         variant="outline"
@@ -48,7 +51,7 @@ const AddToCartButton = ({
 
   return (
     <Button
-      onClick={() => addToCart(product)}
+      onClick={() => addItemToCart(product)}
       disabled={disabled}
       rounded={false}
     >
@@ -58,21 +61,24 @@ const AddToCartButton = ({
   )
 }
 
+interface UpdateCartItemQuantityButtonsProps {
+  product: CartItem
+  className?: string
+}
+
 // Update cart item quantity buttons
 export const UpdateCartItemQuantityButtons = ({
   product,
   className
-}: {
-  product: CartItem
-  className?: string
-}) => {
-  const { increaseQuantity, decreaseQuantity, removeFromCart, getCart } =
-    useCartStore()
+}: UpdateCartItemQuantityButtonsProps) => {
+  const {
+    increaseItemQuantity,
+    decreaseItemQuantity,
+    removeItemFromCart,
+    getItemQuantity
+  } = useCartStore()
 
-  // Get the current cart and find the specific product's quantity
-  const cart = getCart(product.merchantPubkey)
-  const item = cart?.items.find((item) => item.productId === product.productId)
-  const quantity = item?.quantity || 0
+  const quantity = getItemQuantity(product.merchantPubkey, product.productId)
 
   return (
     <div
@@ -85,7 +91,7 @@ export const UpdateCartItemQuantityButtons = ({
         <Button
           size="icon"
           rounded={false}
-          onClick={() => removeFromCart(product)}
+          onClick={() => removeItemFromCart(product)}
           variant="destructive"
           className={cn(
             'max-w-7 transition-all duration-200 ease-in-out',
@@ -103,7 +109,7 @@ export const UpdateCartItemQuantityButtons = ({
           <Button
             size="icon"
             rounded={false}
-            onClick={() => decreaseQuantity(product)}
+            onClick={() => decreaseItemQuantity(product)}
             variant="primary"
             className="max-w-7 border-l-0 rounded-r-full"
           >
@@ -119,7 +125,7 @@ export const UpdateCartItemQuantityButtons = ({
       />
       <Button
         size="icon"
-        onClick={() => increaseQuantity(product)}
+        onClick={() => increaseItemQuantity(product)}
         className="max-w-7"
       >
         <Plus />
