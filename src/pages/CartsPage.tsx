@@ -1,13 +1,13 @@
 import MerchantCartCard from '@/components/Cards/MerchantCartCard'
-import SkeletonCard from '@/components/Cards/SkeletonCard'
+import RelatedProducts from '@/components/RelatedProducts'
 import PageSection from '@/layouts/PageSection'
 import { useCartStore } from '@/stores/useCartStore'
 import React from 'react'
 
 const CartsPage: React.FC = () => {
-  const { carts, getCartsItemCount } = useCartStore()
+  const { carts, getCartsItemsCount } = useCartStore()
 
-  const totalItems = getCartsItemCount()
+  const totalItems = getCartsItemsCount()
   const cartCount = carts.length
 
   return (
@@ -31,17 +31,8 @@ const CartsPage: React.FC = () => {
             ))}
           </ul>
         </div>
-        <div className="border-muted border-1 rounded-lg p-4 basis-1/5">
-          <h2 className="voice-lg font-bold">Related Products</h2>
 
-          <ul className="mt-8 grid gap-4">
-            {[1, 2, 3, 4, 5].map((num) => (
-              <li key={num}>
-                <SkeletonCard variant="slide" />
-              </li>
-            ))}
-          </ul>
-        </div>
+        <RelatedProducts />
       </div>
     </PageSection>
   )
