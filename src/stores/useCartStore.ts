@@ -27,19 +27,27 @@ interface CartState {
   toggleHUD: (force?: boolean) => void
 
   // Cart actions
-  addToCart: (product: CartItem) => void
-  increaseQuantity: (product: CartItem) => void
-  decreaseQuantity: (product: CartItem) => void
-  removeFromCart: (product: CartItem) => void
+  clearCart: (merchantPubkey: string) => void
+  clearAllCarts: () => void
 
-  // Cart getters
+  // All carts getters
   getCartsTotal: () => number
-  getCartsItemCount: () => number
+  getCartsItemsCount: () => number
 
-  // Cart getters
+  // Single cart getters
   getCart: (merchantPubkey: string) => Cart | undefined
   getCartTotal: (merchantPubkey: string) => number
-  getCartItemCount: (merchantPubkey: string) => number
+  getCartItemsCount: (merchantPubkey: string) => number
+
+  // Item getters
+  getItem: (merchantPubkey: string, productId: string) => CartItem | undefined
+  getItemQuantity: (merchantPubkey: string, productId: string) => number
+
+  // Item actions
+  addItemToCart: (product: CartItem) => void
+  increaseItemQuantity: (product: CartItem) => void
+  decreaseItemQuantity: (product: CartItem) => void
+  removeItemFromCart: (product: CartItem) => void
 }
 
 export const useCartStore = create<CartState>()(
@@ -55,23 +63,9 @@ export const useCartStore = create<CartState>()(
         })),
 
       // Cart actions
-      addToCart: (product: CartItem) => {
-        // #TODO: Fix cart creation logic to properly handle existing carts and items
-        // Currently always creating a new cart as a temporary solution
-        set((state) => ({
-          carts: [
-            ...state.carts,
-            {
-              merchantPubkey: product.merchantPubkey,
-              items: [{ ...product, quantity: 1 }]
-            }
-          ]
-        }))
-
-        console.log(product, get().carts)
-
+      addItemToCart: (product: CartItem) => {
         // Original implementation:
-        /*
+
         const existingCart = get().getCart(product.merchantPubkey)
 
         if (!existingCart) {
@@ -93,7 +87,7 @@ export const useCartStore = create<CartState>()(
         )
 
         if (existingItem) {
-          get().increaseQuantity(product)
+          get().increaseItemQuantity(product)
           return
         }
 
@@ -108,17 +102,11 @@ export const useCartStore = create<CartState>()(
               : cart
           )
         }))
-        */
+
+        console.log(get().carts)
       },
 
-      increaseQuantity: (product: CartItem) => {
-        const existingCart = get().getCart(product.merchantPubkey)
-        if (!existingCart) {
-          throw new Error(
-            'Cannot increase quantity: Merchant cart not initialized'
-          )
-        }
-
+      increaseItemQuantity: (product: CartItem) => {
         set((state) => ({
           carts: state.carts.map((cart) =>
             cart.merchantPubkey === product.merchantPubkey
@@ -135,7 +123,7 @@ export const useCartStore = create<CartState>()(
         }))
       },
 
-      decreaseQuantity: (product: CartItem) => {
+      decreaseItemQuantity: (product: CartItem) => {
         set((state) => ({
           carts: state.carts
             .map((cart) => {
@@ -157,7 +145,8 @@ export const useCartStore = create<CartState>()(
         }))
       },
 
-      removeFromCart: (product: CartItem) => {
+      removeItemFromCart: (product: CartItem) => {
+        console.log(product)
         set((state) => ({
           carts: state.carts
             .map((cart) => {
@@ -172,6 +161,18 @@ export const useCartStore = create<CartState>()(
             })
             .filter((cart) => cart.items.length > 0)
         }))
+      },
+      // Cart clearing methods
+      clearCart: (merchantPubkey: string) => {
+        set((state) => ({
+          carts: state.carts.filter(
+            (cart) => cart.merchantPubkey !== merchantPubkey
+          )
+        }))
+      },
+
+      clearAllCarts: () => {
+        set((state) => ({ carts: [] }))
       },
 
       // Cart getters
@@ -188,7 +189,7 @@ export const useCartStore = create<CartState>()(
           : 0
       },
 
-      getCartItemCount: (merchantPubkey: string) => {
+      getCartItemsCount: (merchantPubkey: string) => {
         const cart = get().getCart(merchantPubkey)
         return cart
           ? cart.items.reduce((count, item) => count + item.quantity, 0)
@@ -207,11 +208,25 @@ export const useCartStore = create<CartState>()(
           0
         ),
 
-      getCartsItemCount: () => {
+      getCartsItemsCount: () => {
         return get().carts.reduce(
           (total, cart) =>
             total +
             cart.items.reduce((count, item) => count + item.quantity, 0),
+          0
+        )
+      },
+
+      // get Item
+      getItem: (merchantPubkey: string, productId: string) => {
+        const cart = get().getCart(merchantPubkey)
+        return cart?.items.find((item) => item.productId === productId)
+      },
+
+      getItemQuantity: (merchantPubkey: string, productId: string) => {
+        const cart = get().getCart(merchantPubkey)
+        return (
+          cart?.items.find((item) => item.productId === productId)?.quantity ||
           0
         )
       }
