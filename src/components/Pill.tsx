@@ -12,7 +12,7 @@ const Pill: React.FC<PillProps> = ({ children, className }) => {
   return (
     <div
       className={cn(
-        'flex items-center rounded-full bg-paper/50 px-1 py-1 pr-4 gap-2 border border-base',
+        'flex items-center rounded-full bg-paper/50 px-1 py-1 pr-4 gap-2 border border-base whitespace-nowrap',
         className
       )}
     >
