@@ -9,14 +9,16 @@ import {
 } from '@/components/Cards/CardComponents.tsx'
 import { UpdateCartItemQuantityButtons } from '../Buttons/index.tsx'
 import { useState } from 'react'
+import { Pill } from '../Pill.tsx'
+import { formatPrice } from '@/lib/utils.ts'
 
 const PLACEHOLDER_IMAGE = 'https://prd.place/600/400'
 
-interface CartItemCardProps {
+interface CartItemProps {
   product?: CartItem | null
 }
 
-const CartItemCard: React.FC<CartItemCardProps> = ({ product }) => {
+const CartHUDItem: React.FC<CartItemProps> = ({ product }) => {
   const [imageError, setImageError] = useState(false)
 
   if (!product) {
@@ -55,4 +57,71 @@ const CartItemCard: React.FC<CartItemCardProps> = ({ product }) => {
   )
 }
 
-export default CartItemCard
+export const CartItemCard: React.FC<CartItemProps> = ({ product }) => {
+  const [imageError, setImageError] = useState(false)
+
+  return (
+    <Card className="border-none flex flex-wrap items-center gap-4">
+      <CardHeader className="flex items-center gap-4  min-w-[120px] max-w-[200px] flex-1">
+        <input type="checkbox" />
+        <div className="relative w-full">
+          <picture className="aspect-square block bg-ink rounded-lg overflow-hidden">
+            <img
+              className="w-full h-full object-cover absolute inset-0"
+              src={imageError ? PLACEHOLDER_IMAGE : product?.image}
+              alt={product?.name}
+              onError={() => setImageError(true)}
+              loading="lazy"
+            />
+          </picture>
+        </div>
+      </CardHeader>
+      <CardContent className="col-span-2  flex-2  grid justify-items-start gap-4">
+        <CardTitle className="voice-lg font-normal">{product?.name}</CardTitle>
+
+        <p className="voice-sm font-bold">in stock</p>
+
+        {/* variant pills */}
+        <ul className="flex items-center gap-2">
+          {[1, 2, 3].map((variant) => (
+            <li>
+              <Pill>
+                <span className="voice-base font-medium">
+                  Variant {variant}
+                </span>
+              </Pill>
+            </li>
+          ))}
+        </ul>
+
+        <UpdateCartItemQuantityButtons
+          product={product as CartItem}
+          className="border-none"
+        />
+      </CardContent>
+      <CardFooter className="col-span-2 grid justify-items-end">
+        <div className="flex items-center gap-2">
+          {/* Price in Satoshis */}
+          <p className="voice-2l ">{formatPrice(product?.price ?? 0, 'SAT')}</p>
+
+          {/* price in USD */}
+          <p className="voice-base ">
+            {formatPrice(product?.price ?? 0, 'USD')}
+          </p>
+        </div>
+
+        {/* discount */}
+        <div className="flex items-center gap-2">
+          {/* old price */}
+          <p className="line-through voice-sm text-muted-foreground">
+            {formatPrice(product?.price ?? 0, 'SAT')}
+          </p>
+          {/* percentage off */}
+          <p className="voice-sm text-muted-foreground">-20%</p>
+        </div>
+      </CardFooter>
+    </Card>
+  )
+}
+
+export default CartHUDItem
