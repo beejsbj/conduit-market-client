@@ -24,14 +24,14 @@ const MerchantCartCard: React.FC<MerchantCartCardProps> = ({
   merchantPubkey
 }) => {
   // Get cart-related functions from store
-  const { getCart, getCartTotal, getCartItemCount } = useCartStore()
+  const { getCart, getCartTotal, getCartItemsCount } = useCartStore()
 
   // Get cart data for specific merchant
   const cart = getCart(merchantPubkey)
   if (!cart) return null
 
   // Calculate cart metrics
-  const itemCount = getCartItemCount(merchantPubkey)
+  const itemCount = getCartItemsCount(merchantPubkey)
   const total = getCartTotal(merchantPubkey)
   // TODO: Replace with actual merchant data
   const merchantName = 'Merchant Name'
