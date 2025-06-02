@@ -42,10 +42,7 @@ function App() {
           <Route path="/how-it-works" component={HowItWorksPage} />
           <Route path="/auth" component={AuthPage} />
           <Route path="/merchants" component={MerchantsPage} />
-          <Route
-            path="/merchant/:merchantId"
-            component={MerchantProductsPage}
-          />
+          <Route path="/merchant/:merchantId" component={ProductExplorerPage} />
           <Route path="/categories" component={CategoriesPage} />
           <Route
             path="/category/:categoryId"
