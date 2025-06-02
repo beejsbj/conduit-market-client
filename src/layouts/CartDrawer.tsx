@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react'
 import ZapoutButton from '@/components/Buttons/ZapoutButton.tsx'
 import { cn, formatPrice } from '@/lib/utils'
 import Button from '@/components/Buttons/Button'
-import CartItemCard from '@/components/Cards/CartItemCard'
+import CartHUDItem from '@/components/Cards/CartItemCard'
 
 const CartDrawer: React.FC = () => {
   const { carts, isHUDOpen, toggleHUD, getCartsTotal } = useCartStore()
@@ -44,7 +44,7 @@ const CartDrawer: React.FC = () => {
               className="max-w-[120px]"
               key={product?.productId || `placeholder-${index}`}
             >
-              <CartItemCard product={product} />
+              <CartHUDItem product={product} />
             </li>
           ))}
         </ul>
