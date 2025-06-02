@@ -56,7 +56,6 @@ const ProductCard: React.FC<ProductCardProps> = ({
 
   const productEvent = validationMemo.productEvent!
   const { pubkey } = event
-  console.log(event, pubkey)
 
   const [imageError, setImageError] = useState(false)
 
