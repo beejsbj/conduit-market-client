@@ -6,12 +6,31 @@ import { TypographyGuide } from '@/components/StyleGuide/TypographyGuide'
 import { ButtonGuide } from '@/components/StyleGuide/ButtonGuide'
 import { ComponentsGuide } from '@/components/StyleGuide/ComponentsGuide'
 import PageSection from '@/layouts/PageSection'
-import { useParams } from 'wouter'
+import { useParams, useLocation } from 'wouter'
 import Breadcrumbs from '@/components/Breadcumbs'
 import { CardsGuide } from '@/components/StyleGuide/CardsGuide'
 
 export default function StyleGuidePage() {
-  const params = useParams()
+  const [location, setLocation] = useLocation()
+  const params = useParams<{ tab?: string; componentTab?: string }>()
+
+  const currentTab = params.tab || 'design-system'
+  const currentComponentTab = params.componentTab || 'all'
+
+  const handleTabChange = (value: string) => {
+    if (value === 'design-system') {
+      setLocation('/style-guide')
+    } else {
+      setLocation(`/style-guide/${value}`)
+    }
+  }
+
+  const handleComponentTabChange = (value: string) => {
+    setLocation(`/style-guide/components/${value}`)
+  }
+
+  // If we're on a component tab route, force the main tab to be 'components'
+  const effectiveTab = params.componentTab ? 'components' : currentTab
 
   return (
     <main className="grid gap-8">
@@ -25,7 +44,11 @@ export default function StyleGuidePage() {
         </div>
       </PageSection>
 
-      <Tabs defaultValue={params.page || 'design-system'} className="w-full">
+      <Tabs
+        value={effectiveTab}
+        onValueChange={handleTabChange}
+        className="w-full"
+      >
         <PageSection width="wide">
           <TabsList className="w-full justify-start sticky top-0 bg-background z-10">
             <TabsTrigger value="design-system">Design System</TabsTrigger>
@@ -49,6 +72,7 @@ export default function StyleGuidePage() {
             <ColorGuide />
           </PageSection>
         </TabsContent>
+
         <TabsContent value="voices" className="mt-6">
           <PageSection width="wide">
             <TypographyGuide />
@@ -63,7 +87,10 @@ export default function StyleGuidePage() {
 
         <TabsContent value="components" className="mt-6">
           <PageSection width="wide">
-            <ComponentsGuide />
+            <ComponentsGuide
+              currentTab={currentComponentTab}
+              onTabChange={handleComponentTabChange}
+            />
           </PageSection>
         </TabsContent>
 
