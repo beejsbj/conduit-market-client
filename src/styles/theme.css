@@ -301,7 +301,7 @@
 
   /* Shadows */
 
-  --text-shadow: 0 0 0.625em var(--color-primary-500),
+  --shadow-primary: 0 0 0.625em var(--color-primary-500),
     0 0 1.25em var(--color-primary-400), 0 0 2.5em var(--color-primary-300),
     0 0 5em var(--color-primary-200);
 
