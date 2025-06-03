@@ -13,8 +13,7 @@ import {
   CardHeader,
   CardTitle
 } from './CardComponents.tsx'
-import { ShoppingCart, Star } from 'lucide-react'
-import { useCartStore } from '@/stores/useCartStore.ts'
+import Icon from '../Icon'
 import { MultiUserPill } from '@/components/Pill'
 import { Badge } from '@/components/Badge.tsx'
 import { cn, formatPrice } from '@/lib/utils.ts'
@@ -149,9 +148,10 @@ const ProductCard: React.FC<ProductCardProps> = ({
 
             {/* rating */}
             <div className="flex items-center gap-1">
-              <Star
+              <Icon
+                icon="star"
                 className="size-4 text-transparent"
-                fill="var(--color-primary-400)"
+                fill="fill-primary-400"
               />
               <p className="voice-base font-bold">4.5</p>
             </div>
@@ -232,9 +232,10 @@ const ProductCard: React.FC<ProductCardProps> = ({
               <CardFooter className="flex justify-between items-center pt-0">
                 {/* rating */}
                 <div className="flex items-center gap-1">
-                  <Star
+                  <Icon
+                    icon="star"
                     className="size-4 text-transparent"
-                    fill="var(--color-primary-400)"
+                    fill="fill-primary-400"
                   />
                   <p className="voice-base font-bold">4.5</p>
                 </div>
@@ -297,9 +298,10 @@ const ProductCard: React.FC<ProductCardProps> = ({
 
             {/* rating */}
             <div className="flex items-center gap-1">
-              <Star
+              <Icon
+                icon="star"
                 className="size-4 text-transparent"
-                fill="var(--color-primary-400)"
+                fill="fill-primary-400"
               />
               <p className="voice-base font-bold">4.5</p>
             </div>
