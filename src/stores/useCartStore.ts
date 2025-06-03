@@ -12,6 +12,7 @@ export interface CartItem {
   price: number
   image: string
   quantity: number
+  selectedForZapout?: boolean
 }
 
 interface Cart {
@@ -48,6 +49,8 @@ interface CartState {
   increaseItemQuantity: (product: CartItem) => void
   decreaseItemQuantity: (product: CartItem) => void
   removeItemFromCart: (product: CartItem) => void
+  toggleItemSelectionForZapout: (product: CartItem, force?: boolean) => void
+  toggleAllItemsSelectionForZapout: (force?: boolean) => void
 }
 
 export const useCartStore = create<CartState>()(
@@ -229,6 +232,42 @@ export const useCartStore = create<CartState>()(
           cart?.items.find((item) => item.productId === productId)?.quantity ||
           0
         )
+      },
+
+      toggleItemSelectionForZapout: (product: CartItem, force?: boolean) => {
+        set((state) => ({
+          carts: state.carts.map((cart) =>
+            cart.merchantPubkey === product.merchantPubkey
+              ? {
+                  ...cart,
+                  items: cart.items.map((item) =>
+                    item.productId === product.productId
+                      ? {
+                          ...item,
+                          selectedForZapout:
+                            force !== undefined
+                              ? force
+                              : !item.selectedForZapout
+                        }
+                      : item
+                  )
+                }
+              : cart
+          )
+        }))
+      },
+
+      toggleAllItemsSelectionForZapout: (force?: boolean) => {
+        set((state) => ({
+          carts: state.carts.map((cart) => ({
+            ...cart,
+            items: cart.items.map((item) => ({
+              ...item,
+              selectedForZapout:
+                force !== undefined ? force : !item.selectedForZapout
+            }))
+          }))
+        }))
       }
     }),
     {
