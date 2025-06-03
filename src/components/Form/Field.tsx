@@ -1,6 +1,7 @@
 import * as React from 'react'
 import { cn } from '@/lib/utils'
 import Input from './Input'
+import Icon, { type IconName } from '../Icon'
 
 export type FieldProps = {
   label?: string
@@ -12,8 +13,8 @@ export type FieldProps = {
   disabled?: boolean
   hidden?: boolean
   placeholder?: string
-  rightIcon?: React.ReactNode
-  leftIcon?: React.ReactNode
+  rightIcon?: IconName
+  leftIcon?: IconName
 } & React.ComponentProps<'input'>
 
 const Field = React.forwardRef<HTMLInputElement, FieldProps>(
@@ -60,7 +61,7 @@ const Field = React.forwardRef<HTMLInputElement, FieldProps>(
       'relative flex items-center',
 
       // Spacing
-      'p-2',
+      'p-2 pl-4',
 
       // Borders & Shape
       'rounded-lg border border-base-700',
@@ -100,18 +101,18 @@ const Field = React.forwardRef<HTMLInputElement, FieldProps>(
           </label>
         )}
         <div className={inputWrapperClassNames}>
-          {leftIcon && <div className="absolute left-2">{leftIcon}</div>}
+          {leftIcon && <Icon icon={leftIcon} className="absolute left-2" />}
           <Input
             id={id}
             ref={ref}
             name={name}
             type={type}
             disabled={disabled}
-            placeholder={placeholder}
+            placeholder={placeholder ?? label}
             className={inputClassNames}
             {...props}
           />
-          {rightIcon && <div className="absolute right-2">{rightIcon}</div>}
+          {rightIcon && <Icon icon={rightIcon} className="absolute right-2" />}
         </div>
       </div>
     )
