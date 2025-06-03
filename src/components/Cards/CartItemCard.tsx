@@ -59,15 +59,19 @@ const CartHUDItem: React.FC<CartItemProps> = ({ product }) => {
 
 export const CartItemCard: React.FC<CartItemProps> = ({ product }) => {
   const [imageError, setImageError] = useState(false)
-
+  const { toggleItemSelectionForZapout } = useCartStore()
   return (
     <Card className="border-none flex flex-wrap items-center gap-4">
-      <CardHeader className="flex items-center gap-4  min-w-[120px] max-w-[200px] flex-1">
-        <input type="checkbox" />
-        <div className="relative w-full">
+      <CardHeader className="flex items-center gap-4  min-w-[120px] max-w-[250px] flex-1">
+        <input
+          type="checkbox"
+          checked={product?.selectedForZapout}
+          onChange={() => toggleItemSelectionForZapout(product as CartItem)}
+        />
+        <div className=" w-full">
           <picture className="aspect-square block bg-ink rounded-lg overflow-hidden">
             <img
-              className="w-full h-full object-cover absolute inset-0"
+              className="w-full h-full object-cover"
               src={imageError ? PLACEHOLDER_IMAGE : product?.image}
               alt={product?.name}
               onError={() => setImageError(true)}
@@ -85,7 +89,7 @@ export const CartItemCard: React.FC<CartItemProps> = ({ product }) => {
         <ul className="flex items-center gap-2">
           {[1, 2, 3].map((variant) => (
             <li>
-              <Pill>
+              <Pill className="bg-muted border-none">
                 <span className="voice-base font-medium">
                   Variant {variant}
                 </span>
@@ -94,10 +98,7 @@ export const CartItemCard: React.FC<CartItemProps> = ({ product }) => {
           ))}
         </ul>
 
-        <UpdateCartItemQuantityButtons
-          product={product as CartItem}
-          className="border-none"
-        />
+        <UpdateCartItemQuantityButtons product={product as CartItem} />
       </CardContent>
       <CardFooter className="col-span-2 grid justify-items-end">
         <div className="flex items-center gap-2">
