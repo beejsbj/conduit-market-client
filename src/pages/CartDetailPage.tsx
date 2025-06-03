@@ -17,7 +17,12 @@ import RelatedProducts from '@/components/RelatedProducts'
 const CartDetailPage: React.FC = () => {
   const { merchantId } = useParams()
 
-  const { getCart, getCartTotal, getCartItemsCount } = useCartStore()
+  const {
+    getCart,
+    getCartTotal,
+    getCartItemsCount,
+    toggleAllItemsSelectionForZapout
+  } = useCartStore()
   const cart = getCart(merchantId as string)
   const cartItemsCount = getCartItemsCount(merchantId as string)
   const cartTotal = getCartTotal(merchantId as string)
@@ -28,7 +33,7 @@ const CartDetailPage: React.FC = () => {
     <PageSection>
       <div className="border-muted p-8 rounded-lg grid gap-8 lg:flex lg:justify-between">
         {/* Cart Card */}
-        <Card className="flex-1">
+        <Card className="flex-1 p-4">
           {/* Cart Header */}
           <CardHeader className="flex items-start justify-between">
             <h1 className="voice-4l">{merchantName}</h1>
@@ -48,7 +53,11 @@ const CartDetailPage: React.FC = () => {
           {/* Cart Items */}
           <CardContent className="mt-8">
             <div className="flex items-center gap-2 ">
-              <input type="checkbox" />
+              <input
+                type="checkbox"
+                checked={cart?.items.every((item) => item.selectedForZapout)}
+                onChange={() => toggleAllItemsSelectionForZapout()}
+              />
               <label>Select all</label>
             </div>
             <ul className="mt-8 grid gap-4">
@@ -66,7 +75,7 @@ const CartDetailPage: React.FC = () => {
 
         <div className="">
           {/* Cart Total */}
-          <Card className="">
+          <Card className="p-4">
             <CardHeader className="voice-lg font-medium">
               SubTotal <span>({cartItemsCount} items)</span>
             </CardHeader>
