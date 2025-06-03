@@ -81,10 +81,7 @@ const Header: React.FC = () => {
     <header className="relative">
       <PageSection width="wide">
         <div className="flex justify-between items-center gap-4">
-          <div>
-            <Logo className="max-w-50" />
-            <Breadcrumbs />
-          </div>
+          <Logo className="max-w-50" />
 
           {/* Desktop Navigation */}
           <div className="hidden lg:flex items-center flex-1 justify-end gap-4">
@@ -143,6 +140,7 @@ const Header: React.FC = () => {
           {/* Mobile Menu */}
           <MobileMenu />
         </div>
+        <Breadcrumbs />
       </PageSection>
     </header>
   )
