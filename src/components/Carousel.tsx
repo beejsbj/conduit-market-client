@@ -1,6 +1,5 @@
 import { cn } from '@/lib/utils'
-import { ArrowRight } from 'lucide-react'
-import { ArrowLeft } from 'lucide-react'
+import Icon from '@/components/Icon'
 import React, { useRef, useState, useEffect, Children } from 'react'
 import Button from './Buttons/Button'
 
@@ -124,19 +123,33 @@ const Carousel: React.FC<CarouselProps> = ({
   const itemBasis = Math.floor(100 / visibleItems) + -2 + '%'
   const itemBasisMobile = Math.floor(100 / visibleItemsMobile) + -2 + '%'
 
+  // Conditional styling variables
+  const carouselWrapperClassName = cn('grid relative mt-4', className)
+  const carouselListClassName =
+    'flex gap-4 overflow-x-auto scroll-smooth snap-x snap-mandatory [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]'
+  const carouselItemClassName =
+    'flex-shrink-0 min-w-fit md:min-w-min snap-start'
+  const carouselItemStyle = { flexBasis: itemBasis }
+
+  const scrollIndicatorClassName = (index: number) =>
+    cn(
+      'size-3 rounded-full transition-all duration-300',
+      currentPage === index
+        ? 'bg-primary-400 shadow-md shadow-primary'
+        : 'bg-base-300 hover:scale-125'
+    )
+
+  const prevButtonClassName = 'absolute -left-0 top-1/2 -translate-y-1/2 z-10'
+  const nextButtonClassName = 'absolute -right-0 top-1/2 -translate-y-1/2 z-10'
+
   return (
-    <div className={cn('grid relative mt-4', className)}>
-      <ul
-        ref={carouselRef}
-        className="flex gap-4 overflow-x-auto scroll-smooth snap-x snap-mandatory [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]"
-      >
+    <div className={carouselWrapperClassName}>
+      <ul ref={carouselRef} className={carouselListClassName}>
         {Children.map(children, (child, index) => (
           <li
             key={index}
-            className="flex-shrink-0 min-w-fit md:min-w-min snap-start"
-            style={{
-              flexBasis: itemBasis
-            }}
+            className={carouselItemClassName}
+            style={carouselItemStyle}
           >
             {child}
           </li>
@@ -150,12 +163,7 @@ const Carousel: React.FC<CarouselProps> = ({
             <button
               key={index}
               onClick={() => scrollToPage(index)}
-              className={cn(
-                'w-2 h-2 rounded-full transition-all duration-300',
-                currentPage === index
-                  ? 'bg-purple-500 scale-125'
-                  : 'bg-gray-300 hover:bg-gray-400'
-              )}
+              className={scrollIndicatorClassName(index)}
               aria-label={`Go to page ${index + 1}`}
               aria-current={currentPage === index ? 'true' : 'false'}
             />
@@ -168,10 +176,10 @@ const Carousel: React.FC<CarouselProps> = ({
           variant="primary"
           size="icon"
           rounded={false}
-          className="absolute -left-0 top-1/2 -translate-y-1/2 z-10"
+          className={prevButtonClassName}
           onClick={handleScrollPrev}
         >
-          <ArrowLeft className="h-4 w-4" />
+          <Icon icon="arrowLeft" className="size-4" />
         </Button>
       )}
 
@@ -180,10 +188,10 @@ const Carousel: React.FC<CarouselProps> = ({
           variant="primary"
           size="icon"
           rounded={false}
-          className="absolute -right-0 top-1/2 -translate-y-1/2 z-10"
+          className={nextButtonClassName}
           onClick={handleScrollNext}
         >
-          <ArrowRight className="h-4 w-4" />
+          <Icon icon="arrowRight" className="size-4" />
         </Button>
       )}
     </div>
