@@ -1,15 +1,8 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { useAccountStore } from '@/stores/useAccountStore'
 import Button from './Buttons/Button'
-import {
-  MessagesSquare,
-  Menu,
-  SearchIcon,
-  ShoppingCart,
-  User,
-  Wand,
-  X
-} from 'lucide-react'
+
+import Icon from './Icon'
 import Field from './Form/Field'
 
 const MobileMenu: React.FC = () => {
@@ -44,7 +37,7 @@ const MobileMenu: React.FC = () => {
         className="lg:hidden"
         aria-label="Menu"
       >
-        <Menu />
+        <Icon icon="menu" />
       </Button>
 
       {/* Mobile Menu Overlay */}
@@ -69,7 +62,7 @@ const MobileMenu: React.FC = () => {
               onClick={() => setIsOpen(false)}
               aria-label="Close menu"
             >
-              <X />
+              <Icon icon="x" />
             </Button>
           </div>
 
@@ -77,7 +70,7 @@ const MobileMenu: React.FC = () => {
             <Field
               name="search"
               type="search"
-              rightIcon={<SearchIcon />}
+              rightIcon="search"
               className="w-full"
               placeholder="Search..."
             />
@@ -89,7 +82,7 @@ const MobileMenu: React.FC = () => {
                 to="/shop"
                 className="w-full justify-start"
               >
-                <ShoppingCart className="max-w-5 mr-2" />
+                <Icon icon="shoppingCart" className="max-w-5 mr-2" />
                 <span>Shop</span>
               </Button>
 
@@ -100,7 +93,7 @@ const MobileMenu: React.FC = () => {
                   to="/orders"
                   className="w-full justify-start"
                 >
-                  <Wand className="max-w-5 mr-2" />
+                  <Icon icon="wand" className="max-w-5 mr-2" />
                   <span>Orders</span>
                 </Button>
               ) : (
@@ -110,7 +103,7 @@ const MobileMenu: React.FC = () => {
                   to="/how-it-works"
                   className="w-full justify-start"
                 >
-                  <Wand className="max-w-5 mr-2" />
+                  <Icon icon="wand" className="max-w-5 mr-2" />
                   <span>How it works</span>
                 </Button>
               )}
@@ -122,7 +115,7 @@ const MobileMenu: React.FC = () => {
                   to="/messages"
                   className="w-full justify-start"
                 >
-                  <MessagesSquare className="max-w-5 mr-2" />
+                  <Icon icon="messagesSquare" className="max-w-5 mr-2" />
                   <span>Messages</span>
                 </Button>
               )}
@@ -133,7 +126,7 @@ const MobileMenu: React.FC = () => {
                 to="/sell"
                 className="w-full justify-start"
               >
-                <Wand className="max-w-5 mr-2" />
+                <Icon icon="wand" className="max-w-5 mr-2" />
                 <span>Sell</span>
               </Button>
 
@@ -144,17 +137,17 @@ const MobileMenu: React.FC = () => {
                   to="/user"
                   className="w-full justify-start"
                 >
-                  <User className="max-w-5 mr-2" />
+                  <Icon icon="user" className="max-w-5 mr-2" />
                   <span>Profile</span>
                 </Button>
               ) : (
                 <Button
                   variant="primary"
                   isLink
-                  to="/login"
+                  to="/auth"
                   className="w-full justify-start"
                 >
-                  <User className="max-w-5 mr-2" />
+                  <Icon icon="user" className="max-w-5 mr-2" />
                   <span>Login</span>
                 </Button>
               )}
