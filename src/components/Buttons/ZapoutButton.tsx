@@ -1,7 +1,7 @@
 import React from 'react'
 import Button from './Button'
 import type { ButtonProps } from './Button'
-import { Zap } from 'lucide-react'
+import Icon from '../Icon'
 
 export interface ZapoutButtonProps extends Omit<ButtonProps, 'isLink' | 'to'> {}
 
@@ -25,7 +25,7 @@ const ZapoutButton: React.FC<ZapoutButtonProps> = ({
       rounded={rounded}
     >
       <picture>
-        <Zap />
+        <Icon icon="zap" />
       </picture>
 
       {children}
