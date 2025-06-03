@@ -9,7 +9,7 @@
 */
 
 import { useCartStore, type CartItem } from '@/stores/useCartStore.ts'
-import { Minus, Plus, Trash, ShoppingCart } from 'lucide-react'
+import Icon from '../Icon'
 import Button from './Button'
 import { cn } from '@/lib/utils'
 import Field from '../Form/Field'
@@ -43,7 +43,7 @@ const AddToCartButton = ({
         variant="outline"
         className="border-primary"
       >
-        <ShoppingCart className="size-4" />
+        <Icon icon="shoppingCart" className="size-4" />
         Add
       </Button>
     )
@@ -55,7 +55,7 @@ const AddToCartButton = ({
       disabled={disabled}
       rounded={false}
     >
-      <ShoppingCart className="size-4" />
+      <Icon icon="shoppingCart" className="size-4" />
       Add to Cart
     </Button>
   )
@@ -98,7 +98,7 @@ export const UpdateCartItemQuantityButtons = ({
             quantity === 1 ? 'rounded-full' : 'rounded-l-full border-r-0'
           )}
         >
-          <Trash />
+          <Icon icon="trash" className="size-5" />
         </Button>
         <div
           className={cn(
@@ -113,7 +113,7 @@ export const UpdateCartItemQuantityButtons = ({
             variant="primary"
             className="max-w-7 border-l-0 rounded-r-full"
           >
-            <Minus />
+            <Icon icon="minus" className="size-5" />
           </Button>
         </div>
       </div>
@@ -128,7 +128,7 @@ export const UpdateCartItemQuantityButtons = ({
         onClick={() => increaseItemQuantity(product)}
         className="max-w-7"
       >
-        <Plus />
+        <Icon icon="plus" className="size-5" />
       </Button>
     </div>
   )
