@@ -1,5 +1,5 @@
 import { useCartStore } from '@/stores/useCartStore'
-import { Minus, Plus, ShoppingCart, X } from 'lucide-react'
+import Icon from '@/components/Icon'
 import { useEffect, useState } from 'react'
 import ZapoutButton from '@/components/Buttons/ZapoutButton.tsx'
 import { cn, formatPrice } from '@/lib/utils'
@@ -33,7 +33,7 @@ const CartDrawer: React.FC = () => {
         {/* close */}
         <div className="absolute top-[-40px] right-10 z-[-1] pb-2 bg-accent rounded-t-full from-primary-800 to-accent/80 bg-gradient-to-t">
           <Button variant="ghost" size="icon" onClick={() => toggleHUD()}>
-            <X />
+            <Icon icon="xIcon" />
           </Button>
         </div>
 
@@ -54,7 +54,7 @@ const CartDrawer: React.FC = () => {
           <div className="grid gap-2 items-center content-center text-center">
             <h3 className="voice-base font-bold">Subtotal</h3>
             <p className="voice-3l">{formatPrice(cartTotal)}</p>
-            <p className="voice-sm text-muted-foreground text-primary-foreground">
+            <p className="voice-sm text-muted-foreground ">
               {formatPrice(cartTotal)}
             </p>
           </div>
