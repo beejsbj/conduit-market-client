@@ -13,7 +13,7 @@ import Avatar from '../Avatar'
 import Button from '../Buttons/Button'
 import ZapoutButton from '../Buttons/ZapoutButton'
 import { formatPrice } from '@/lib/utils'
-import { Ellipsis, ShoppingBagIcon } from 'lucide-react'
+import Icon from '../Icon'
 
 // Component props interface
 interface MerchantCartCardProps {
@@ -76,7 +76,7 @@ const MerchantCartCard: React.FC<MerchantCartCardProps> = ({
           to={`/carts/${merchantPubkey}`}
         >
           <picture className="shrink-0">
-            <ShoppingBagIcon />
+            <Icon icon="shoppingBag" />
           </picture>
           View Cart
         </Button>
@@ -84,7 +84,7 @@ const MerchantCartCard: React.FC<MerchantCartCardProps> = ({
         {/* More Options Button */}
         <Button variant="outline" size="icon" className="">
           <picture className="">
-            <Ellipsis className="size-4 md:size-6" />
+            <Icon icon="ellipsis" className="size-4 md:size-6" />
           </picture>
         </Button>
       </CardFooter>
