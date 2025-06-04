@@ -1,5 +1,3 @@
-'use client'
-
 import * as React from 'react'
 import { cn } from '@/lib/utils'
 
@@ -12,12 +10,14 @@ interface TabsProps extends React.HTMLAttributes<HTMLDivElement> {
 
 interface TabsListProps extends React.HTMLAttributes<HTMLDivElement> {
   children: React.ReactNode
+  className?: string
 }
 
 interface TabsTriggerProps
   extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   value: string
   children: React.ReactNode
+  className?: string
 }
 
 interface TabsContentProps extends React.HTMLAttributes<HTMLDivElement> {
@@ -88,9 +88,8 @@ function TabsTrigger({
       aria-selected={isSelected}
       onClick={() => onValueChange(value)}
       className={cn(
-        'voice-sm font-bold font-normal whitespace-nowrap px-3 py-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 ',
-        isSelected &&
-          'font-bold data-[state=active]:font-bold border-b-2 border-primary',
+        'voice-sm font-normal whitespace-nowrap px-3 py-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 ',
+        isSelected && 'font-bold data-[state=active]:font-bold border-primary',
         className
       )}
       {...props}
