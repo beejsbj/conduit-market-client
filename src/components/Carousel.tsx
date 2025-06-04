@@ -8,6 +8,49 @@ interface CarouselProps {
   className?: string
   visibleItems?: number
   visibleItemsMobile?: number
+  variant?: 'default' | 'hud'
+  indicatorVariant?: 'dots' | 'lines'
+}
+
+interface ScrollIndicatorProps {
+  totalPages: number
+  currentPage: number
+  variant?: 'dots' | 'lines'
+  onPageChange: (pageIndex: number) => void
+}
+
+const ScrollIndicator: React.FC<ScrollIndicatorProps> = ({
+  totalPages,
+  currentPage,
+  variant = 'dots',
+  onPageChange
+}) => {
+  const getIndicatorClassName = (isCurrentPage: boolean) =>
+    cn('rounded-full transition-all duration-300', {
+      'size-3': variant === 'dots',
+      'h-1 w-full max-w-15': variant === 'lines',
+      // Colors for dots
+      'bg-primary-400 shadow-md shadow-primary':
+        isCurrentPage && variant === 'dots',
+      'bg-base-300 hover:bg-base-400': !isCurrentPage && variant === 'dots',
+      // Colors for lines
+      'bg-ink': isCurrentPage && variant === 'lines',
+      'bg-ink/50 hover:bg-ink/75': !isCurrentPage && variant === 'lines'
+    })
+
+  return (
+    <div className="flex justify-center gap-2 flex-1 max-w-full">
+      {Array.from({ length: totalPages }).map((_, index) => (
+        <button
+          key={index}
+          onClick={() => onPageChange(index)}
+          className={getIndicatorClassName(currentPage === index)}
+          aria-label={`Go to page ${index + 1}`}
+          aria-current={currentPage === index ? 'true' : 'false'}
+        />
+      ))}
+    </div>
+  )
 }
 
 const Carousel: React.FC<CarouselProps> = ({
@@ -15,6 +58,8 @@ const Carousel: React.FC<CarouselProps> = ({
   visibleItems = 4,
   visibleItemsMobile = 1,
   className,
+  variant = 'default',
+  indicatorVariant = 'dots',
   ...props
 }) => {
   const carouselRef = useRef<HTMLUListElement>(null)
@@ -131,16 +176,20 @@ const Carousel: React.FC<CarouselProps> = ({
     'flex-shrink-0 min-w-fit md:min-w-min snap-start'
   const carouselItemStyle = { flexBasis: itemBasis }
 
-  const scrollIndicatorClassName = (index: number) =>
-    cn(
-      'size-3 rounded-full transition-all duration-300',
-      currentPage === index
-        ? 'bg-primary-400 shadow-md shadow-primary'
-        : 'bg-base-300 hover:scale-125'
-    )
-
-  const prevButtonClassName = 'absolute -left-0 top-1/2 -translate-y-1/2 z-10'
-  const nextButtonClassName = 'absolute -right-0 top-1/2 -translate-y-1/2 z-10'
+  const prevButtonClassName = cn(
+    'absolute -left-0 top-1/2 -translate-y-1/2 z-10',
+    {
+      'static translate-y-0': variant === 'hud',
+      'opacity-0 pointer-events-none': !canScrollPrev
+    }
+  )
+  const nextButtonClassName = cn(
+    'absolute -right-0 top-1/2 -translate-y-1/2 z-10',
+    {
+      'static translate-y-0': variant === 'hud',
+      'opacity-0 pointer-events-none': !canScrollNext
+    }
+  )
 
   return (
     <div className={carouselWrapperClassName}>
@@ -156,43 +205,40 @@ const Carousel: React.FC<CarouselProps> = ({
         ))}
       </ul>
 
-      {/* Scroll indicators */}
       {totalPages > 1 && (
-        <div className="flex justify-center gap-2 mt-4">
-          {Array.from({ length: totalPages }).map((_, index) => (
-            <button
-              key={index}
-              onClick={() => scrollToPage(index)}
-              className={scrollIndicatorClassName(index)}
-              aria-label={`Go to page ${index + 1}`}
-              aria-current={currentPage === index ? 'true' : 'false'}
-            />
-          ))}
+        <div
+          className={cn(
+            'mt-2 flex items-center justify-between px-4 gap-5',
+            variant === 'hud' && 'relative'
+          )}
+        >
+          <Button
+            variant={variant === 'hud' ? 'ghost' : 'primary'}
+            size="icon"
+            rounded={false}
+            className={prevButtonClassName}
+            onClick={handleScrollPrev}
+          >
+            <Icon icon="chevronLeft" className="size-6" />
+          </Button>
+
+          <ScrollIndicator
+            totalPages={totalPages}
+            currentPage={currentPage}
+            variant={indicatorVariant}
+            onPageChange={scrollToPage}
+          />
+
+          <Button
+            variant={variant === 'hud' ? 'ghost' : 'primary'}
+            size="icon"
+            rounded={false}
+            className={nextButtonClassName}
+            onClick={handleScrollNext}
+          >
+            <Icon icon="chevronRight" className="size-6" />
+          </Button>
         </div>
-      )}
-
-      {canScrollPrev && (
-        <Button
-          variant="primary"
-          size="icon"
-          rounded={false}
-          className={prevButtonClassName}
-          onClick={handleScrollPrev}
-        >
-          <Icon icon="arrowLeft" className="size-4" />
-        </Button>
-      )}
-
-      {canScrollNext && (
-        <Button
-          variant="primary"
-          size="icon"
-          rounded={false}
-          className={nextButtonClassName}
-          onClick={handleScrollNext}
-        >
-          <Icon icon="arrowRight" className="size-4" />
-        </Button>
       )}
     </div>
   )
