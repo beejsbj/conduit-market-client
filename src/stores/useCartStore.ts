@@ -15,7 +15,7 @@ export interface CartItem {
   selectedForZapout?: boolean
 }
 
-interface Cart {
+export interface Cart {
   merchantPubkey: string
   items: CartItem[]
 }
@@ -26,6 +26,8 @@ interface CartState {
   // HUD UI
   isHUDOpen: boolean
   toggleHUD: (force?: boolean) => void
+  selectedHUDCart: Cart | null
+  setSelectedHUDCart: (cart: Cart) => void
 
   // Cart actions
   clearCart: (merchantPubkey: string) => void
@@ -58,11 +60,16 @@ export const useCartStore = create<CartState>()(
     (set, get) => ({
       carts: [],
       isHUDOpen: false,
-
+      selectedHUDCart: null,
       // HUD UI actions
       toggleHUD: (force?: boolean) =>
         set((state) => ({
           isHUDOpen: force !== undefined ? force : !state.isHUDOpen
+        })),
+
+      setSelectedHUDCart: (cart: Cart) =>
+        set((state) => ({
+          selectedHUDCart: cart
         })),
 
       // Cart actions
