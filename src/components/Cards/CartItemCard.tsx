@@ -11,6 +11,7 @@ import { UpdateCartItemQuantityButtons } from '../Buttons/index.tsx'
 import { useState } from 'react'
 import { Pill } from '../Pill.tsx'
 import { formatPrice } from '@/lib/utils.ts'
+import Icon from '../Icon.tsx'
 
 const PLACEHOLDER_IMAGE = 'https://prd.place/600/400'
 
@@ -23,16 +24,18 @@ const CartHUDItem: React.FC<CartItemProps> = ({ product }) => {
 
   if (!product) {
     return (
-      <Card className="bg-muted/60 border border-ink border-dashed aspect-square w-[120px]">
+      <Card className="bg-muted/60 border [border-image:var(--dashed-border)_1] aspect-square min-w-[120px]">
         <CardContent className="h-full flex items-center justify-center">
-          <div className="w-full h-full" />
+          <div className="w-full h-full grid place-items-center">
+            <Icon icon="plus" className="size-10" />
+          </div>
         </CardContent>
       </Card>
     )
   }
 
   return (
-    <Card className="border-none max-w-[120px]">
+    <Card className="border-none">
       <CardContent className="p-0 relative overflow-hidden">
         <picture className="aspect-square bg-ink">
           <img
@@ -43,9 +46,9 @@ const CartHUDItem: React.FC<CartItemProps> = ({ product }) => {
             loading="lazy"
           />
         </picture>
-        <p className="absolute bottom-1 left-1/2 -translate-x-1/2 p-2 voice-2l">
-          {product.price}
-        </p>
+        <div className="absolute inset-0 from-transparent to-black/50 bg-gradient-to-b grid items-end p-2">
+          <p className="voice-2l text-center">{product.price}</p>
+        </div>
       </CardContent>
       <CardFooter className="p-0">
         <UpdateCartItemQuantityButtons
