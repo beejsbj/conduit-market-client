@@ -1,18 +1,21 @@
 import {
   ArrowLeft,
   ArrowRight,
+  ChevronUp,
+  ChevronDown,
   ChevronLeft,
+  ChevronRight,
   Heart,
   Lock,
   Mail,
   ShoppingCart,
+  ShoppingBag,
   MessagesSquare,
   SearchIcon,
   User,
   Wand,
   X,
   Menu,
-  ChevronRight,
   Zap,
   Minus,
   Plus,
@@ -29,7 +32,10 @@ import {
 const iconMap = {
   arrowLeft: ArrowLeft,
   arrowRight: ArrowRight,
+  chevronUp: ChevronUp,
+  chevronDown: ChevronDown,
   chevronLeft: ChevronLeft,
+  chevronRight: ChevronRight,
   heart: Heart,
   lock: Lock,
   mail: Mail,
@@ -40,7 +46,6 @@ const iconMap = {
   wand: Wand,
   menu: Menu,
   x: X,
-  chevronRight: ChevronRight,
   zap: Zap,
   minus: Minus,
   plus: Plus,
@@ -51,7 +56,8 @@ const iconMap = {
   star: Star,
   xIcon: XIcon,
   paste: ClipboardPaste,
-  userPlus: UserPlus
+  userPlus: UserPlus,
+  ShoppingBag: ShoppingBagIcon
 } as const
 
 export type IconName = keyof typeof iconMap
