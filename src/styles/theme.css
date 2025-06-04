@@ -1,6 +1,12 @@
 /* Colors */
 @layer base {
   :root {
+    --dashed-border: url("data:image/svg+xml,%3csvg width='100%25' height='100%25' xmlns='http://www.w3.org/2000/svg'%3e%3crect width='100%25' height='100%25' fill='none' stroke='hsl(281, 16%, 65%)' stroke-width='7' stroke-dasharray='6%2c 30' stroke-dashoffset='0' stroke-linecap='square'/%3e%3c/svg%3e");
+
+    --dashed-border-rounded: url("data:image/svg+xml,%3csvg width='100%25' height='100%25' xmlns='http://www.w3.org/2000/svg'%3e%3crect width='100%25' height='100%25' fill='none' rx='100' ry='100' stroke='hsl(281, 16%, 65%)' stroke-width='7' stroke-dasharray='6%2c 29' stroke-dashoffset='0' stroke-linecap='square'/%3e%3c/svg%3e");
+  }
+
+  :root {
     /* Base HSL values */
     --base-h: 255;
     --base-s: 8%;
