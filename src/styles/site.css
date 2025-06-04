@@ -129,10 +129,6 @@ layer(base);
 /* components */
 
 @layer components {
-  .cart-drawer {
-    @apply bg-primary mb-4 flex justify-between gap-4 from-primary-800 to-primary/80 bg-gradient-to-b relative rounded-lg;
-  }
-
   .cart-drawer::before {
     content: '';
     position: absolute;
