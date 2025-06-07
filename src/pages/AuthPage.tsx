@@ -11,6 +11,8 @@ const AuthPage: React.FC = () => {
     }
   }
 
+  const ifComingFromZapout = false
+
   return (
     <PageSection width="xNarrow" sectionClassName="relative overflow-hidden">
       <div className="flex gap-2 items-center justify-center">
@@ -22,7 +24,9 @@ const AuthPage: React.FC = () => {
         >
           <Icon icon="chevronLeft" className="size-10" />
         </Button>
-        <h1 className="voice-5l">Sign in</h1>
+        <h1 className="voice-5l">
+          {ifComingFromZapout ? 'Continue to Zapout' : 'Sign in'}
+        </h1>
       </div>
       <p className="voice-base text-center text-balance">
         To connect to thousands of independent merchants and millions of
