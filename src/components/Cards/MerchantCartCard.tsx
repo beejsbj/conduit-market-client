@@ -63,7 +63,12 @@ const MerchantCartCard: React.FC<MerchantCartCardProps> = ({
       {/* Action Buttons Section */}
       <CardFooter className="flex flex-wrap items-center justify-end gap-4 flex-1">
         {/* Primary Zapout Button */}
-        <ZapoutButton size="md" rounded={false} className="flex-1">
+        <ZapoutButton
+          size="md"
+          rounded={false}
+          className="flex-1"
+          merchantPubkey={merchantPubkey}
+        >
           Zapout
         </ZapoutButton>
         {/* View Cart Button */}
