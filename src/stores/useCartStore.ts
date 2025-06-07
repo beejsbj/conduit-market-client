@@ -85,7 +85,7 @@ export const useCartStore = create<CartState>()(
               ...state.carts,
               {
                 merchantPubkey: product.merchantPubkey,
-                items: [{ ...product, quantity: 1 }]
+                items: [{ ...product, quantity: 1, selectedForZapout: true }]
               }
             ]
           }))
@@ -107,7 +107,10 @@ export const useCartStore = create<CartState>()(
             cart.merchantPubkey === product.merchantPubkey
               ? {
                   ...cart,
-                  items: [...cart.items, { ...product, quantity: 1 }]
+                  items: [
+                    ...cart.items,
+                    { ...product, quantity: 1, selectedForZapout: true }
+                  ]
                 }
               : cart
           )
