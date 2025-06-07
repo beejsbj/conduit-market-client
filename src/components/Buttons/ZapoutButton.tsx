@@ -3,14 +3,17 @@ import Button from './Button'
 import type { ButtonProps } from './Button'
 import Icon from '../Icon'
 
-export interface ZapoutButtonProps extends Omit<ButtonProps, 'isLink' | 'to'> {}
+export interface ZapoutButtonProps extends Omit<ButtonProps, 'isLink' | 'to'> {
+  merchantPubkey: string
+}
 
 const ZapoutButton: React.FC<ZapoutButtonProps> = ({
   variant = 'primary',
   size = 'md',
   disabled = false,
-  children,
+  children = 'Zapout',
   rounded = true,
+  merchantPubkey,
 
   ...props
 }) => {
@@ -21,7 +24,7 @@ const ZapoutButton: React.FC<ZapoutButtonProps> = ({
       size={size}
       disabled={disabled}
       isLink={true}
-      to={'/zapout'}
+      to={`/zapout/${merchantPubkey}`}
       rounded={rounded}
     >
       <picture>
