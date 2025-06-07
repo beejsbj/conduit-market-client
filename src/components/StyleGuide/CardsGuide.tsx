@@ -19,7 +19,7 @@ interface Card<T = any> {
 const PLACEHOLDER_IMAGE = 'https://prd.place/600/400'
 
 export function CardsGuide() {
-  const { products, loading } = useMockProducts({ count: 3, modifyStock: true })
+  const { products, loading } = useMockProducts({ count: 1, modifyStock: true })
 
   const cards: Card[] = [
     {
