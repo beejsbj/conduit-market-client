@@ -5,6 +5,7 @@ import Icon, { type IconName } from '../Icon'
 
 export type FieldProps = {
   label?: string
+  labelClassName?: string
   name: string
   type?: string
   className?: string
@@ -21,6 +22,7 @@ const Field = React.forwardRef<HTMLInputElement, FieldProps>(
   (
     {
       label,
+      labelClassName,
       name,
       type = 'text',
       className,
@@ -49,6 +51,7 @@ const Field = React.forwardRef<HTMLInputElement, FieldProps>(
     const labelClassNames = cn(
       // Typography - Using design system voice level for consistent text styling
       'voice-sm font-bold',
+      labelClassName,
 
       // Add any conditional classes if needed
       {
