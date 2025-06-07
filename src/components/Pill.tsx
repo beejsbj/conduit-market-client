@@ -156,6 +156,7 @@ const MultiUserPill: React.FC<MultiUserPillProps> = ({
 
 interface IconPillProps
   extends Omit<React.HTMLAttributes<HTMLDivElement>, 'children'> {
+  className?: string
   text: string
   leftIcon?: IconName
   rightIcon?: IconName
@@ -178,13 +179,14 @@ const IconPill: React.FC<IconPillProps> = ({
   text,
   leftIcon,
   rightIcon,
-  size = 'md'
+  size = 'md',
+  className
 }) => {
   const iconSize = iconSizeClasses[size]
   const textClasses = cn('font-medium', textSizeClasses[size])
 
   return (
-    <Pill className={cn('px-1 py-1 pr-4')}>
+    <Pill className={cn('px-2 py-2 pr-4', className)}>
       {leftIcon && <Icon icon={leftIcon} className={iconSize} />}
       <span className={textClasses}>{text}</span>
       {rightIcon && <Icon icon={rightIcon} className={iconSize} />}
