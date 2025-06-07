@@ -19,7 +19,7 @@ interface CartItemProps {
   product?: CartItem | null
 }
 
-const CartHUDItem: React.FC<CartItemProps> = ({ product }) => {
+export const CartHUDItem: React.FC<CartItemProps> = ({ product }) => {
   const [imageError, setImageError] = useState(false)
 
   if (!product) {
@@ -128,4 +128,47 @@ export const CartItemCard: React.FC<CartItemProps> = ({ product }) => {
   )
 }
 
-export default CartHUDItem
+export const OrderSummaryItemCard: React.FC<CartItemProps> = ({ product }) => {
+  const [imageError, setImageError] = useState(false)
+  const { toggleItemSelectionForZapout } = useCartStore()
+  return (
+    <Card className="border-none flex flex-wrap items-center gap-4">
+      <CardHeader className="flex items-center gap-4  min-w-[120px] max-w-[250px] flex-1">
+        <div className=" w-full">
+          <picture className="aspect-square block bg-ink rounded-lg overflow-hidden">
+            <img
+              className="w-full h-full object-cover"
+              src={imageError ? PLACEHOLDER_IMAGE : product?.image}
+              alt={product?.name}
+              onError={() => setImageError(true)}
+              loading="lazy"
+            />
+          </picture>
+        </div>
+      </CardHeader>
+      <CardContent className="flex-2  grid justify-items-start gap-4">
+        <CardTitle className="voice-base font-normal">
+          {product?.name}
+        </CardTitle>
+      </CardContent>
+      <CardFooter className="grid gap-4 justify-items-end">
+        <div className="grid gap-2 justify-items-end">
+          {/* Price in Satoshis */}
+          <p className="voice-lg font-bold ">
+            {formatPrice(product?.price ?? 0, 'SAT')}
+          </p>
+
+          {/* price in USD */}
+          <p className="voice-sm ">{formatPrice(product?.price ?? 0, 'USD')}</p>
+        </div>
+
+        <div className="flex items-center gap-2">
+          <p className="voice-base text-muted-foreground">Qty:</p>
+          <p className="voice-base text-muted-foreground font-bold">
+            {product?.quantity}
+          </p>
+        </div>
+      </CardFooter>
+    </Card>
+  )
+}
