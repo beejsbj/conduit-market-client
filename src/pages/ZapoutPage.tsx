@@ -2,7 +2,7 @@ import {
   useCartStore,
   type CartItem as StoreCartItem
 } from '@/stores/useCartStore'
-import ShippingForm from '@/layouts/ShippingForm.tsx'
+import ShippingForm from '@/components/ZapoutPage/ShippingForm.tsx'
 import { createOrder } from '@/lib/nostr/createOrder.ts'
 import { useCallback, useEffect } from 'react'
 import { NDKEvent } from '@nostr-dev-kit/ndk'
@@ -10,16 +10,13 @@ import postOrder from '@/lib/nostr/postOrder.ts'
 import { useAccountStore } from '@/stores/useAccountStore'
 import useWindowState, { WindowTypes } from '@/stores/useWindowState'
 import BackButton from '@/components/Buttons/BackButton'
-
-interface CartItem {
-  eventId: string
-  productId: string
-  merchantPubkey: string
-  quantity: number
-  price: number
-  name: string
-  image: string
-}
+import PageSection from '@/layouts/PageSection'
+import OrderSummary from '@/components/ZapoutPage/OrderSummary'
+import { useParams, useSearch, useLocation } from 'wouter'
+import PaymentMethod from '@/components/ZapoutPage/PaymentMethod'
+import Button from '@/components/Buttons/Button'
+import Icon from '@/components/Icon'
+import ZapoutConfirmation from '@/components/ZapoutPage/ZapoutConfirmation'
 
 interface OrderData {
   items: Array<{
@@ -82,183 +79,89 @@ async function prepareOrder(
   postOrder(order, cart[0].merchantPubkey)
 }
 
-export default function ZapoutPage() {
-  const { carts, getCartsTotal } = useCartStore()
-  const { user, isLoggedIn, fetchUser } = useAccountStore()
-  const { pushWindow } = useWindowState()
+type ZapoutStep = {
+  label: string
+  query: string
+  component?: React.FC
+}
 
-  // Format functions
-  const formatCurrency = (amount: number) => {
-    return new Intl.NumberFormat('en-US', {
-      style: 'currency',
-      currency: 'USD'
-    }).format(amount)
-  }
+const ZapoutPage: React.FC = () => {
+  const { merchantPubkey } = useParams()
+  const query = useSearch() // zapoutStep=shipping
+  const step = query.split('=')[1] ?? 'shipping' // shipping
 
-  const formatPubkey = (pubkey: string) => {
-    if (!pubkey) return ''
-    return `${pubkey.substring(0, 8)}...${pubkey.substring(pubkey.length - 4)}`
-  }
+  const [location, setLocation] = useLocation()
 
-  // Calculate cart totals
-  const subtotal = getCartsTotal()
-
-  const handleSubmit = useCallback(
-    (shippingInfo: unknown) => {
-      if (user && isLoggedIn) {
-        // Flatten all cart items for the order and convert to order format
-        const allCartItems = carts.flatMap((cart) => ({
-          ...cart.items,
-          eventId: cart.merchantPubkey // Using merchantPubkey as eventId for now
-        })) as CartItem[]
-        prepareOrder(allCartItems, shippingInfo, user.npub)
-      } else {
-        console.error(
-          '[ZapoutPage.handleSubmit] No active user, cannot submit order'
-        )
-      }
+  const zapoutSteps: ZapoutStep[] = [
+    {
+      label: 'Shipping',
+      query: 'shipping',
+      component: ShippingStep
     },
-    [user, isLoggedIn, carts]
-  )
+    {
+      label: 'Payment',
+      query: 'payment',
+      component: PaymentStep
+    },
+    {
+      label: 'Confirmation',
+      query: 'confirmation',
+      component: ZapoutConfirmation
+    }
+  ]
 
-  // Open login window function
-  const openLoginWindow = () => {
-    pushWindow(WindowTypes.LOGIN, {
-      title: 'Lock In',
-      isFullScreen: true,
-      disableClickOutside: true
-    })
-  }
+  const currentStep = zapoutSteps.find((s) => s.query === step)
+  const CurrentStep = currentStep?.component
 
-  // Refresh auth state and listen for changes
   useEffect(() => {
-    // Check auth state immediately
-    if (isLoggedIn) {
-      fetchUser()
+    // If no search query is present, set it to the first step
+    if (!query || query === '?') {
+      setLocation(`?zapoutStep=${zapoutSteps[0].query}`)
     }
+  }, [query, location])
 
-    // Monitor localStorage for changes
-    const handleStorageChange = (event: StorageEvent) => {
-      if (event.key === 'nostr-merchant-auth') {
-        console.log('Auth storage changed, refreshing state')
-        // Re-fetch user if logged in
-        if (isLoggedIn) {
-          fetchUser()
-        }
-      }
+  const handleBack = () => {
+    if (window.history.length > 1) {
+      window.history.back()
     }
-
-    // Set up listeners
-    window.addEventListener('storage', handleStorageChange)
-
-    return () => {
-      window.removeEventListener('storage', handleStorageChange)
-    }
-  }, [fetchUser, isLoggedIn])
+  }
 
   return (
-    <div className="container mx-auto px-4 py-8 max-w-5xl">
-      <BackButton text="Back to Shopping" />
-      <h1 className="text-3xl font-bold mb-8 text-primary">Checkout</h1>
-
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        {/* Cart Items Section */}
-        <div className="lg:col-span-2">
-          <div className="bg-neutral-100 dark:bg-neutral-800 rounded-lg p-6 mb-6">
-            <h2 className="text-xl font-bold mb-4 text-secondary">Your Cart</h2>
-
-            {carts.length === 0 ? (
-              <p className="text-neutral-600 dark:text-neutral-400">
-                Your cart is empty.
-              </p>
-            ) : (
-              <div className="space-y-4">
-                {carts.map((cart) =>
-                  cart.items.map((item) => (
-                    <div
-                      key={item.productId}
-                      className="flex items-center gap-4 p-4 bg-white dark:bg-neutral-700 rounded-md shadow-xs"
-                    >
-                      <div className="w-16 h-16 shrink-0">
-                        <img
-                          src={item.image}
-                          alt={item.name}
-                          className="w-full h-full object-cover rounded-md"
-                        />
-                      </div>
-                      <div className="grow">
-                        <h3 className="font-medium text-lg">{item.name}</h3>
-                        <div className="text-neutral-600 dark:text-neutral-400 text-sm">
-                          Quantity: {item.quantity}
-                        </div>
-                      </div>
-                      <div className="font-bold text-lg">
-                        {formatCurrency(item.price)}
-                      </div>
-                    </div>
-                  ))
-                )}
-
-                <div className="flex justify-between pt-4 border-t border-neutral-200 dark:border-neutral-600">
-                  <span className="font-medium">Subtotal:</span>
-                  <span className="font-bold">{formatCurrency(subtotal)}</span>
-                </div>
-              </div>
-            )}
+    <PageSection width="normal">
+      <div className="grid lg:grid-cols-2 gap-12">
+        <div>
+          <div className="flex gap-2 items-center border-b border-ink pb-4">
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={handleBack}
+              className="-ml-12"
+            >
+              <Icon icon="chevronLeft" className="size-10" />
+            </Button>
+            <h1 className="voice-2l">{currentStep?.label}</h1>
           </div>
+          {CurrentStep && <CurrentStep />}
 
-          {/* User Info Section */}
-          {isLoggedIn && user ? (
-            <div className="bg-neutral-100 dark:bg-neutral-800 rounded-lg p-6">
-              <div className="flex items-center mb-4">
-                <div className="w-8 h-8 rounded-full bg-primary flex items-center justify-center text-white mr-3">
-                  N
-                </div>
-                <div>
-                  <p className="text-sm text-neutral-600 dark:text-neutral-400">
-                    Logged in as:
-                  </p>
-                  <p className="font-medium">{formatPubkey(user.npub)}</p>
-                </div>
-              </div>
-            </div>
-          ) : null}
+          <p className="voice-sm text-muted-foreground mt-8 text-balance">
+            Your personal data will be used to process your order, support your
+            experience throughout this website, and for other purposes described
+            in our privacy policy.
+          </p>
         </div>
 
-        {/* Shipping Form Section - without the constant re-rendering */}
-        <div className="lg:col-span-1">
-          <div className="bg-neutral-100 dark:bg-neutral-800 rounded-lg p-6 sticky top-4">
-            {isLoggedIn && user ? (
-              <>
-                <h2 className="text-xl font-bold mb-4">Shipping Details</h2>
-                <ShippingForm
-                  onSubmit={handleSubmit}
-                  cartPriceUsd={subtotal}
-                  onShippingCostUpdate={() => {
-                    console.log('Shipping cost updated')
-                  }}
-                />
-              </>
-            ) : (
-              <div className="text-center py-6">
-                <h2 className="text-xl font-bold mb-4">Sign In to Continue</h2>
-                <p className="mb-6 text-neutral-600 dark:text-neutral-400">
-                  Please login with your Nostr account to complete your
-                  purchase.
-                </p>
-                <div className="inline-block">
-                  <button
-                    onClick={openLoginWindow}
-                    className="bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-sm transition-colors"
-                  >
-                    Login with Nostr Signer Extension
-                  </button>
-                </div>
-              </div>
-            )}
-          </div>
-        </div>
+        <OrderSummary merchantPubkey={merchantPubkey as string} />
       </div>
-    </div>
+    </PageSection>
   )
 }
+
+const ShippingStep: React.FC = () => {
+  return <ShippingForm />
+}
+
+const PaymentStep: React.FC = () => {
+  return <PaymentMethod />
+}
+
+export default ZapoutPage
