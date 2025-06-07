@@ -15,6 +15,7 @@ import {
   User,
   Wand,
   X,
+  Type,
   Menu,
   Zap,
   Minus,
@@ -26,7 +27,17 @@ import {
   Star,
   XIcon,
   ClipboardPaste,
-  UserPlus
+  Copy,
+  UserPlus,
+  TriangleAlert,
+  KeyRound,
+  LucideShieldCheck,
+  Link,
+  PhoneCall,
+  Share,
+  Landmark,
+  Home,
+  MessageCircle
 } from 'lucide-react'
 
 const iconMap = {
@@ -40,7 +51,7 @@ const iconMap = {
   lock: Lock,
   mail: Mail,
   shoppingCart: ShoppingCart,
-  messagesSquare: MessagesSquare,
+  messages: MessagesSquare,
   search: SearchIcon,
   user: User,
   wand: Wand,
@@ -57,7 +68,17 @@ const iconMap = {
   xIcon: XIcon,
   paste: ClipboardPaste,
   userPlus: UserPlus,
-  ShoppingBag: ShoppingBagIcon
+  ShoppingBag: ShoppingBagIcon,
+  alert: TriangleAlert,
+  copy: Copy,
+  key: KeyRound,
+  shieldCheck: LucideShieldCheck,
+  type: Type,
+  link: Link,
+  phoneCall: PhoneCall,
+  share: Share,
+  landmark: Landmark,
+  home: Home
 } as const
 
 export type IconName = keyof typeof iconMap
