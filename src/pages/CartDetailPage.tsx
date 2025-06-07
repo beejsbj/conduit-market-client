@@ -88,7 +88,12 @@ const CartDetailPage: React.FC = () => {
               </p>
             </CardContent>
             <CardFooter>
-              <ZapoutButton rounded={false}>Zapout</ZapoutButton>
+              <ZapoutButton
+                rounded={false}
+                merchantPubkey={merchantId as string}
+              >
+                Zapout
+              </ZapoutButton>
             </CardFooter>
           </Card>
 
