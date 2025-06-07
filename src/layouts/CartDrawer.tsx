@@ -3,7 +3,7 @@ import Icon from '@/components/Icon'
 import ZapoutButton from '@/components/Buttons/ZapoutButton.tsx'
 import { cn, formatPrice } from '@/lib/utils'
 import Button from '@/components/Buttons/Button'
-import CartHUDItem from '@/components/Cards/CartItemCard'
+import { CartHUDItem } from '@/components/Cards/CartItemCard'
 import Carousel from '@/components/Carousel'
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/Tabs'
 import { useEffect, useState } from 'react'
@@ -169,7 +169,12 @@ const CartDrawer: React.FC = () => {
             <Icon icon="ShoppingBag" />
             View Cart(s)
           </Button>
-          <ZapoutButton rounded={false}>Zap out</ZapoutButton>
+          <ZapoutButton
+            rounded={false}
+            merchantPubkey={selectedHUDCart?.merchantPubkey || ''}
+          >
+            Zap out
+          </ZapoutButton>
         </div>
       </div>
     </div>
