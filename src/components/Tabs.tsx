@@ -18,6 +18,7 @@ interface TabsTriggerProps
   value: string
   children: React.ReactNode
   className?: string
+  isSelectedClassName?: string
 }
 
 interface TabsContentProps extends React.HTMLAttributes<HTMLDivElement> {
@@ -77,6 +78,7 @@ function TabsTrigger({
   className,
   value,
   children,
+  isSelectedClassName,
   ...props
 }: TabsTriggerProps) {
   const { value: selectedValue, onValueChange } = React.useContext(TabsContext)
@@ -89,8 +91,9 @@ function TabsTrigger({
       onClick={() => onValueChange(value)}
       className={cn(
         'voice-sm font-normal whitespace-nowrap px-3 py-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 ',
+        className,
         isSelected && 'font-bold data-[state=active]:font-bold border-primary',
-        className
+        isSelected && isSelectedClassName
       )}
       {...props}
     >
