@@ -17,6 +17,7 @@ import AuthPage from '@/pages/AuthPage'
 import MainLayout from '@/layouts/MainLayout'
 import SimpleLayout from '@/layouts/SimpleLayout'
 import HUDLayer from '@/layouts/HUDLayer.tsx'
+import CreateAccountPage from './CreateAccountPage'
 
 interface RouteConfig {
   label: string
@@ -40,6 +41,12 @@ const routes: RouteConfig[] = [
     layout: SimpleLayout
   },
   {
+    label: 'Create Nsec',
+    path: '/auth/create',
+    pageComponent: CreateAccountPage,
+    layout: SimpleLayout
+  },
+  {
     label: 'Product Details',
     path: '/product/:productId',
     pageComponent: ProductDetailPage
@@ -51,8 +58,9 @@ const routes: RouteConfig[] = [
   },
   {
     label: 'Zapout',
-    path: '/zapout',
-    pageComponent: ZapoutPage
+    path: '/zapout/:merchantPubkey',
+    pageComponent: ZapoutPage,
+    layout: SimpleLayout
   },
 
   {
@@ -103,6 +111,11 @@ const routes: RouteConfig[] = [
   {
     label: 'Shopping Carts',
     path: '/carts',
+    pageComponent: CartsPage
+  },
+  {
+    label: 'Zapout',
+    path: '/zapout',
     pageComponent: CartsPage
   },
   {
