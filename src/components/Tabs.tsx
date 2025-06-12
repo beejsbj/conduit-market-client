@@ -84,11 +84,16 @@ function TabsTrigger({
   const { value: selectedValue, onValueChange } = React.useContext(TabsContext)
   const isSelected = selectedValue === value
 
+  const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault()
+    onValueChange(value)
+  }
+
   return (
     <button
       role="tab"
       aria-selected={isSelected}
-      onClick={() => onValueChange(value)}
+      onClick={handleClick}
       className={cn(
         'voice-sm font-normal whitespace-nowrap px-3 py-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 ',
         className,
