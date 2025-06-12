@@ -103,7 +103,7 @@ const ShippingForm: React.FC = () => {
         <div key={index} className="space-y-4 mb-6">
           {/* Handle grouped fields (arrays) */}
           {Array.isArray(group) ? (
-            <div className="flex gap-4">
+            <div className="flex gap-4 sm:flex-row flex-col">
               {group.map((field, fieldIndex) => (
                 <Field
                   key={fieldIndex}
