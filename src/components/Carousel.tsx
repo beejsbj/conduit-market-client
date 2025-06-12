@@ -2,7 +2,9 @@ import { cn } from '@/lib/utils'
 import Icon from '@/components/Icon'
 import React, { useRef, useState, useEffect, Children } from 'react'
 import Button from './Buttons/Button'
+import { useInterfaceStore } from '@/stores/useInterfaceStore'
 
+//to
 interface CarouselProps {
   children: React.ReactNode
   className?: string
@@ -67,10 +69,21 @@ const Carousel: React.FC<CarouselProps> = ({
   const [currentPage, setCurrentPage] = useState(0)
   const [totalPages, setTotalPages] = useState(1)
 
+  // Get viewport information from shared interface store
+  const { isMobile } = useInterfaceStore()
+
+  // Determine how many items should be visible at this breakpoint
+  const currentVisibleItems = isMobile ? visibleItemsMobile : visibleItems
+
   const [canScrollPrev, setCanScrollPrev] = useState(false)
   const [canScrollNext, setCanScrollNext] = useState(
-    childrenCount > visibleItems
+    childrenCount > currentVisibleItems
   )
+
+  // Update scroll-next availability when viewport (and thus visible-items) changes
+  useEffect(() => {
+    setCanScrollNext(childrenCount > currentVisibleItems)
+  }, [childrenCount, currentVisibleItems])
 
   const calculateCurrentPage = (
     scrollLeft: number,
@@ -114,7 +127,7 @@ const Carousel: React.FC<CarouselProps> = ({
       // Also update current page when total pages changes
       updateScrollInfo()
     }
-  }, [children, visibleItems])
+  }, [children, currentVisibleItems])
 
   // Add scroll event listener
   useEffect(() => {
@@ -164,17 +177,16 @@ const Carousel: React.FC<CarouselProps> = ({
     }
   }
 
-  // Calculate item width based on visibleItems
-  const itemBasis = Math.floor(100 / visibleItems) + -2 + '%'
-  const itemBasisMobile = Math.floor(100 / visibleItemsMobile) + -2 + '%'
+  // Calculate item width based on the number of visible items for the current breakpoint
+  const itemBasisPercent = Math.floor(100 / currentVisibleItems) - 2
+  const itemBasis = `${itemBasisPercent}%`
 
   // Conditional styling variables
   const carouselWrapperClassName = cn('grid relative mt-4', className)
   const carouselListClassName =
     'flex gap-4 overflow-x-auto scroll-smooth snap-x snap-mandatory [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]'
-  const carouselItemClassName =
-    'flex-shrink-0 min-w-fit md:min-w-min snap-start'
-  const carouselItemStyle = { flexBasis: itemBasis }
+  const carouselItemClassName = 'flex-shrink-0 md:min-w-min snap-start'
+  const carouselItemStyle = { maxWidth: itemBasis }
 
   const prevButtonClassName = cn(
     'absolute -left-0 top-1/2 -translate-y-1/2 z-10',
