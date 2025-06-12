@@ -6,28 +6,41 @@ import Button from '@/components/Buttons/Button'
 import { CartHUDItem } from '@/components/Cards/CartItemCard'
 import Carousel from '@/components/Carousel'
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/Tabs'
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import Avatar from '@/components/Avatar'
 import type { Cart } from '@/stores/useCartStore'
+import { useInterfaceStore } from '@/stores/useInterfaceStore'
+import { useCartInteractions } from '@/hooks/useCartInteractions'
+
+// when touch drag down on the cart drawer, it should close
+// #todo place hlder icon is smaller than main image.
+//find  a wa yo to fix caroself on phone
 
 const CartDrawer: React.FC = () => {
-  const {
-    carts,
-    toggleHUD,
-    getCartTotal,
-    selectedHUDCart,
-    setSelectedHUDCart,
-    isHUDOpen
-  } = useCartStore()
+  // ===========================================================================
+  // State & Hooks
+  // ===========================================================================
+  const { carts, getCartTotal, selectedHUDCart, setSelectedHUDCart } =
+    useCartStore()
+
+  const { isCartHUDOpen, toggleCartHUD } = useInterfaceStore()
+
+  const { ref } = useCartInteractions()
 
   useEffect(() => {
-    if (carts.length > 0) {
+    if (carts.length > 0 && !selectedHUDCart) {
       setSelectedHUDCart(carts[0] as Cart)
     }
-  }, [carts, setSelectedHUDCart])
+  }, [carts, selectedHUDCart, setSelectedHUDCart])
 
+  // ===========================================================================
+  // Constants
+  // ===========================================================================
   const PLACEHOLDER_IMAGE = 'https://avatar.iran.liara.run/public'
 
+  // ===========================================================================
+  // Handlers & Helpers
+  // ===========================================================================
   const getItemsWithPlaceholders = (items: any[] = []) => {
     if (items.length >= 5) {
       // If we have 5 or more items, show all of them
@@ -39,6 +52,30 @@ const CartDrawer: React.FC = () => {
       .map((_, index) => items[index] || null)
   }
 
+  const handleTabChange = (merchantPubkey: string) => {
+    if (!isCartHUDOpen) {
+      toggleCartHUD(true)
+    }
+    const cart = carts.find((cart) => cart.merchantPubkey === merchantPubkey)
+    if (cart) {
+      setSelectedHUDCart(cart)
+    }
+  }
+
+  const handleCartClick = () => {
+    if (!isCartHUDOpen) {
+      toggleCartHUD(true)
+    }
+  }
+
+  const handleCloseClick = (e?: React.MouseEvent<HTMLButtonElement>) => {
+    e?.stopPropagation()
+    toggleCartHUD(false)
+  }
+
+  // ===========================================================================
+  // Styles
+  // ===========================================================================
   const TabsTriggerClasses = (merchantPubkey: string) =>
     cn(
       'pb-4 pt-2 bg-accent rounded-t-[999px] from-primary-800 to-accent bg-gradient-to-t flex items-center gap-2 transition-all duration-300',
@@ -47,26 +84,28 @@ const CartDrawer: React.FC = () => {
       }
     )
 
-  const handleTabChange = (merchantPubkey: string) => {
-    if (!isHUDOpen) {
-      toggleHUD()
-    }
-    const cart = carts.find((cart) => cart.merchantPubkey === merchantPubkey)
-    if (cart) {
-      setSelectedHUDCart(cart)
-    }
-  }
+  const cartDrawerClassName = cn(
+    'bg-primary grid sm:grid-cols-3 justify-between gap-4 from-primary-800 to-primary/80 bg-gradient-to-b rounded-lg px-3 py-2 relative cursor-pointer relative z-1',
+    //  after
+    'after:absolute after:inset-[-1px] after:bg-gradient-to-b after:from-ink after:to-transparent after:rounded-lg after:z-[-5]'
+  )
 
+  // ===========================================================================
+  // Render
+  // ===========================================================================
   return (
-    <div className="cart-drawer bg-primary grid grid-cols-3 justify-between gap-4 from-primary-800 to-primary/80 bg-gradient-to-b rounded-lg px-3 py-2 relative">
-      {/* close */}
-      <div className="absolute top-[-30px] right-10 z-1 pb-2 bg-accent rounded-t-full from-primary-800 to-accent bg-gradient-to-t">
-        <Button variant="ghost" size="icon" onClick={() => toggleHUD()}>
-          <Icon icon="xIcon" />
-        </Button>
-      </div>
+    <div ref={ref} className={cartDrawerClassName} onClick={handleCartClick}>
+      {/* Close Button */}
+      {isCartHUDOpen && (
+        <div className="absolute top-[-30px] right-10 z-1 pb-2 bg-accent rounded-t-full from-primary-800 to-accent bg-gradient-to-t">
+          <Button variant="ghost" size="icon" onClick={handleCloseClick}>
+            <Icon icon="xIcon" />
+          </Button>
+        </div>
+      )}
 
-      <div className="col-span-2">
+      {/* Cart Tabs */}
+      <div className="sm:col-span-2">
         <Tabs
           defaultValue={selectedHUDCart?.merchantPubkey || 'empty'}
           className="w-full"
@@ -90,6 +129,7 @@ const CartDrawer: React.FC = () => {
             </TabsList>
           )}
 
+          {/* Cart Content */}
           {carts.length > 0 ? (
             carts.map((cart) => (
               <TabsContent
@@ -148,8 +188,9 @@ const CartDrawer: React.FC = () => {
         </Tabs>
       </div>
 
-      <div className="grid grid-cols-2 gap-4">
-        {/* totals */}
+      {/* Cart Summary & Actions */}
+      <div className="grid sm:place-content-center sm:grid-cols-2 gap-6">
+        {/* Totals */}
         <div className="grid gap-2 items-center content-center text-center">
           <h3 className="voice-base font-bold">Subtotal</h3>
           <p className="voice-3l">
@@ -163,7 +204,7 @@ const CartDrawer: React.FC = () => {
           </p>
         </div>
 
-        {/* actions */}
+        {/* Actions */}
         <div className="grid gap-2 items-center content-center">
           <Button variant="outline" rounded={false} isLink to="/carts">
             <Icon icon="ShoppingBag" />
