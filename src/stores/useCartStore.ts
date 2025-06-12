@@ -23,9 +23,7 @@ export interface Cart {
 interface CartState {
   carts: Cart[]
 
-  // HUD UI
-  isHUDOpen: boolean
-  toggleHUD: (force?: boolean) => void
+  // HUD state
   selectedHUDCart: Cart | null
   setSelectedHUDCart: (cart: Cart) => void
 
@@ -59,13 +57,8 @@ export const useCartStore = create<CartState>()(
   persist(
     (set, get) => ({
       carts: [],
-      isHUDOpen: false,
       selectedHUDCart: null,
       // HUD UI actions
-      toggleHUD: (force?: boolean) =>
-        set((state) => ({
-          isHUDOpen: force !== undefined ? force : !state.isHUDOpen
-        })),
 
       setSelectedHUDCart: (cart: Cart) =>
         set((state) => ({
