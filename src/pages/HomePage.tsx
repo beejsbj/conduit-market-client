@@ -53,7 +53,7 @@ const content = [
 ]
 
 const HomePage: React.FC = () => {
-  const { products, loading } = useMockProducts({ count: 10 })
+  const { products, loading } = useMockProducts({ count: 3 })
 
   if (loading) {
     return <div>Loading...</div>
