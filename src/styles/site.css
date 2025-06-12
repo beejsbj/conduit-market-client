@@ -129,15 +129,6 @@ layer(base);
 /* components */
 
 @layer components {
-  .cart-drawer::before {
-    content: '';
-    position: absolute;
-    inset: -1px;
-    background: linear-gradient(to bottom, var(--color-ink), transparent);
-    border-radius: var(--radius-lg);
-    z-index: -1;
-  }
-
   .tabs-list {
     @apply flex items-center p-1 relative;
 
