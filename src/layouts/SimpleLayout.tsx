@@ -1,6 +1,7 @@
 import Icon from '@/components/Icon'
 import Logo from '@/components/Logo'
 import Button from '@/components/Buttons/Button'
+import SlideDrawer from '@/components/SlideDrawer'
 import React, { type PropsWithChildren } from 'react'
 import PageSection from '@/layouts/PageSection'
 import Breadcrumbs from '@/components/Breadcumbs'
@@ -43,6 +44,31 @@ const SimpleLayout: React.FC<PropsWithChildren> = ({ children }) => {
                 <span className="">How it works</span>
               </Button>
             </div>
+
+            {/* Mobile Navigation */}
+            <SlideDrawer>
+              <div className="flex flex-col gap-2 mt-4">
+                <Button
+                  variant="ghost"
+                  isLink
+                  to="/shop"
+                  className="w-full justify-start"
+                >
+                  <Icon icon="shoppingCart" className="max-w-5 mr-2" />
+                  <span>Shop</span>
+                </Button>
+
+                <Button
+                  variant="ghost"
+                  isLink
+                  to="/orders"
+                  className="w-full justify-start"
+                >
+                  <Icon icon="wand" className="max-w-5 mr-2" />
+                  <span>How it works</span>
+                </Button>
+              </div>
+            </SlideDrawer>
           </div>
         </PageSection>
       </header>
