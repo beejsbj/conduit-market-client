@@ -1,79 +1,59 @@
 import CartDrawer from '@/layouts/CartDrawer'
 import PageSection from './PageSection'
 import { cn } from '@/lib/utils'
-import { useCartStore } from '@/stores/useCartStore'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
+import { useInterfaceStore } from '@/stores/useInterfaceStore'
 
 /*  #todo
 // -  there should be a way to individually control each Hud element but also a way to control all of them at once. */
+// - draging on the cart drawer ends up scrolling the page in the background
 
 const HUDLayer: React.FC = () => {
-  const { isHUDOpen, toggleHUD } = useCartStore()
+  const { isCartHUDOpen, toggleCartHUD } = useInterfaceStore()
+  const [isHealthBarOpen, setIsHealthBarOpen] = useState(false)
 
-  const INACTIVITY_DELAY = 2000
+  const [anyHudOpen, setAnyHudOpen] = useState(false)
 
+  // Update anyHudOpen whenever any HUD element state changes
   useEffect(() => {
-    let scrollTimeout: NodeJS.Timeout
-    let inactivityTimeout: NodeJS.Timeout
+    setAnyHudOpen(isCartHUDOpen || isHealthBarOpen)
+  }, [isCartHUDOpen, isHealthBarOpen])
 
-    const resetInactivityTimer = () => {
-      clearTimeout(inactivityTimeout)
-      inactivityTimeout = setTimeout(() => {
-        // Auto-open HUD after 5 seconds of inactivity if it's closed
-        if (!isHUDOpen) {
-          toggleHUD(true)
-        }
-      }, INACTIVITY_DELAY)
+  const hideAllHud = () => {
+    toggleCartHUD(false)
+    setIsHealthBarOpen(false)
+  }
+
+  //   conditional classes
+
+  // hud layer container
+  const hudLayerContainerClassName = cn(
+    'fixed inset-0 z-50 pointer-events-none grid transition-all duration-300',
+    {
+      'bg-paper/40 md:bg-transparent': anyHudOpen
     }
-
-    const handleScroll = () => {
-      if (isHUDOpen) {
-        toggleHUD(false)
-      }
-      // Reset the timeout on each scroll
-      clearTimeout(scrollTimeout)
-      scrollTimeout = setTimeout(() => {
-        // Handle potential auto-show after scroll stops if needed
-      }, 1000)
-
-      // Reset inactivity timer on scroll
-      resetInactivityTimer()
-    }
-
-    const handleUserActivity = () => {
-      // Reset inactivity timer on any user activity
-      resetInactivityTimer()
-    }
-
-    // Add event listeners for various user activities
-    window.addEventListener('scroll', handleScroll)
-    window.addEventListener('mousemove', handleUserActivity)
-    window.addEventListener('keydown', handleUserActivity)
-    window.addEventListener('touchstart', handleUserActivity)
-
-    // Start the inactivity timer initially
-    resetInactivityTimer()
-
-    return () => {
-      window.removeEventListener('scroll', handleScroll)
-      window.removeEventListener('mousemove', handleUserActivity)
-      window.removeEventListener('keydown', handleUserActivity)
-      window.removeEventListener('touchstart', handleUserActivity)
-      clearTimeout(scrollTimeout)
-      clearTimeout(inactivityTimeout)
-    }
-  }, [isHUDOpen, toggleHUD])
+  )
 
   const cartSectionClassName = cn(
     'self-end pointer-events-auto transition-all duration-600 ease-bounce',
     {
-      'translate-y-0 opacity-100': isHUDOpen,
-      'translate-y-9/10  opacity-50 hover:translate-y-7/10': !isHUDOpen
+      'translate-y-0 opacity-100': isCartHUDOpen,
+      'translate-y-9/10  opacity-50 hover:translate-y-7/10': !isCartHUDOpen
     }
   )
 
+  const handleHudLayerClick = (e: React.MouseEvent<HTMLDivElement>) => {
+    //  if (anyHudOpen) {
+    //    e.stopPropagation()
+    //    hideAllHud()
+    //  }
+  }
+
   return (
-    <div className="fixed inset-0 z-50 pointer-events-none grid">
+    <div className={hudLayerContainerClassName} onClick={handleHudLayerClick}>
+      <PageSection>
+        <div>health bar</div>
+      </PageSection>
       <PageSection sectionClassName={cartSectionClassName}>
         <CartDrawer />
       </PageSection>
