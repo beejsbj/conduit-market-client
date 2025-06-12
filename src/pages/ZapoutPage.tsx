@@ -116,11 +116,15 @@ const ZapoutPage: React.FC = () => {
   useEffect(() => {
     // If no search query is present, set it to the first step
     if (!query || query === '?') {
-      setLocation(`?zapoutStep=${zapoutSteps[0].query}`)
+      // `setLocation` behaves like the `navigate` helper from wouter and accepts
+      // an options object where `replace: true` performs a history.replaceState
+      // instead of history.pushState.
+      setLocation(`?zapoutStep=${zapoutSteps[0].query}`, { replace: true })
     }
   }, [query, location])
 
   const handleBack = () => {
+    console.log('handleBack', location)
     if (window.history.length > 1) {
       window.history.back()
     }
@@ -128,14 +132,14 @@ const ZapoutPage: React.FC = () => {
 
   return (
     <PageSection width="normal">
-      <div className="grid lg:grid-cols-2 gap-12">
+      <div className="grid md:grid-cols-2 gap-12">
         <div>
           <div className="flex gap-2 items-center border-b border-ink pb-4">
             <Button
               variant="ghost"
               size="icon"
               onClick={handleBack}
-              className="-ml-12"
+              className="lg:-ml-12"
             >
               <Icon icon="chevronLeft" className="size-10" />
             </Button>
