@@ -10,10 +10,10 @@ import {
 import { UpdateCartItemQuantityButtons } from '../Buttons/index.tsx'
 import { useState } from 'react'
 import { Pill } from '../Pill.tsx'
-import { formatPrice } from '@/lib/utils.ts'
+import { cn, formatPrice } from '@/lib/utils.ts'
 import Icon from '../Icon.tsx'
 
-const PLACEHOLDER_IMAGE = 'https://prd.place/600/400'
+const PLACEHOLDER_IMAGE = '/images/placeholders/cart-item.svg'
 
 interface CartItemProps {
   product?: CartItem | null
@@ -22,40 +22,34 @@ interface CartItemProps {
 export const CartHUDItem: React.FC<CartItemProps> = ({ product }) => {
   const [imageError, setImageError] = useState(false)
 
-  if (!product) {
-    return (
-      <Card className="bg-muted/60 border [border-image:var(--dashed-border)_1] aspect-square min-w-[120px]">
-        <CardContent className="h-full flex items-center justify-center">
-          <div className="w-full h-full grid place-items-center">
-            <Icon icon="plus" className="size-10" />
-          </div>
-        </CardContent>
-      </Card>
-    )
-  }
-
   return (
-    <Card className="border-none">
+    <Card className={cn('border-none', !product && 'bg-transparent')}>
       <CardContent className="p-0 relative overflow-hidden">
-        <picture className="aspect-square bg-ink">
+        <picture
+          className={cn('aspect-square bg-ink', !product && 'bg-transparent')}
+        >
           <img
             className="w-full h-full object-cover"
-            src={imageError ? PLACEHOLDER_IMAGE : product.image}
-            alt={product.name}
+            src={imageError || !product ? PLACEHOLDER_IMAGE : product.image}
+            alt={product?.name || 'placeholder'}
             onError={() => setImageError(true)}
             loading="lazy"
           />
         </picture>
-        <div className="absolute inset-0 from-transparent to-black/50 bg-gradient-to-b grid items-end p-2">
-          <p className="voice-2l text-center">{product.price}</p>
-        </div>
+        {product && (
+          <div className="absolute inset-0 from-transparent to-black/50 bg-gradient-to-b grid items-end p-2">
+            <p className="voice-2l text-center">{product.price}</p>
+          </div>
+        )}
       </CardContent>
-      <CardFooter className="p-0">
-        <UpdateCartItemQuantityButtons
-          product={product}
-          className="border-none"
-        />
-      </CardFooter>
+      {product && (
+        <CardFooter className="p-0">
+          <UpdateCartItemQuantityButtons
+            product={product}
+            className="border-none"
+          />
+        </CardFooter>
+      )}
     </Card>
   )
 }
