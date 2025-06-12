@@ -113,7 +113,7 @@ const Header: React.FC = () => {
             {/* messages button if logged in */}
             {isLoggedIn && (
               <Button variant="ghost" isLink to="/shop">
-                <Icon icon="messagesSquare" />
+                <Icon icon="messages" />
                 <span className="">Messages</span>
               </Button>
             )}
