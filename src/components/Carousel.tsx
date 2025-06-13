@@ -3,7 +3,7 @@ import Icon from '@/components/Icon'
 import React, { useRef, useState, useEffect, Children } from 'react'
 import Button from './Buttons/Button'
 import { useInterfaceStore } from '@/stores/useInterfaceStore'
-
+import autoAnimate from '@formkit/auto-animate'
 //to
 interface CarouselProps {
   children: React.ReactNode
@@ -65,6 +65,11 @@ const Carousel: React.FC<CarouselProps> = ({
   ...props
 }) => {
   const carouselRef = useRef<HTMLUListElement>(null)
+  useEffect(() => {
+    if (carouselRef.current) {
+      autoAnimate(carouselRef.current)
+    }
+  }, [carouselRef.current])
   const childrenCount = Children.count(children)
   const [currentPage, setCurrentPage] = useState(0)
   const [totalPages, setTotalPages] = useState(1)
