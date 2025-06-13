@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "bun run build:schema && vite",
     "build": "bun run build:schema && vite build",
-    "build:schema": "cd external/nostr-commerce-schema && bun run build",
+    "build:schema": "bun --cwd external/nostr-commerce-schema run build",
     "preview": "vite preview"
   },
   "dependencies": {
