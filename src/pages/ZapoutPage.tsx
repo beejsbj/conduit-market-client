@@ -17,6 +17,7 @@ import PaymentMethod from '@/components/ZapoutPage/PaymentMethod'
 import Button from '@/components/Buttons/Button'
 import Icon from '@/components/Icon'
 import ZapoutConfirmation from '@/components/ZapoutPage/ZapoutConfirmation'
+import { useAutoAnimate } from '@formkit/auto-animate/react'
 
 interface OrderData {
   items: Array<{
@@ -96,12 +97,12 @@ const ZapoutPage: React.FC = () => {
     {
       label: 'Shipping',
       query: 'shipping',
-      component: ShippingStep
+      component: ShippingForm
     },
     {
       label: 'Payment',
       query: 'payment',
-      component: PaymentStep
+      component: PaymentMethod
     },
     {
       label: 'Confirmation',
@@ -130,10 +131,12 @@ const ZapoutPage: React.FC = () => {
     }
   }
 
+  const [animate] = useAutoAnimate()
+
   return (
     <PageSection width="normal">
-      <div className="grid md:grid-cols-2 gap-12">
-        <div>
+      <div className="grid md:grid-cols-2 items-start gap-12">
+        <div ref={animate}>
           <div className="flex gap-2 items-center border-b border-ink pb-4">
             <Button
               variant="ghost"
@@ -158,14 +161,6 @@ const ZapoutPage: React.FC = () => {
       </div>
     </PageSection>
   )
-}
-
-const ShippingStep: React.FC = () => {
-  return <ShippingForm />
-}
-
-const PaymentStep: React.FC = () => {
-  return <PaymentMethod />
 }
 
 export default ZapoutPage
