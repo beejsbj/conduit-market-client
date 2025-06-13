@@ -9,11 +9,12 @@ import PageSection from '@/layouts/PageSection'
 import { useParams, useLocation } from 'wouter'
 import Breadcrumbs from '@/components/Breadcumbs'
 import { CardsGuide } from '@/components/StyleGuide/CardsGuide'
+import { useAutoAnimate } from '@formkit/auto-animate/react'
 
 export default function StyleGuidePage() {
   const [location, setLocation] = useLocation()
   const params = useParams<{ tab?: string; componentTab?: string }>()
-
+  const [animate] = useAutoAnimate()
   const currentTab = params.tab || 'design-system'
   const currentComponentTab = params.componentTab || 'all'
 
@@ -48,6 +49,7 @@ export default function StyleGuidePage() {
         value={effectiveTab}
         onValueChange={handleTabChange}
         className="w-full"
+        ref={animate}
       >
         <PageSection width="wide">
           <TabsList className="w-full justify-start sticky top-0 bg-background z-10">
