@@ -14,11 +14,24 @@ import { useInterfaceStore } from '@/stores/useInterfaceStore'
  * (e.g. scrolling) also needs to restart the inactivity timer – and a
  * `cleanup` function to remove listeners and clear timers.
  */
+
+const INACTIVITY_DELAY = 4000
+const USE_SHOW_ON_INACTIVITY_DELAY = true
+const USE_HIDE_ON_SCROLL = true
+const USE_TOUCH_DRAG = true
+
 const ShowOnInactivity = (
   isHUDOpen: boolean,
   toggleCartHUD: (isOpen: boolean) => void,
-  inactivityDelay = 2000
+  inactivityDelay: number = INACTIVITY_DELAY
 ) => {
+  if (!USE_SHOW_ON_INACTIVITY_DELAY) {
+    return {
+      reset: () => {},
+      cleanup: () => {}
+    } as { reset: () => void; cleanup: () => void }
+  }
+
   let inactivityTimeout: NodeJS.Timeout
 
   const reset = () => {
@@ -68,6 +81,12 @@ const HideOnScroll = (
   toggleCartHUD: (isOpen: boolean) => void,
   resetInactivityTimer?: () => void
 ) => {
+  if (!USE_HIDE_ON_SCROLL) {
+    return {
+      cleanup: () => {}
+    } as { cleanup: () => void }
+  }
+
   let scrollTimeout: NodeJS.Timeout
 
   const handleScroll = () => {
@@ -267,6 +286,7 @@ export const useCartInteractions = ({
 
   // Attach/detach touch event listeners
   useEffect(() => {
+    if (!USE_TOUCH_DRAG) return
     const element = elementRef.current
     if (!element || !isMobile) return
 
@@ -325,9 +345,8 @@ export const useCartInteractions = ({
       element.style.touchAction = ''
     }
 
-    element.style.transform = `translate(${translateX}px, ${translateY}px)`
-    element.style.transition =
-      translateX === 0 && translateY === 0 ? 'transform 0.2s ease-out' : ''
+    element.style.setProperty('--translateX', `${translateX}px`)
+    element.style.setProperty('--translateY', `${translateY}px`)
   }, [isMobile, translateX, translateY])
 
   return {
