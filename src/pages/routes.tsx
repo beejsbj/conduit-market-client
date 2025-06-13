@@ -18,6 +18,7 @@ import MainLayout from '@/layouts/MainLayout'
 import SimpleLayout from '@/layouts/SimpleLayout'
 import HUDLayer from '@/layouts/HUDLayer.tsx'
 import CreateAccountPage from './CreateAccountPage'
+import { useAutoAnimate } from '@formkit/auto-animate/react'
 
 interface RouteConfig {
   label: string
@@ -161,5 +162,7 @@ const renderRoutes = (
 }
 
 export const AppRoutes: React.FC = () => {
+  const [animate] = useAutoAnimate()
+
   return <Switch>{renderRoutes(routes)}</Switch>
 }
