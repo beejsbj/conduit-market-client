@@ -26,6 +26,7 @@ import Logo from '../Logo'
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/Tabs'
 import Carousel from '../Carousel'
 import SkeletonCard from '../Cards/SkeletonCard'
+import { useAutoAnimate } from '@formkit/auto-animate/react'
 
 interface Component {
   name: string
@@ -409,11 +410,18 @@ export function ComponentsGuide({
   currentTab,
   onTabChange
 }: ComponentsGuideProps) {
+  const [animate] = useAutoAnimate()
+
   return (
     <div className="space-y-8">
       <h2 className="voice-3l mb-12">Components</h2>
 
-      <Tabs value={currentTab} onValueChange={onTabChange} className="w-full">
+      <Tabs
+        value={currentTab}
+        onValueChange={onTabChange}
+        className="w-full"
+        ref={animate}
+      >
         <TabsList className="w-full justify-start">
           <TabsTrigger value="all">All</TabsTrigger>
           {components.map((component) => (
