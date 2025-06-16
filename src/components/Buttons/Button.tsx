@@ -37,7 +37,7 @@ const Button: React.FC<ButtonProps> = ({
 }) => {
   const classNameValue = cn(
     // Base styles applied to all buttons
-    'flex items-center gap-2 justify-center font-bold transition-colors focus:outline-hidden focus:ring-2 focus:ring-offset-2 whitespace-nowrap flex-shrink-0',
+    'flex items-center gap-2 justify-center font-bold transition-colors focus:outline-hidden focus:ring-2 focus:ring-offset-2 whitespace-nowrap flex-shrink-0 [&:hover_svg]:filter-(--electric-shock)',
     {
       // Primary variant - Solid background with primary color
       'bg-primary-500 text-primary-foreground hover:bg-primary-600 focus:ring-primary':

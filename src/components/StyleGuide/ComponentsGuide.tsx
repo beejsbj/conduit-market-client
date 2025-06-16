@@ -42,6 +42,37 @@ interface Component {
 
 const components: Component[] = [
   {
+    name: 'Logo',
+    display: true,
+    component: Logo,
+    states: [
+      {
+        label: 'Full',
+        props: { variant: 'full' }
+      },
+      {
+        label: 'Background',
+        props: { variant: 'bg' }
+      },
+      {
+        label: 'Electric Shock',
+        props: { variant: 'full', className: 'electric-shock' }
+      },
+      {
+        label: 'Electric Fill',
+        props: { variant: 'full', className: 'electric-fill' }
+      },
+      {
+        label: 'Electric Outline',
+        props: { variant: 'full', className: 'electric-outline' }
+      },
+      {
+        label: 'Electric Outline Only',
+        props: { variant: 'full', className: 'electric-outline-only' }
+      }
+    ]
+  },
+  {
     name: 'Carousel',
     component: Carousel,
     fullWidth: true,
@@ -58,21 +89,6 @@ const components: Component[] = [
           <SkeletonCard key={4} />,
           <SkeletonCard key={5} />
         ]
-      }
-    ]
-  },
-  {
-    name: 'Logo',
-    display: true,
-    component: Logo,
-    states: [
-      {
-        label: 'Full',
-        props: { variant: 'full' }
-      },
-      {
-        label: 'Background',
-        props: { variant: 'bg' }
       }
     ]
   },

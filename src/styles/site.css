@@ -112,9 +112,9 @@ layer(base);
   }
 
   .tabs-list {
-      @apply flex items-center p-1 relative;
+    @apply flex items-center p-1 relative;
 
-      /* &::before {
+    /* &::before {
         content: '';
         position: absolute;
         height: 2px;
@@ -124,17 +124,38 @@ layer(base);
         background: var(--color-primary);
         transition: left var(--transition-normal), width var(--transition-normal);
       }*/
-    }
+  }
 }
 
 @layer utilities {
-  .hide-scrollbar {
-    -ms-overflow-style: none; /* IE and Edge */
-    scrollbar-width: none; /* Firefox */
+  :root {
+    --electric-fill: url(#electric-fill);
+    --electric-outline: url(#electric-outline);
+    --electric-outline-only: url(#electric-outline-only);
+    --electric-shock: url(#electric-shock);
   }
-  
-  .hide-scrollbar::-webkit-scrollbar {
-    display: none; /* Chrome, Safari, Opera */
+  .electric-shock {
+    will-change: filter;
+    filter: var(--electric-shock);
+  }
+
+  .electric-fill {
+    will-change: filter;
+    filter: var(--electric-fill);
+  }
+
+  .electric-outline {
+    will-change: filter;
+    filter: var(--electric-outline);
+  }
+
+  .electric-outline-only {
+    will-change: filter;
+    filter: var(--electric-outline-only);
+  }
+
+  .electric-disabled {
+    filter: none !important;
   }
 }
 
@@ -150,5 +171,4 @@ layer(base);
 }
 
 @layer components {
-  
 }

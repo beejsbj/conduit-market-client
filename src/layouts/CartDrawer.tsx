@@ -103,7 +103,10 @@ const CartDrawer: React.FC = () => {
     )
 
   const cartDrawerDragWrapperClassName = cn(
-    'translate-y-[var(--translateY)] translate-x-[var(--translateX)] transition-all duration-200 ease-bounce'
+    'translate-y-[var(--translateY)] translate-x-[var(--translateX)] transition-all duration-200 ease-bounce',
+    {
+      'filter-(--electric-outline)': isCartHUDOpen
+    }
   )
 
   const cartDrawerClassName = cn(

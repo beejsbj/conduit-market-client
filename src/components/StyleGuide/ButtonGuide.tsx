@@ -1,4 +1,6 @@
 import Button from '@/components/Buttons/Button'
+import { ZapButton } from '@/components/Buttons/ZapButton'
+import ZapoutButton from '@/components/Buttons/ZapoutButton'
 import Icon from '../Icon'
 
 const buttonVariants = [
@@ -23,6 +25,8 @@ export function ButtonGuide() {
       <div className="space-y-4">
         <h3 className="voice-2l">Variants</h3>
         <div className="flex flex-wrap gap-4">
+          <ZapButton />
+          <ZapoutButton />
           {buttonVariants.map((variant) => (
             <Button key={variant} variant={variant as any}>
               {variant}
