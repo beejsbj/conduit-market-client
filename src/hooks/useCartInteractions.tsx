@@ -303,6 +303,8 @@ export const useCartInteractions = ({
 
   // Desktop: Inactivity and Scroll listeners
   useEffect(() => {
+    if (isMobile) return
+
     const { reset, cleanup: cleanupInactivity } = ShowOnInactivity(
       isCartHUDOpen,
       toggleCartHUD,

@@ -39,7 +39,8 @@ const HUDLayer: React.FC = () => {
     'self-end pointer-events-auto transition-all duration-600 ease-bounce',
     {
       'translate-y-0 opacity-100': isCartHUDOpen,
-      'translate-y-8/10  opacity-50 hover:translate-y-7/10': !isCartHUDOpen
+      'translate-y-9/10 md:translate-y-8/10  opacity-50 hover:translate-y-7/10':
+        !isCartHUDOpen
     }
   )
 
