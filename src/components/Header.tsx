@@ -2,25 +2,18 @@ import React, { useEffect, useRef, useState } from 'react'
 import { useAccountStore } from '@/stores/useAccountStore'
 import Button from './Buttons/Button'
 import useWindowState, { WindowTypes } from '@/stores/useWindowState'
-import {
-  MessagesSquare,
-  SearchIcon,
-  ShoppingCart,
-  User,
-  Wand
-} from 'lucide-react'
-import { useCartStore } from '@/stores/useCartStore'
-import OrderPageButton from './Buttons/OrderPageButton'
+import Icon from './Icon'
 import Field from './Form/Field'
 import Logo from './Logo'
 import MobileMenu from './MobileMenu'
+import PageSection from '@/layouts/PageSection'
+import Breadcrumbs from '@/components/Breadcumbs'
 
 const Header: React.FC = () => {
   const [dropdownOpen, setDropdownOpen] = useState(false)
   const [displayName, setDisplayName] = useState<string>('')
   const { user, isLoggedIn, logout } = useAccountStore()
   const { pushWindow } = useWindowState()
-  const { cart, openCart } = useCartStore()
 
   const openLoginWindow = (): void => {
     pushWindow(WindowTypes.LOGIN, {
@@ -84,59 +77,59 @@ const Header: React.FC = () => {
 
   return (
     <header className="relative">
-      <div className="inner-column wide">
+      <PageSection width="wide">
         <div className="flex justify-between items-center gap-4">
           <Logo className="max-w-50" />
 
           {/* Desktop Navigation */}
           <div className="hidden lg:flex items-center flex-1 justify-end gap-4">
             <Button variant="ghost" isLink to="/shop">
-              <ShoppingCart />
+              <Icon.ShoppingCart />
               <span className="">Shop</span>
             </Button>
 
             {/* how it works button if logged in else orders page */}
             {isLoggedIn ? (
               <Button variant="ghost" isLink to="/orders">
-                <Wand />
+                <Icon.Wand />
                 <span className="">Orders</span>
               </Button>
             ) : (
               <Button variant="ghost" isLink to="/orders">
-                <Wand />
+                <Icon.Wand />
                 <span className="">How it works</span>
               </Button>
             )}
 
             <Field
               name="search"
-              type="search"
-              rightIcon={<SearchIcon />}
+              type="text"
+              rightIcon="Search"
               className="w-full"
             />
 
             {/* messages button if logged in */}
             {isLoggedIn && (
               <Button variant="ghost" isLink to="/shop">
-                <MessagesSquare />
+                <Icon.Messages />
                 <span className="">Messages</span>
               </Button>
             )}
 
             {/* sell button */}
             <Button variant="ghost" isLink to="/shop">
-              <Wand />
+              <Icon.Wand />
               <span className="">Sell</span>
             </Button>
 
             {/* login button, else user button */}
             {isLoggedIn ? (
               <Button variant="ghost" size="icon" isLink to="/user">
-                <User />
+                <Icon.User />
               </Button>
             ) : (
-              <Button variant="primary" isLink to="/login">
-                <User />
+              <Button variant="primary" isLink to="/auth">
+                <Icon.User />
                 <span className="">Login</span>
               </Button>
             )}
@@ -145,7 +138,8 @@ const Header: React.FC = () => {
           {/* Mobile Menu */}
           <MobileMenu />
         </div>
-      </div>
+        <Breadcrumbs />
+      </PageSection>
     </header>
   )
 }
