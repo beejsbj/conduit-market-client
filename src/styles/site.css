@@ -130,18 +130,68 @@ layer(base);
 @layer utilities {
   :root {
     --electric-fill: url(#electric-fill);
+    --electric-fill-static: url(#electric-fill-static);
     --electric-outline: url(#electric-outline);
     --electric-outline-only: url(#electric-outline-only);
     --electric-shock: url(#electric-shock);
+    --pixelate: url(#pixelate);
   }
+
+  @keyframes opacityFlicker {
+    0% {
+      opacity: 0.93;
+    }
+    10% {
+      opacity: 0.71;
+    }
+    20% {
+      opacity: 0.8;
+    }
+    30% {
+      opacity: 0.89;
+    }
+    40% {
+      opacity: 0.76;
+    }
+    50% {
+      opacity: 0.78;
+    }
+    60% {
+      opacity: 0.75;
+    }
+    70% {
+      opacity: 0.73;
+    }
+    80% {
+      opacity: 0.96;
+    }
+    90% {
+      opacity: 0.96;
+    }
+    100% {
+      opacity: 0.84;
+    }
+  }
+
+  .pixelate {
+    will-change: filter;
+    filter: var(--pixelate);
+  }
+
   .electric-shock {
     will-change: filter;
     filter: var(--electric-shock);
+    /* animation: opacityFlicker 1s linear infinite; */
   }
 
   .electric-fill {
     will-change: filter;
     filter: var(--electric-fill);
+  }
+
+  .electric-fill-static {
+    will-change: filter;
+    filter: var(--electric-fill-static);
   }
 
   .electric-outline {

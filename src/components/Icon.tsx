@@ -39,6 +39,7 @@ import {
   Home,
   MessageCircle
 } from 'lucide-react'
+import { cn } from '@/lib/utils'
 
 // Individual icon component interface
 interface IconProps {
@@ -46,55 +47,61 @@ interface IconProps {
   fill?: string
 }
 
-// Create individual icon components
-const createIconComponent = (IconComponent: React.ComponentType<any>) => {
-  return ({ className, fill }: IconProps) => (
-    <picture className={className}>
-      <IconComponent className={fill} />
+// Icon map for component lookup
+const iconMap = {
+  ArrowLeft,
+  ArrowRight,
+  ChevronUp,
+  ChevronDown,
+  ChevronLeft,
+  ChevronRight,
+  Heart,
+  Lock,
+  Mail,
+  ShoppingCart,
+  Messages: MessagesSquare,
+  Search: SearchIcon,
+  User,
+  Wand,
+  Menu,
+  X,
+  Zap,
+  Minus,
+  Plus,
+  Trash,
+  ReceiptText,
+  Ellipsis,
+  ShoppingBag: ShoppingBagIcon,
+  Star,
+  XIcon,
+  Paste: ClipboardPaste,
+  UserPlus,
+  Alert: TriangleAlert,
+  Copy,
+  Key: KeyRound,
+  ShieldCheck: LucideShieldCheck,
+  Type,
+  Link,
+  PhoneCall,
+  Share,
+  Landmark,
+  Home,
+  MessageCircle
+} as const
+
+// Icon component that accepts an icon name and applies electric effect styling
+const Icon = Object.entries(iconMap).reduce((acc, [name, Component]) => {
+  acc[name as keyof typeof iconMap] = ({ className, fill }: IconProps) => (
+    <picture
+      className={cn(
+        className,
+        'filter-(--pixelate) group-hover:filter-(--electric-shock)'
+      )}
+    >
+      <Component className={fill} />
     </picture>
   )
-}
-
-// Icon object with all individual components
-const Icon = {
-  ArrowLeft: createIconComponent(ArrowLeft),
-  ArrowRight: createIconComponent(ArrowRight),
-  ChevronUp: createIconComponent(ChevronUp),
-  ChevronDown: createIconComponent(ChevronDown),
-  ChevronLeft: createIconComponent(ChevronLeft),
-  ChevronRight: createIconComponent(ChevronRight),
-  Heart: createIconComponent(Heart),
-  Lock: createIconComponent(Lock),
-  Mail: createIconComponent(Mail),
-  ShoppingCart: createIconComponent(ShoppingCart),
-  Messages: createIconComponent(MessagesSquare),
-  Search: createIconComponent(SearchIcon),
-  User: createIconComponent(User),
-  Wand: createIconComponent(Wand),
-  Menu: createIconComponent(Menu),
-  X: createIconComponent(X),
-  Zap: createIconComponent(Zap),
-  Minus: createIconComponent(Minus),
-  Plus: createIconComponent(Plus),
-  Trash: createIconComponent(Trash),
-  ReceiptText: createIconComponent(ReceiptText),
-  Ellipsis: createIconComponent(Ellipsis),
-  ShoppingBag: createIconComponent(ShoppingBagIcon),
-  Star: createIconComponent(Star),
-  XIcon: createIconComponent(XIcon),
-  Paste: createIconComponent(ClipboardPaste),
-  UserPlus: createIconComponent(UserPlus),
-  Alert: createIconComponent(TriangleAlert),
-  Copy: createIconComponent(Copy),
-  Key: createIconComponent(KeyRound),
-  ShieldCheck: createIconComponent(LucideShieldCheck),
-  Type: createIconComponent(Type),
-  Link: createIconComponent(Link),
-  PhoneCall: createIconComponent(PhoneCall),
-  Share: createIconComponent(Share),
-  Landmark: createIconComponent(Landmark),
-  Home: createIconComponent(Home),
-  MessageCircle: createIconComponent(MessageCircle)
-}
+  return acc
+}, {} as Record<keyof typeof iconMap, React.FC<IconProps>>)
 
 export default Icon

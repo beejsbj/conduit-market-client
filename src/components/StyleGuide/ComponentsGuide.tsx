@@ -51,8 +51,16 @@ const components: Component[] = [
         props: { variant: 'full' }
       },
       {
+        label: 'Full',
+        props: { variant: 'full' }
+      },
+      {
         label: 'Background',
         props: { variant: 'bg' }
+      },
+      {
+        label: 'Pixelate',
+        props: { variant: 'full', className: 'pixelate' }
       },
       {
         label: 'Electric Shock',
@@ -63,9 +71,14 @@ const components: Component[] = [
         props: { variant: 'full', className: 'electric-fill' }
       },
       {
+        label: 'Electric Fill Static',
+        props: { variant: 'full', className: 'electric-fill-static' }
+      },
+      {
         label: 'Electric Outline',
         props: { variant: 'full', className: 'electric-outline' }
       },
+
       {
         label: 'Electric Outline Only',
         props: { variant: 'full', className: 'electric-outline-only' }
