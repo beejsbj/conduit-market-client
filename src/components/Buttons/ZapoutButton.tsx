@@ -28,7 +28,7 @@ const ZapoutButton: React.FC<ZapoutButtonProps> = ({
       rounded={rounded}
     >
       <picture>
-        <Icon icon="zap" />
+        <Icon.Zap />
       </picture>
 
       {children}

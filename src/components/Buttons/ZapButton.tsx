@@ -4,7 +4,7 @@ import Icon from '../Icon'
 export const ZapButton: React.FC = () => {
   return (
     <Button variant="ghost" size="icon">
-      <Icon icon="zap" className="text-primary" />
+      <Icon.Zap className="text-primary" />
     </Button>
   )
 }

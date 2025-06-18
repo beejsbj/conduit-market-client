@@ -1,45 +1,46 @@
+import { useState } from 'react'
 import { useLocation } from 'wouter'
 import Button from '../Buttons/Button'
 import Field from '../Form/Field'
 
-import Icon, { type IconName } from '../Icon'
+import Icon from '../Icon'
 import { IconPill } from '../Pill'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '../Tabs'
 
 const PaymentMethod: React.FC = () => {
   const [location, navigate] = useLocation()
 
+  const [isGeneratingInvoice, setIsGeneratingInvoice] = useState(false)
+  const [isGenerated, setIsGenerated] = useState(false)
+
   const paymentMethods = [
     {
       label: 'Lightning',
       value: 'lightning',
-      icon: 'zap',
+      icon: 'Zap',
       component: LightningPaymentMethod
     },
     {
       label: 'USDT',
       value: 'usdt',
-      icon: 'type'
+      icon: 'Type'
     },
     {
       label: 'On-Chain',
       value: 'onchain',
-      icon: 'link'
+      icon: 'Link'
     },
     {
       label: 'Minipay',
       value: 'minipay',
-      icon: 'phoneCall'
-    },
-    {
-      label: 'Fiat',
-      value: 'fiat',
-      icon: 'landmark'
+      icon: 'PhoneCall'
     }
   ]
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
+    // when submitted, ie generate invoice, then the tabs content is shown
+
     navigate(`?zapoutStep=confirmation`)
   }
 
@@ -56,18 +57,22 @@ const PaymentMethod: React.FC = () => {
             >
               <IconPill
                 text={method.label}
-                leftIcon={method.icon as IconName}
+                leftIcon={method.icon as keyof typeof Icon}
                 size="md"
                 className="border-none bg-transparent"
               />
             </TabsTrigger>
           ))}
         </TabsList>
-        {paymentMethods.map((method) => (
-          <TabsContent key={method.value} value={method.value}>
-            {method.component && <method.component />}
-          </TabsContent>
-        ))}
+        {paymentMethods.map((method) => {
+          if (isGenerated) {
+            return (
+              <TabsContent key={method.value} value={method.value}>
+                {method.component && <method.component />}
+              </TabsContent>
+            )
+          }
+        })}
       </Tabs>
 
       <Button variant="primary" className="w-full mt-8" rounded={false}>
@@ -100,7 +105,7 @@ const LightningPaymentMethod: React.FC = () => {
           rounded={false}
           size="lg"
         >
-          <Icon icon="copy" className="size-5" />
+          <Icon.Copy className="size-5" />
           <span>Copy</span>
         </Button>
 
@@ -110,7 +115,7 @@ const LightningPaymentMethod: React.FC = () => {
           rounded={false}
           size="lg"
         >
-          <Icon icon="share" className="size-5" />
+          <Icon.Share className="size-5" />
           <span>Share</span>
         </Button>
       </div>

@@ -35,12 +35,12 @@ const SimpleLayout: React.FC<PropsWithChildren> = ({ children }) => {
             {/* Desktop Navigation */}
             <div className="hidden lg:flex items-center flex-1 justify-end gap-4">
               <Button variant="ghost" isLink to="/shop">
-                <Icon icon="shoppingCart" />
+                <Icon.ShoppingCart />
                 <span className="">Shop</span>
               </Button>
 
               <Button variant="ghost" isLink to="/orders">
-                <Icon icon="wand" />
+                <Icon.Wand />
                 <span className="">How it works</span>
               </Button>
             </div>
@@ -54,7 +54,7 @@ const SimpleLayout: React.FC<PropsWithChildren> = ({ children }) => {
                   to="/shop"
                   className="w-full justify-start"
                 >
-                  <Icon icon="shoppingCart" className="max-w-5 mr-2" />
+                  <Icon.ShoppingCart className="max-w-5 mr-2" />
                   <span>Shop</span>
                 </Button>
 
@@ -64,7 +64,7 @@ const SimpleLayout: React.FC<PropsWithChildren> = ({ children }) => {
                   to="/orders"
                   className="w-full justify-start"
                 >
-                  <Icon icon="wand" className="max-w-5 mr-2" />
+                  <Icon.Wand className="max-w-5 mr-2" />
                   <span>How it works</span>
                 </Button>
               </div>

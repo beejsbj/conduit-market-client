@@ -81,7 +81,7 @@ const MerchantCartCard: React.FC<MerchantCartCardProps> = ({
           to={`/carts/${merchantPubkey}`}
         >
           <picture className="shrink-0">
-            <Icon icon="shoppingBag" />
+            <Icon.ShoppingBag />
           </picture>
           View Cart
         </Button>
@@ -89,7 +89,7 @@ const MerchantCartCard: React.FC<MerchantCartCardProps> = ({
         {/* More Options Button */}
         <Button variant="outline" size="icon" className="">
           <picture className="">
-            <Icon icon="ellipsis" className="size-4 md:size-6" />
+            <Icon.Ellipsis className="size-4 md:size-6" />
           </picture>
         </Button>
       </CardFooter>

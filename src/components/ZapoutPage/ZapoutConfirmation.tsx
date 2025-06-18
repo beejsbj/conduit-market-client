@@ -121,7 +121,7 @@ const ZapoutConfirmation: React.FC = () => {
       <div className="flex items-center justify-between gap-2 px-8 py-4">
         <Logo className="max-w-50" />
         <Button variant="ghost" size="lg">
-          <Icon icon="home" className="size-6" />
+          <Icon.Home className="size-6" />
           Back to Home
         </Button>
       </div>
@@ -153,11 +153,11 @@ const ZapoutConfirmation: React.FC = () => {
 
             <div className="flex items-center gap-4">
               <Button variant="primary" size="lg" className="flex-1">
-                <Icon icon="messages" />
+                <Icon.Messages />
                 Go to Messages
               </Button>
               <Button variant="muted" size="lg" className="flex-1">
-                <Icon icon="shoppingBag" />
+                <Icon.ShoppingBag />
                 Shop
               </Button>
             </div>

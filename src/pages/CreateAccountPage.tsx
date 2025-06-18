@@ -18,8 +18,8 @@ const CreateAccountPage: React.FC = () => {
               platform lock-in. Just your key to the open internet.
             </p>
             <p className="voice-sm font-bold text-warning-foreground flex items-center gap-2">
-              <Icon icon="alert" className="size-4" /> Don’t lose it. We can’t
-              recover it for you.
+              <Icon.Alert className="size-4" /> Don’t lose it. We can’t recover
+              it for you.
             </p>
           </div>
           <form className="grid gap-8 mt-8 border-t pt-8 border-muted">
@@ -33,8 +33,7 @@ const CreateAccountPage: React.FC = () => {
               />
 
               <p className="md:absolute top-0 right-0 voice-sm font-bold text-info-foreground flex items-center gap-1">
-                <Icon icon="key" className="size-4" /> nsec1 = secret, never
-                share
+                <Icon.Key className="size-4" /> nsec1 = secret, never share
               </p>
 
               <div className="grid md:flex gap-4 md:justify-between items-center ">
@@ -44,7 +43,7 @@ const CreateAccountPage: React.FC = () => {
                   className="border-primary flex-1"
                   rounded={false}
                 >
-                  <Icon icon="copy" className="size-4" /> Copy Your Nsec
+                  <Icon.Copy className="size-4" /> Copy Your Nsec
                 </Button>
                 <Button
                   variant="outline"
@@ -52,7 +51,7 @@ const CreateAccountPage: React.FC = () => {
                   className="border-primary flex-1"
                   rounded={false}
                 >
-                  <Icon icon="lock" className="size-4" /> Encrypt with Pin
+                  <Icon.Lock className="size-4" /> Encrypt with Pin
                 </Button>
               </div>
             </div>
@@ -67,8 +66,8 @@ const CreateAccountPage: React.FC = () => {
               />
 
               <p className="md:absolute top-0 right-0 voice-sm font-bold text-info-foreground flex items-center gap-1">
-                <Icon icon="shieldCheck" className="size-4" /> npub1 = public,
-                safe to share
+                <Icon.ShieldCheck className="size-4" /> npub1 = public, safe to
+                share
               </p>
               <Button
                 variant="outline"
@@ -76,7 +75,7 @@ const CreateAccountPage: React.FC = () => {
                 className="border-primary flex-1"
                 rounded={false}
               >
-                <Icon icon="copy" className="size-4" /> Copy Your Npub
+                <Icon.Copy className="size-4" /> Copy Your Npub
               </Button>
             </div>
 
@@ -101,8 +100,7 @@ const CreateAccountPage: React.FC = () => {
             </li>
             <li className="border-b pb-8 border-muted">
               <h3 className="voice-base font-bold">
-                What’s my <Icon icon="key" className="size-4 inline-block" />{' '}
-                nsec1 ?
+                What’s my <Icon.Key className="size-4 inline-block" /> nsec1 ?
               </h3>
               <p className="voice-base  mt-2">
                 Think of it as your password that cannot be changed or forged.
@@ -111,8 +109,7 @@ const CreateAccountPage: React.FC = () => {
             </li>
             <li className="border-b pb-8 border-muted">
               <h3 className="voice-base font-bold">
-                What’s my{' '}
-                <Icon icon="shieldCheck" className="size-4 inline-block" />{' '}
+                What’s my <Icon.ShieldCheck className="size-4 inline-block" />{' '}
                 npub1 ?
               </h3>
               <p className="voice-base  mt-2">

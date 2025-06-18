@@ -284,7 +284,7 @@ const Footer = () => {
                 to={social.link}
                 rounded={false}
               >
-                <Icon icon="heart" />
+                <Icon.Heart />
               </Button>
             ))}
           </div>

@@ -126,7 +126,7 @@ const CartDrawer: React.FC = () => {
         {isCartHUDOpen && (
           <div className="absolute top-[-30px] right-10 z-1 pb-2 bg-accent rounded-t-full from-primary-800 to-accent bg-gradient-to-t">
             <Button variant="ghost" size="icon" onClick={handleCloseClick}>
-              <Icon icon="xIcon" />
+              <Icon.XIcon />
             </Button>
           </div>
         )}
@@ -239,7 +239,7 @@ const CartDrawer: React.FC = () => {
           {/* Actions */}
           <div className="grid gap-2 items-center content-center">
             <Button variant="outline" rounded={false} isLink to="/carts">
-              <Icon icon="ShoppingBag" />
+              <Icon.ShoppingBag />
               View Cart(s)
             </Button>
             <ZapoutButton

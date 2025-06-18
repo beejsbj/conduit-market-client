@@ -95,7 +95,7 @@ const SlideDrawer: React.FC<SlideDrawerProps> = ({
           onClick={() => setIsOpen(true)}
           aria-label="Open menu"
         >
-          <Icon icon="menu" />
+          <Icon.Menu />
         </Button>
       )}
 
@@ -111,7 +111,7 @@ const SlideDrawer: React.FC<SlideDrawerProps> = ({
             onClick={close}
             aria-label="Close menu"
           >
-            <Icon icon="x" />
+            <Icon.X />
           </Button>
         </div>
 

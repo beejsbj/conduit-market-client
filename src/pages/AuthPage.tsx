@@ -22,7 +22,7 @@ const AuthPage: React.FC = () => {
           onClick={handleBack}
           className="-ml-12"
         >
-          <Icon icon="chevronLeft" className="size-10" />
+          <Icon.ChevronLeft className="size-10" />
         </Button>
         <h1 className="voice-5l">
           {ifComingFromZapout ? 'Continue to Zapout' : 'Sign in'}
@@ -42,7 +42,7 @@ const AuthPage: React.FC = () => {
           className="border-primary"
           rounded={false}
         >
-          <Icon icon="lock" />
+          <Icon.Lock />
           Nostr Signer
         </Button>
         <Button
@@ -51,10 +51,10 @@ const AuthPage: React.FC = () => {
           className="border-primary"
           rounded={false}
         >
-          <Icon icon="mail" />
+          <Icon.Mail />
           Email Sign in
         </Button>
-        <Field label="Paste Nsec" name="nsec" type="text" leftIcon="paste" />
+        <Field label="Paste Nsec" name="nsec" type="text" leftIcon="Paste" />
       </form>
       <div className="grid gap-4 mt-16 border-t border-muted pt-8">
         <h2 className="voice-lg">Sign up</h2>
@@ -62,7 +62,7 @@ const AuthPage: React.FC = () => {
           You can create a profile (nsec) per transaction
         </p>
         <Button variant="primary" size="lg" rounded={false}>
-          <Icon icon="userPlus" />
+          <Icon.UserPlus />
           Create Nsec
         </Button>
       </div>

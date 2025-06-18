@@ -236,7 +236,7 @@ const Carousel: React.FC<CarouselProps> = ({
             className={prevButtonClassName}
             onClick={handleScrollPrev}
           >
-            <Icon icon="chevronLeft" className="size-6" />
+            <Icon.ChevronLeft className="size-6" />
           </Button>
 
           <ScrollIndicator
@@ -253,7 +253,7 @@ const Carousel: React.FC<CarouselProps> = ({
             className={nextButtonClassName}
             onClick={handleScrollNext}
           >
-            <Icon icon="chevronRight" className="size-6" />
+            <Icon.ChevronRight className="size-6" />
           </Button>
         </div>
       )}

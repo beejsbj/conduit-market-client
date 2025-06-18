@@ -19,66 +19,68 @@ import Icon from '@/components/Icon'
 import ZapoutConfirmation from '@/components/ZapoutPage/ZapoutConfirmation'
 import { useAutoAnimate } from '@formkit/auto-animate/react'
 
-interface OrderData {
-  items: Array<{
-    eventId: string
-    productId: string
-    quantity: number
-    price: number
-  }>
-  shipping?: {
-    eventId: string
-    methodId: string
-  }
-  address?: string
-  phone?: string
-  email?: string
-  message?: string
-}
+// #todo guard this page from non-logged in users
 
-async function prepareOrder(
-  cart: CartItem[],
-  shippingInfo: unknown,
-  pubkey: string
-) {
-  const isMultiMerchantCart = cart.some(
-    (item) => item.merchantPubkey !== cart[0].merchantPubkey
-  )
+// interface OrderData {
+//   items: Array<{
+//     eventId: string
+//     productId: string
+//     quantity: number
+//     price: number
+//   }>
+//   shipping?: {
+//     eventId: string
+//     methodId: string
+//   }
+//   address?: string
+//   phone?: string
+//   email?: string
+//   message?: string
+// }
 
-  if (isMultiMerchantCart) {
-    console.error('TODO: Process multi-merchant carts')
-    return
-  }
+// async function prepareOrder(
+//   cart: CartItem[],
+//   shippingInfo: unknown,
+//   pubkey: string
+// ) {
+//   const isMultiMerchantCart = cart.some(
+//     (item) => item.merchantPubkey !== cart[0].merchantPubkey
+//   )
 
-  const addressString =
-    typeof shippingInfo === 'string'
-      ? shippingInfo
-      : JSON.stringify(shippingInfo)
+//   if (isMultiMerchantCart) {
+//     console.error('TODO: Process multi-merchant carts')
+//     return
+//   }
 
-  const orderData: OrderData = {
-    items: cart.map((item) => ({
-      eventId: item.eventId,
-      productId: item.productId,
-      quantity: item.quantity,
-      price: item.price
-    })),
-    address: addressString,
-    message: `Order from Pubkey: ${pubkey}`
-  }
+//   const addressString =
+//     typeof shippingInfo === 'string'
+//       ? shippingInfo
+//       : JSON.stringify(shippingInfo)
 
-  const order = await createOrder(orderData, cart[0].merchantPubkey)
+//   const orderData: OrderData = {
+//     items: cart.map((item) => ({
+//       eventId: item.eventId,
+//       productId: item.productId,
+//       quantity: item.quantity,
+//       price: item.price
+//     })),
+//     address: addressString,
+//     message: `Order from Pubkey: ${pubkey}`
+//   }
 
-  if (!order || !(order instanceof NDKEvent)) {
-    console.error(
-      '[ZapoutPage.prepareOrder] Failed to create order. Error:',
-      order?.message || 'Unknown error'
-    )
-    // TODO: Display error to user
-    return
-  }
+//   const order = await createOrder(orderData, cart[0].merchantPubkey)
 
-  postOrder(order, cart[0].merchantPubkey)
-}
+//   if (!order || !(order instanceof NDKEvent)) {
+//     console.error(
+//       '[ZapoutPage.prepareOrder] Failed to create order. Error:',
+//       order?.message || 'Unknown error'
+//     )
+//     // TODO: Display error to user
+//     return
+//   }
+
+//   postOrder(order, cart[0].merchantPubkey)
+// }
 
 type ZapoutStep = {
   label: string
@@ -144,7 +146,7 @@ const ZapoutPage: React.FC = () => {
               onClick={handleBack}
               className="lg:-ml-12"
             >
-              <Icon icon="chevronLeft" className="size-10" />
+              <Icon.ChevronLeft className="size-10" />
             </Button>
             <h1 className="voice-2l">{currentStep?.label}</h1>
           </div>

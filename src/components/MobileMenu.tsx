@@ -13,8 +13,8 @@ const MobileMenu: React.FC = () => {
       <div className="space-y-4 mt-4">
         <Field
           name="search"
-          type="search"
-          rightIcon="search"
+          type="text"
+          rightIcon="Search"
           className="w-full"
           placeholder="Search..."
         />
@@ -26,7 +26,7 @@ const MobileMenu: React.FC = () => {
             to="/shop"
             className="w-full justify-start"
           >
-            <Icon icon="shoppingCart" className="max-w-5 mr-2" />
+            <Icon.ShoppingCart className="max-w-5 mr-2" />
             <span>Shop</span>
           </Button>
 
@@ -37,7 +37,7 @@ const MobileMenu: React.FC = () => {
               to="/orders"
               className="w-full justify-start"
             >
-              <Icon icon="wand" className="max-w-5 mr-2" />
+              <Icon.Wand className="max-w-5 mr-2" />
               <span>Orders</span>
             </Button>
           ) : (
@@ -47,7 +47,7 @@ const MobileMenu: React.FC = () => {
               to="/how-it-works"
               className="w-full justify-start"
             >
-              <Icon icon="wand" className="max-w-5 mr-2" />
+              <Icon.Wand className="max-w-5 mr-2" />
               <span>How it works</span>
             </Button>
           )}
@@ -59,7 +59,7 @@ const MobileMenu: React.FC = () => {
               to="/messages"
               className="w-full justify-start"
             >
-              <Icon icon="messages" className="max-w-5 mr-2" />
+              <Icon.Messages className="max-w-5 mr-2" />
               <span>Messages</span>
             </Button>
           )}
@@ -70,7 +70,7 @@ const MobileMenu: React.FC = () => {
             to="/sell"
             className="w-full justify-start"
           >
-            <Icon icon="wand" className="max-w-5 mr-2" />
+            <Icon.Wand className="max-w-5 mr-2" />
             <span>Sell</span>
           </Button>
 
@@ -81,7 +81,7 @@ const MobileMenu: React.FC = () => {
               to="/user"
               className="w-full justify-start"
             >
-              <Icon icon="user" className="max-w-5 mr-2" />
+              <Icon.User className="max-w-5 mr-2" />
               <span>Profile</span>
             </Button>
           ) : (
@@ -91,7 +91,7 @@ const MobileMenu: React.FC = () => {
               to="/auth"
               className="w-full justify-start"
             >
-              <Icon icon="user" className="max-w-5 mr-2" />
+              <Icon.User className="max-w-5 mr-2" />
               <span>Login</span>
             </Button>
           )}

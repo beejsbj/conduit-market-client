@@ -1,135 +1,237 @@
 //todo use better form library
 
+import { useForm, Controller } from 'react-hook-form'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { z } from 'zod'
 import Button from '../Buttons/Button'
-import Icon from '../Icon'
 import Field from '../Form/Field'
 import { useLocation } from 'wouter'
-import { navigate } from 'wouter/use-browser-location'
 
-const form = [
-  [
+// Form configuration object
+const formConfig = {
+  sections: [
     {
-      label: 'First Name',
-      name: 'firstName',
-      type: 'text',
-      placeholder: 'First Name',
-      required: true
+      id: 'name',
+      layout: 'row',
+      fields: [
+        {
+          name: 'firstName',
+          type: 'text',
+          placeholder: 'First Name',
+          required: true,
+          validation: z.string().min(1, 'First name is required')
+        },
+        {
+          name: 'lastName',
+          type: 'text',
+          placeholder: 'Last Name',
+          required: true,
+          validation: z.string().min(1, 'Last name is required')
+        }
+      ]
     },
     {
-      label: 'Last Name',
-      name: 'lastName',
-      type: 'text',
-      placeholder: 'Last Name',
-      required: true
+      id: 'phone',
+      layout: 'single',
+      fields: [
+        {
+          name: 'phone',
+          type: 'text',
+          placeholder: 'Phone (optional)',
+          required: false,
+          validation: z.string().optional()
+        }
+      ]
+    },
+    {
+      id: 'address1',
+      layout: 'single',
+      fields: [
+        {
+          name: 'addressLine1',
+          type: 'text',
+          placeholder: 'Street Address',
+          required: true,
+          validation: z.string().min(1, 'Street address is required')
+        }
+      ]
+    },
+    {
+      id: 'address2',
+      layout: 'single',
+      fields: [
+        {
+          name: 'addressLine2',
+          type: 'text',
+          placeholder: 'Apt, Suite, etc. (optional)',
+          required: false,
+          validation: z.string().optional()
+        }
+      ]
+    },
+    {
+      id: 'location',
+      layout: 'row',
+      fields: [
+        {
+          name: 'postalCode',
+          type: 'text',
+          placeholder: 'Postal Code',
+          required: true,
+          validation: z.string().min(1, 'Postal code is required')
+        },
+        {
+          name: 'city',
+          type: 'text',
+          placeholder: 'City',
+          required: true,
+          validation: z.string().min(1, 'City is required')
+        },
+        {
+          name: 'region',
+          type: 'text',
+          placeholder: 'Region',
+          required: true,
+          validation: z.string().min(1, 'Region is required')
+        }
+      ]
+    },
+    {
+      id: 'country',
+      layout: 'single',
+      fields: [
+        {
+          name: 'country',
+          type: 'select',
+          placeholder: 'Select Country',
+          required: true,
+          options: [
+            'United States',
+            'Canada',
+            'United Kingdom',
+            'Australia',
+            'New Zealand',
+            'Other'
+          ],
+          validation: z.string().min(1, 'Country is required')
+        }
+      ]
     }
-  ],
-  {
-    label: 'Phone',
-    name: 'phone',
-    type: 'text',
-    placeholder: 'Phone (optional)'
-  },
-  {
-    label: 'Address Line 1',
-    name: 'addressLine1',
-    type: 'text',
-    placeholder: 'Street Address',
-    required: true
-  },
-  {
-    label: 'Address Line 2',
-    name: 'addressLine2',
-    type: 'text',
-    placeholder: 'Apt, Suite, etc. (optional)'
-  },
-  [
-    {
-      label: 'Postal Code',
-      name: 'postalCode',
-      type: 'text',
-      placeholder: 'Postal Code',
-      required: true
-    },
-    {
-      label: 'City',
-      name: 'city',
-      type: 'text',
-      placeholder: 'City',
-      required: true
-    },
-    {
-      label: 'Region',
-      name: 'region',
-      type: 'text',
-      placeholder: 'Region',
-      required: true
-    }
-  ],
-  {
-    label: 'Country',
-    name: 'country',
-    type: 'dropdown',
-    placeholder: 'Country',
-    required: true,
-    options: [
-      'United States',
-      'Canada',
-      'United Kingdom',
-      'Australia',
-      'New Zealand',
-      'Other'
-    ],
-    multiple: false
-  }
-]
+  ]
+}
+
+// Generate Zod schema from form configuration
+const generateSchema = () => {
+  const schemaFields: Record<string, z.ZodTypeAny> = {}
+
+  formConfig.sections.forEach((section) => {
+    section.fields.forEach((field) => {
+      schemaFields[field.name] = field.validation
+    })
+  })
+
+  return z.object(schemaFields)
+}
+
+// Zod schema for shipping form validation
+export const ShippingFormSchema = generateSchema()
+
+// Infer the type from the schema
+export type ShippingFormData = z.infer<typeof ShippingFormSchema>
+
+// Dynamic field renderer component
+const DynamicField: React.FC<{
+  field: any
+  control: any
+  errors: any
+  className?: string
+}> = ({ field, control, errors, className }) => {
+  return (
+    <Controller
+      name={field.name}
+      control={control}
+      render={({ field: fieldProps }) => (
+        <Field
+          {...fieldProps}
+          type={field.type}
+          placeholder={field.placeholder}
+          options={field.options}
+          required={field.required}
+          error={errors[field.name]?.message}
+          className={className}
+        />
+      )}
+    />
+  )
+}
 
 const ShippingForm: React.FC = () => {
   const [location, navigate] = useLocation()
 
-  const handleBack = () => {
-    if (window.history.length > 1) {
-      window.history.back()
+  const {
+    control,
+    handleSubmit,
+    formState: { errors, isSubmitting }
+  } = useForm<ShippingFormData>({
+    resolver: zodResolver(ShippingFormSchema),
+    mode: 'onChange',
+    defaultValues: {
+      firstName: '',
+      lastName: '',
+      phone: '',
+      addressLine1: '',
+      addressLine2: '',
+      postalCode: '',
+      city: '',
+      region: '',
+      country: ''
+    }
+  })
+
+  const onSubmit = async (data: ShippingFormData) => {
+    try {
+      console.log('Form data:', data)
+      // If validation passes, proceed to payment
+      navigate(`?zapoutStep=payment`)
+    } catch (error) {
+      console.error('Form submission error:', error)
     }
   }
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
-    navigate(`?zapoutStep=payment`)
-  }
-
   return (
-    <form className="grid gap-2 mt-8" onSubmit={handleSubmit}>
-      {form.map((group, index) => (
-        <div key={index} className="space-y-4 mb-6">
-          {/* Handle grouped fields (arrays) */}
-          {Array.isArray(group) ? (
+    <form className="grid gap-2 mt-8" onSubmit={handleSubmit(onSubmit)}>
+      {formConfig.sections.map((section) => (
+        <div key={section.id} className="space-y-4 mb-6">
+          {section.layout === 'row' ? (
             <div className="flex gap-4 sm:flex-row flex-col">
-              {group.map((field, fieldIndex) => (
-                <Field
-                  key={fieldIndex}
-                  //   label={field.label}
-                  name={field.name}
-                  type={field.type}
-                  placeholder={field.placeholder}
-                  //   required={field.required} #fixme
+              {section.fields.map((field) => (
+                <DynamicField
+                  key={field.name}
+                  field={field}
+                  control={control}
+                  errors={errors}
                   className="flex-1"
                 />
               ))}
             </div>
           ) : (
-            /* Handle single fields */
-            <Field
-              //  label={group.label}
-              name={group.name}
-              type={group.type}
-              placeholder={group.placeholder}
-              //   required={group.required} #fixme
-            />
+            <>
+              {section.fields.map((field) => (
+                <DynamicField
+                  key={field.name}
+                  field={field}
+                  control={control}
+                  errors={errors}
+                />
+              ))}
+            </>
           )}
         </div>
       ))}
 
-      <Button rounded={false}>Continue to Payment</Button>
+      <Button rounded={false} disabled={isSubmitting}>
+        {isSubmitting ? 'Processing...' : 'Continue to Payment'}
+      </Button>
     </form>
   )
 }

@@ -18,7 +18,7 @@ interface ArticleCardProps {
 }
 
 const ArticleCard: React.FC<ArticleCardProps> = ({ event }) => {
-  // Placeholder values - these should be extracted from the event later
+  // #todo Placeholder values - these should be extracted from the event later
   const articleTitle = 'Article title in max 2 lines even if it’s short' // #fixme
   const articleAuthor = 'Article author' // #fixme
   const articleAuthorImage = null

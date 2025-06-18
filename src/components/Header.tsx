@@ -3,7 +3,6 @@ import { useAccountStore } from '@/stores/useAccountStore'
 import Button from './Buttons/Button'
 import useWindowState, { WindowTypes } from '@/stores/useWindowState'
 import Icon from './Icon'
-import { useCartStore } from '@/stores/useCartStore'
 import Field from './Form/Field'
 import Logo from './Logo'
 import MobileMenu from './MobileMenu'
@@ -15,7 +14,6 @@ const Header: React.FC = () => {
   const [displayName, setDisplayName] = useState<string>('')
   const { user, isLoggedIn, logout } = useAccountStore()
   const { pushWindow } = useWindowState()
-  const { carts, toggleHUD } = useCartStore()
 
   const openLoginWindow = (): void => {
     pushWindow(WindowTypes.LOGIN, {
@@ -86,52 +84,52 @@ const Header: React.FC = () => {
           {/* Desktop Navigation */}
           <div className="hidden lg:flex items-center flex-1 justify-end gap-4">
             <Button variant="ghost" isLink to="/shop">
-              <Icon icon="shoppingCart" />
+              <Icon.ShoppingCart />
               <span className="">Shop</span>
             </Button>
 
             {/* how it works button if logged in else orders page */}
             {isLoggedIn ? (
               <Button variant="ghost" isLink to="/orders">
-                <Icon icon="wand" />
+                <Icon.Wand />
                 <span className="">Orders</span>
               </Button>
             ) : (
               <Button variant="ghost" isLink to="/orders">
-                <Icon icon="wand" />
+                <Icon.Wand />
                 <span className="">How it works</span>
               </Button>
             )}
 
             <Field
               name="search"
-              type="search"
-              rightIcon="search"
+              type="text"
+              rightIcon="Search"
               className="w-full"
             />
 
             {/* messages button if logged in */}
             {isLoggedIn && (
               <Button variant="ghost" isLink to="/shop">
-                <Icon icon="messages" />
+                <Icon.Messages />
                 <span className="">Messages</span>
               </Button>
             )}
 
             {/* sell button */}
             <Button variant="ghost" isLink to="/shop">
-              <Icon icon="wand" />
+              <Icon.Wand />
               <span className="">Sell</span>
             </Button>
 
             {/* login button, else user button */}
             {isLoggedIn ? (
               <Button variant="ghost" size="icon" isLink to="/user">
-                <Icon icon="user" />
+                <Icon.User />
               </Button>
             ) : (
               <Button variant="primary" isLink to="/auth">
-                <Icon icon="user" />
+                <Icon.User />
                 <span className="">Login</span>
               </Button>
             )}
