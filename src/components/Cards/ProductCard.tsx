@@ -148,8 +148,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
 
             {/* rating */}
             <div className="flex items-center gap-1">
-              <Icon
-                icon="star"
+              <Icon.Star
                 className="size-4 text-transparent"
                 fill="fill-primary-400"
               />
@@ -232,8 +231,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
               <CardFooter className="flex justify-between items-center pt-0">
                 {/* rating */}
                 <div className="flex items-center gap-1">
-                  <Icon
-                    icon="star"
+                  <Icon.Star
                     className="size-4 text-transparent"
                     fill="fill-primary-400"
                   />
@@ -298,8 +296,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
 
             {/* rating */}
             <div className="flex items-center gap-1">
-              <Icon
-                icon="star"
+              <Icon.Star
                 className="size-4 text-transparent"
                 fill="fill-primary-400"
               />

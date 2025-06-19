@@ -122,6 +122,7 @@ export const UpdateCartItemQuantityButtons = ({
         inputClassName="text-center"
         value={quantity}
         name="cart-quantity"
+        readOnly
       />
       <Button
         size="icon"
