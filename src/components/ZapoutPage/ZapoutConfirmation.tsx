@@ -15,7 +15,8 @@ const LoadingBar: React.FC<{
   duration?: number
   onComplete?: () => void
   onProgressUpdate?: (progress: number) => void
-}> = ({ duration = 5000, onComplete, onProgressUpdate }) => {
+  className?: string
+}> = ({ duration = 5000, onComplete, onProgressUpdate, className }) => {
   const [progress, setProgress] = useState(0)
 
   useEffect(() => {
@@ -45,8 +46,8 @@ const LoadingBar: React.FC<{
   }, [duration, onComplete, onProgressUpdate])
 
   return (
-    <div className="w-full max-w-md">
-      <div className="h-2 bg-muted/20 rounded-full overflow-hidden">
+    <div className={cn('w-full max-w-md', className)}>
+      <div className="h-1 bg-muted/20 rounded-full overflow-hidden">
         <div
           className="h-full bg-ink rounded-full transition-all duration-100"
           style={{ width: `${progress}%` }}
@@ -163,7 +164,7 @@ const ZapoutConfirmation: React.FC = () => {
   const currentStep = loadingSteps[currentStepIndex]
 
   const wrapperClasses = cn(
-    'fixed inset-0 bg-primary-400 z-50 transition-all duration-300',
+    'fixed inset-0 bg-primary-400 z-50 transition-all duration-300 ',
     isComplete && 'bg-paper'
   )
 
@@ -171,8 +172,8 @@ const ZapoutConfirmation: React.FC = () => {
     <div className={wrapperClasses}>
       {/* header */}
       <div className="flex items-center justify-between gap-2 px-8 py-4">
-        <Logo className="max-w-50" />
-        <Button variant="ghost" size="lg" onClick={() => navigate('/')}>
+        <Logo className="max-w-50 electric-shock" />
+        <Button variant="ghost" size="lg">
           <Icon.Home className="size-6" />
           Back to Home
         </Button>
@@ -180,7 +181,7 @@ const ZapoutConfirmation: React.FC = () => {
 
       {/* body */}
       <div className="rounded-lg p-8 grid h-full content-start justify-items-center gap-16 pt-24">
-        <Logo variant="icon" className="max-w-16" />
+        <Logo variant="icon" className={cn('max-w-20 electric-outline')} />
 
         <h1 className="voice-5l transition-all duration-300 text-center text-balance">
           {currentStep.heading}
@@ -190,6 +191,7 @@ const ZapoutConfirmation: React.FC = () => {
           duration={TOTAL_DURATION}
           onComplete={handleLoadingComplete}
           onProgressUpdate={handleProgressUpdate}
+          className="electric-shock"
         />
 
         <p className="voice-base transition-all duration-300 text-center text-balance max-w-md">
