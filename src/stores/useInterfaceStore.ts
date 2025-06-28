@@ -21,11 +21,19 @@ export const useInterfaceStore = create<InterfaceState>()((set) => ({
   setViewPort: () => {
     if (typeof window === 'undefined') return
 
+    // Use matchMedia for more accurate detection
+    const mobileQuery = window.matchMedia('(max-width: 767px)')
+    const tabletQuery = window.matchMedia(
+      '(min-width: 768px) and (max-width: 1023px)'
+    )
+    const desktopQuery = window.matchMedia('(min-width: 1024px)')
+    const largeDesktopQuery = window.matchMedia('(min-width: 1280px)')
+
     set({
-      isMobile: window.innerWidth < 768,
-      isTablet: window.innerWidth < 1024 && window.innerWidth >= 768,
-      isDesktop: window.innerWidth >= 1024,
-      isLargeDesktop: window.innerWidth >= 1280
+      isMobile: mobileQuery.matches,
+      isTablet: tabletQuery.matches,
+      isDesktop: desktopQuery.matches && !largeDesktopQuery.matches,
+      isLargeDesktop: largeDesktopQuery.matches
     })
   },
 
