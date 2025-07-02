@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useCallback } from 'react'
 import { useSubscription } from 'nostr-hooks'
 import { type NostrEvent } from '@nostr-dev-kit/ndk'
 import {
@@ -17,6 +17,7 @@ import {
 } from '@/stores/useOrderStore'
 import { getNdk } from '@/services/ndkService'
 import { useAccountStore } from '@/stores/useAccountStore'
+import { useRelayState } from '@/stores/useRelayState'
 
 /**
  * Hook to handle subscription to order events
@@ -35,14 +36,37 @@ export const useOrderSubscription = () => {
   } = useOrderStore()
 
   const { user } = useAccountStore()
+  const { relayPoolVersion } = useRelayState()
 
   // Use a ref to track initialization state to prevent double subscription
   const hasInitializedRef = useRef(false)
+  const currentRelayVersionRef = useRef(relayPoolVersion)
 
   const subId = 'order-events'
-  const { events, createSubscription } = useSubscription(subId)
+  const { events, createSubscription, removeSubscription } =
+    useSubscription(subId)
 
-  // Create the subscription only once
+  // Manual refresh function
+  const refreshSubscription = useCallback(() => {
+    // Manual refresh requested
+    removeSubscription()
+    hasInitializedRef.current = false
+    setIsSubscribed(false)
+    setIsLoading(false)
+  }, [setIsSubscribed, setIsLoading, removeSubscription])
+
+  // Restart subscription when relay pool changes
+  useEffect(() => {
+    if (currentRelayVersionRef.current !== relayPoolVersion) {
+      removeSubscription()
+      hasInitializedRef.current = false
+      setIsSubscribed(false)
+      setIsLoading(false)
+      currentRelayVersionRef.current = relayPoolVersion
+    }
+  }, [relayPoolVersion, removeSubscription, setIsSubscribed, setIsLoading])
+
+  // Create the subscription
   useEffect(() => {
     // Skip if already subscribed, loading, or initialization already attempted
     if (isSubscribed || isLoading || hasInitializedRef.current || !user) return
@@ -69,7 +93,7 @@ export const useOrderSubscription = () => {
         // Update both states at once to minimize re-renders
         setIsSubscribed(true)
         setIsLoading(false)
-        console.log('NIP-17 subscription created')
+        // NIP-17 subscription created
       } catch (err) {
         console.error('Error creating subscription:', err)
         setError(String(err))
@@ -78,29 +102,29 @@ export const useOrderSubscription = () => {
     }
 
     initializeSubscription()
-
-    // Cleanup function
-    return () => {
-      // Could add cleanup logic here if needed
-      // Like unsubscribe functionality
-    }
-  }, [user])
+  }, [
+    user,
+    relayPoolVersion,
+    createSubscription,
+    setIsSubscribed,
+    setIsLoading,
+    setError
+  ])
 
   // Process events when they arrive
   useEffect(() => {
     if (!events || events.length === 0) return
 
     const processEvents = async () => {
-      console.log('>>>>> Processing newly-received order events:', events)
       for (const event of events) {
-        console.log('>>>>> Processing newly-received order event:', event)
         try {
-          // For NIP-17 direct messages, attempt decryption
           const decryptedEvent: NostrEvent | null = await decryptNip17Message(
             await getNdk(),
             event.rawEvent()
           )
-          if (!decryptedEvent) continue // Skip this event and proceed to next
+          if (!decryptedEvent) {
+            continue
+          }
 
           // Get the type tag for kind 16 events and order ID
           const typeTag = decryptedEvent.tags.find((tag) => tag[0] === 'type')
@@ -110,7 +134,7 @@ export const useOrderSubscription = () => {
 
           if (!orderIdTag || !orderIdTag[1]) {
             console.error('Missing order ID tag')
-            continue // Skip this event
+            continue
           }
 
           const orderId = orderIdTag[1]
@@ -137,8 +161,6 @@ export const useOrderSubscription = () => {
                   orderType = OrderEventType.PAYMENT_REQUEST
                   isValid = true
                 } else {
-                  console.log('Payment Request:', decryptedEvent)
-                  console.log('Payment Request Result:', paymentRequestResult)
                   console.error(
                     `Invalid Payment Request: ${paymentRequestResult.error.message}`
                   )
@@ -170,6 +192,9 @@ export const useOrderSubscription = () => {
                   )
                 }
                 break
+
+              default:
+              // Unknown type tag value
             }
           } else if (decryptedEvent.kind === 17) {
             // Receipt
@@ -180,6 +205,8 @@ export const useOrderSubscription = () => {
             } else {
               console.error(`Invalid Receipt: ${receiptResult.error.message}`)
             }
+          } else {
+            // Event does not match expected patterns
           }
 
           // Add valid order to store
@@ -209,6 +236,7 @@ export const useOrderSubscription = () => {
   return {
     isLoading,
     error,
-    isSubscribed
+    isSubscribed,
+    refreshSubscription
   }
 }

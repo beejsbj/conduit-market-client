@@ -10,7 +10,6 @@ export enum OrderEventType {
   PAYMENT_RECEIPT = 'receipt'
 }
 
-// Status for order processing
 export enum OrderProcessingStatus {
   PENDING = 'pending',
   PROCESSING = 'processing',
@@ -19,7 +18,6 @@ export enum OrderProcessingStatus {
   FAILED = 'failed'
 }
 
-// Interface for an order in our store
 export interface StoredOrderEvent {
   id: string // Event ID
   orderId: string // Order ID from the order tag
@@ -32,28 +30,25 @@ export interface StoredOrderEvent {
 }
 
 interface OrderState {
-  // Separate arrays for each message type instead of a single flat array
   orders: StoredOrderEvent[]
   paymentRequests: StoredOrderEvent[]
   statusUpdates: StoredOrderEvent[]
   shippingUpdates: StoredOrderEvent[]
   receipts: StoredOrderEvent[]
 
-  // State
   isSubscribed: boolean
   isLoading: boolean
   error: string | null
   selectedOrderId: string | null
 
-  // Methods for state management
   setIsSubscribed: (value: boolean) => void
   setIsLoading: (value: boolean) => void
   setError: (error: string | null) => void
   addOrderEvent: (order: StoredOrderEvent) => void
 
-  // Methods for user interactions
   markAsRead: (orderId: string, type: OrderEventType) => void
   markAllAsRead: () => void
+  clearAllOrders: () => void
   setSelectedOrderEvent: (orderId: string | null) => void
   setOrderProcessingStatus: (
     orderId: string,
@@ -61,7 +56,6 @@ interface OrderState {
     type: OrderEventType
   ) => void
 
-  // Getters for different order types
   getUnreadCount: (type: OrderEventType) => number
   getOrders: () => StoredOrderEvent[]
   getPaymentRequests: () => StoredOrderEvent[]
@@ -78,7 +72,6 @@ interface OrderState {
 export const useOrderStore = create<OrderState>()(
   persist(
     (set, get) => ({
-      // Separate arrays for each message type
       orders: [],
       paymentRequests: [],
       statusUpdates: [],
@@ -90,44 +83,56 @@ export const useOrderStore = create<OrderState>()(
       error: null,
       selectedOrderId: null,
 
-      // Update state methods
       setIsSubscribed: (value: boolean) => set({ isSubscribed: value }),
       setIsLoading: (value: boolean) => set({ isLoading: value }),
       setError: (error: string | null) => set({ error }),
 
-      // Add a new order message to the appropriate array
       addOrderEvent: (order: StoredOrderEvent) => {
         set((state) => {
           switch (order.type) {
             case OrderEventType.ORDER:
-              if (state.orders.some((o) => o.id === order.id)) return state
+              if (state.orders.some((o) => o.orderId === order.orderId)) {
+                return state
+              }
               return {
                 ...state,
                 orders: [...state.orders, order]
               }
             case OrderEventType.PAYMENT_REQUEST:
-              if (state.paymentRequests.some((o) => o.id === order.id))
+              const isDuplicate = state.paymentRequests.some(
+                (o) => o.orderId === order.orderId
+              )
+              if (isDuplicate) {
                 return state
+              }
               return {
                 ...state,
                 paymentRequests: [...state.paymentRequests, order]
               }
             case OrderEventType.STATUS_UPDATE:
-              if (state.statusUpdates.some((o) => o.id === order.id))
+              if (
+                state.statusUpdates.some((o) => o.orderId === order.orderId)
+              ) {
                 return state
+              }
               return {
                 ...state,
                 statusUpdates: [...state.statusUpdates, order]
               }
             case OrderEventType.SHIPPING_UPDATE:
-              if (state.shippingUpdates.some((o) => o.id === order.id))
+              if (
+                state.shippingUpdates.some((o) => o.orderId === order.orderId)
+              ) {
                 return state
+              }
               return {
                 ...state,
                 shippingUpdates: [...state.shippingUpdates, order]
               }
             case OrderEventType.PAYMENT_RECEIPT:
-              if (state.receipts.some((o) => o.id === order.id)) return state
+              if (state.receipts.some((o) => o.orderId === order.orderId)) {
+                return state
+              }
               return {
                 ...state,
                 receipts: [...state.receipts, order]
@@ -138,7 +143,6 @@ export const useOrderStore = create<OrderState>()(
         })
       },
 
-      // Methods for user interactions
       markAsRead: (orderId: string, type: OrderEventType) => {
         set((state) => {
           switch (type) {
@@ -211,7 +215,6 @@ export const useOrderStore = create<OrderState>()(
 
       markAllAsRead: () => {
         set((state) => {
-          // Function to mark all as read in any array
           const markAllRead = (messages: StoredOrderEvent[]) =>
             messages.map((order) => ({ ...order, unread: false }))
 
@@ -226,6 +229,17 @@ export const useOrderStore = create<OrderState>()(
         })
       },
 
+      clearAllOrders: () => {
+        set({
+          orders: [],
+          paymentRequests: [],
+          statusUpdates: [],
+          shippingUpdates: [],
+          receipts: [],
+          selectedOrderId: null
+        })
+      },
+
       setSelectedOrderEvent: (
         orderId: string | null,
         type?: OrderEventType
@@ -233,7 +247,6 @@ export const useOrderStore = create<OrderState>()(
         set({ selectedOrderId: orderId })
 
         if (orderId && type) {
-          // Mark as read when selected
           get().markAsRead(orderId, type)
         } else if (orderId) {
           // Legacy behavior if type is not provided (for backward compatibility)
@@ -331,11 +344,9 @@ export const useOrderStore = create<OrderState>()(
         })
       },
 
-      // Getter methods - now they just return the arrays directly
       getUnreadCount: (type: OrderEventType) => {
         const state = get()
 
-        // Return unread count for specific type
         switch (type) {
           case OrderEventType.ORDER:
             return state.orders.filter((o) => o.unread).length
@@ -375,7 +386,6 @@ export const useOrderStore = create<OrderState>()(
       getOrderById: (orderId: string, type: OrderEventType) => {
         const state = get()
 
-        // Search in the specific array specified by type
         switch (type) {
           case OrderEventType.ORDER:
             return state.orders.find((order) => order.orderId === orderId)
@@ -398,7 +408,6 @@ export const useOrderStore = create<OrderState>()(
         }
       },
 
-      // Helper method to get all messages of a specific type, with sorting
       getAllOrderEventsOfType: (type: OrderEventType) => {
         const state = get()
         switch (type) {
@@ -422,10 +431,9 @@ export const useOrderStore = create<OrderState>()(
       }
     }),
     {
-      name: 'nostr-merchant-OrderEvents',
+      name: 'conduit-customer-orders',
       storage: createJSONStorage(() => localStorage),
       partialize: (state) => ({
-        // Persist all message arrays and selected order ID
         orders: state.orders,
         paymentRequests: state.paymentRequests,
         statusUpdates: state.statusUpdates,

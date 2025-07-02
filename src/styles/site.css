@@ -81,38 +81,61 @@ layer(base);
 
   /* scrollbar */
   * {
-    /* -ms-overflow-style: none; IE and Edge */
-    /* scrollbar-width: var(--line-width, 4px); Firefox */
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: var(--line-width, 4px); /* Firefox */
   }
   /* This part is for the scrollbar track / */
-  /* *::-webkit-scrollbar {
+  *::-webkit-scrollbar {
     width: var(--line-width, 4px);
     height: var(--line-width, 4px);
-  } */
+  }
 
   /* / This part is for the track (the part that the thumb slides across) / */
-  /* ::-webkit-scrollbar-track {
+  ::-webkit-scrollbar-track {
     box-shadow: var(--shadow-xs);
     border-radius: var(--radius-lg);
-  } */
+  }
 
   /* / This part is for the thumb (the part you drag) / */
-  /* ::-webkit-scrollbar-thumb {
+  ::-webkit-scrollbar-thumb {
     background: linear-gradient(
       to bottom,
       var(--color-primary),
       var(--color-secondary)
     );
     border-radius: var(--radius-lg);
-  } */
+  }
 
   /* / This part is for the thumb when it's being hovered over  */
-  /* ::-webkit-scrollbar-thumb:hover {
+  ::-webkit-scrollbar-thumb:hover {
     filter: brightness(1.2);
-  } */
+  }
+
+  .tabs-list {
+      @apply flex items-center p-1 relative;
+
+      /* &::before {
+        content: '';
+        position: absolute;
+        height: 2px;
+        bottom: 0;
+        left: var(--tab-left, 0);
+        width: var(--tab-width, 30px);
+        background: var(--color-primary);
+        transition: left var(--transition-normal), width var(--transition-normal);
+      }*/
+    }
 }
 
 @layer utilities {
+  .hide-scrollbar {
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none; /* Firefox */
+  }
+  
+  .hide-scrollbar::-webkit-scrollbar {
+    display: none; /* Chrome, Safari, Opera */
+  }
 }
 
 .halftone {
@@ -126,21 +149,6 @@ layer(base);
   background-repeat: round;
 }
 
-/* components */
-
 @layer components {
-  .tabs-list {
-    @apply flex items-center p-1 relative;
-
-    /* &::before {
-      content: '';
-      position: absolute;
-      height: 2px;
-      bottom: 0;
-      left: var(--tab-left, 0);
-      width: var(--tab-width, 30px);
-      background: var(--color-primary);
-      transition: left var(--transition-normal), width var(--transition-normal);
-    }*/
-  }
+  
 }

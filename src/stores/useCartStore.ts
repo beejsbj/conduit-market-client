@@ -58,21 +58,15 @@ export const useCartStore = create<CartState>()(
     (set, get) => ({
       carts: [],
       selectedHUDCart: null,
-      // HUD UI actions
-
       setSelectedHUDCart: (cart: Cart) =>
-        set((state) => ({
+        set(() => ({
           selectedHUDCart: cart
         })),
 
-      // Cart actions
       addItemToCart: (product: CartItem) => {
-        // Original implementation:
-
         const existingCart = get().getCart(product.merchantPubkey)
 
         if (!existingCart) {
-          // Create a new cart if it doesn't exist
           set((state) => ({
             carts: [
               ...state.carts,
@@ -94,7 +88,6 @@ export const useCartStore = create<CartState>()(
           return
         }
 
-        // Add new item to existing cart
         set((state) => ({
           carts: state.carts.map((cart) =>
             cart.merchantPubkey === product.merchantPubkey
@@ -108,8 +101,6 @@ export const useCartStore = create<CartState>()(
               : cart
           )
         }))
-
-        console.log(get().carts)
       },
 
       increaseItemQuantity: (product: CartItem) => {
@@ -152,7 +143,6 @@ export const useCartStore = create<CartState>()(
       },
 
       removeItemFromCart: (product: CartItem) => {
-        console.log(product)
         set((state) => ({
           carts: state.carts
             .map((cart) => {
@@ -168,7 +158,6 @@ export const useCartStore = create<CartState>()(
             .filter((cart) => cart.items.length > 0)
         }))
       },
-      // Cart clearing methods
       clearCart: (merchantPubkey: string) => {
         set((state) => ({
           carts: state.carts.filter(
@@ -181,7 +170,6 @@ export const useCartStore = create<CartState>()(
         set((state) => ({ carts: [] }))
       },
 
-      // Cart getters
       getCart: (merchantPubkey: string) =>
         get().carts.find((cart) => cart.merchantPubkey === merchantPubkey),
 
@@ -202,7 +190,6 @@ export const useCartStore = create<CartState>()(
           : 0
       },
 
-      // Global cart getters
       getCartsTotal: () =>
         get().carts.reduce(
           (total, cart) =>
@@ -223,7 +210,6 @@ export const useCartStore = create<CartState>()(
         )
       },
 
-      // get Item
       getItem: (merchantPubkey: string, productId: string) => {
         const cart = get().getCart(merchantPubkey)
         return cart?.items.find((item) => item.productId === productId)

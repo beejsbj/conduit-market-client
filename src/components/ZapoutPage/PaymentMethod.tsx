@@ -1,52 +1,50 @@
-import { useState } from 'react'
-import { useLocation } from 'wouter'
+import { useCallback, useState } from 'react'
+import { useLocation, useParams } from 'wouter'
 import Button from '../Buttons/Button'
 import Field from '../Form/Field'
 
 import Icon from '../Icon'
 import { IconPill } from '../Pill'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '../Tabs'
+import { useCartStore } from '@/stores/useCartStore'
+
+import { useZapoutStore } from '@/stores/useZapoutStore'
+import { paymentMethods } from '@/lib/constants/paymentMethods'
 
 const PaymentMethod: React.FC = () => {
   const [location, navigate] = useLocation()
-
   const [isGeneratingInvoice, setIsGeneratingInvoice] = useState(false)
   const [isGenerated, setIsGenerated] = useState(false)
+  const { carts, getCart } = useCartStore()
+  const { merchantPubkey } = useParams()
+  const cart = useCallback(
+    () => merchantPubkey && getCart(merchantPubkey),
+    [merchantPubkey]
+  )
 
-  const paymentMethods = [
-    {
-      label: 'Lightning',
-      value: 'lightning',
-      icon: 'Zap',
-      component: LightningPaymentMethod
-    },
-    {
-      label: 'USDT',
-      value: 'usdt',
-      icon: 'Type'
-    },
-    {
-      label: 'On-Chain',
-      value: 'onchain',
-      icon: 'Link'
-    },
-    {
-      label: 'Minipay',
-      value: 'minipay',
-      icon: 'PhoneCall'
-    }
-  ]
+  const paymentMethod = useZapoutStore((s) => s.paymentMethod)
+  const setPaymentMethod = useZapoutStore((s) => s.setPaymentMethod)
+  const [selectedMethod, setSelectedMethod] = useState(
+    paymentMethod ?? 'lightning'
+  )
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     // when submitted, ie generate invoice, then the tabs content is shown
-
     navigate(`?zapoutStep=confirmation`)
   }
 
   return (
     <form onSubmit={handleSubmit}>
-      <Tabs className="mt-8" defaultValue="lightning">
+      <Tabs
+        className="mt-8"
+        value={selectedMethod}
+        onValueChange={(val) => {
+          console.log('Setting payment method: ', val)
+          setSelectedMethod(val)
+          setPaymentMethod(val)
+        }}
+      >
         <TabsList>
           {paymentMethods.map((method) => (
             <TabsTrigger
@@ -64,11 +62,12 @@ const PaymentMethod: React.FC = () => {
             </TabsTrigger>
           ))}
         </TabsList>
+
         {paymentMethods.map((method) => {
           if (isGenerated) {
             return (
               <TabsContent key={method.value} value={method.value}>
-                {method.component && <method.component />}
+                {method.value === 'lightning' && <LightningPaymentMethod />}
               </TabsContent>
             )
           }

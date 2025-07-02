@@ -2,7 +2,7 @@ import Icon from '@/components/Icon'
 import Button from '@/components/Buttons/Button'
 import React from 'react'
 import PageSection from '@/layouts/PageSection'
-import Field from '@/components/Form/Field'
+import { SignerLoginButton } from '@/components/SignerLoginButton'
 
 const AuthPage: React.FC = () => {
   const handleBack = () => {
@@ -36,15 +36,7 @@ const AuthPage: React.FC = () => {
       {/* todo replace with better form when adding functionality */}
       <form className="grid gap-4 mt-4">
         <h2 className="voice-lg">Sign in</h2>
-        <Button
-          variant="outline"
-          size="lg"
-          className="border-primary"
-          rounded={false}
-        >
-          <Icon.Lock />
-          Nostr Signer
-        </Button>
+        <SignerLoginButton />
         <Button
           variant="outline"
           size="lg"
@@ -54,7 +46,6 @@ const AuthPage: React.FC = () => {
           <Icon.Mail />
           Email Sign in
         </Button>
-        <Field label="Paste Nsec" name="nsec" type="text" leftIcon="Paste" />
       </form>
       <div className="grid gap-4 mt-16 border-t border-muted pt-8">
         <h2 className="voice-lg">Sign up</h2>

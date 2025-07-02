@@ -3,6 +3,19 @@ import { getNdk } from '@/services/ndkService'
 import type { NDKEvent } from '@nostr-dev-kit/ndk'
 import { NDKRelay } from '@nostr-dev-kit/ndk'
 
+function getActiveRelayPool(): string[] {
+  if (typeof window !== 'undefined') {
+    const stored = localStorage.getItem('conduit.activeRelayPool')
+    if (stored) {
+      try {
+        const parsed = JSON.parse(stored)
+        if (Array.isArray(parsed) && parsed.length > 0) return parsed
+      } catch {}
+    }
+  }
+  return [...DEFAULT_RELAYS]
+}
+
 const postOrder = async (orderEvent: NDKEvent, merchantPubkey: string) => {
   console.log('Posting order event to merchant:', merchantPubkey)
   const ndk = await getNdk()
@@ -13,7 +26,7 @@ const postOrder = async (orderEvent: NDKEvent, merchantPubkey: string) => {
     authors: [merchantPubkey]
   })
 
-  let relayUrls: string[] = [...DEFAULT_RELAYS]
+  let relayUrls: string[] = [...getActiveRelayPool()]
 
   // Add merchant's preferred relays if available
   if (relayList) {
@@ -23,7 +36,8 @@ const postOrder = async (orderEvent: NDKEvent, merchantPubkey: string) => {
     relayUrls = [...merchantRelays, ...relayUrls]
   }
 
-  // Connect to all the relays directly through the NDK's pool
+  console.log('Using relay pool for order posting:', relayUrls)
+
   const relays = relayUrls.map((url) => {
     const relay = new NDKRelay(url, undefined, ndk)
     ndk.pool.addRelay(relay)
