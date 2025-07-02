@@ -1,4 +1,4 @@
-import { Route, Switch } from 'wouter'
+import { Route, Switch, Redirect } from 'wouter'
 import HomePage from '@/pages/HomePage'
 import StyleGuidePage from '@/pages/StyleGuide'
 import MerchantsPage from '@/pages/MerchantsPage'
@@ -10,6 +10,7 @@ import ProductDetailPage from '@/pages/ProductDetailPage'
 import CartsPage from '@/pages/CartsPage'
 import CartDetailPage from '@/pages/CartDetailPage'
 import ProfilePage from '@/pages/ProfilePage'
+import UserPage from '@/pages/UserPage'
 import OrdersPage from '@/pages/OrdersPage'
 import HowItWorksPage from '@/pages/HowItWorksPage'
 import ZapoutPage from '@/pages/ZapoutPage'
@@ -130,6 +131,11 @@ const routes: RouteConfig[] = [
     pageComponent: ProfilePage
   },
   {
+    label: 'User',
+    path: '/user',
+    pageComponent: UserPage
+  },
+  {
     label: 'Orders',
     path: '/orders',
     pageComponent: OrdersPage
@@ -169,5 +175,13 @@ const renderRoutes = (
 export const AppRoutes: React.FC = () => {
   const [animate] = useAutoAnimate()
 
-  return <Switch>{renderRoutes(routes)}</Switch>
+  return (
+    <Switch>
+      {/* Redirect /shop to homepage */}
+      <Route path="/shop">
+        <Redirect to="/" />
+      </Route>
+      {renderRoutes(routes)}
+    </Switch>
+  )
 }

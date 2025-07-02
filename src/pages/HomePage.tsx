@@ -1,13 +1,11 @@
 import ProductCard from '@/components/Cards/ProductCard'
 import PromoCard from '@/components/Cards/PromoCard'
 import Carousel from '@/components/Carousel'
-import Hero from '@/components/HomePage/Hero'
 import PageSection from '@/layouts/PageSection'
 import CollectionCard from '@/components/Cards/CollectionCard'
 import StoreCard from '@/components/Cards/StoreCard'
 import ArticleCard from '@/components/Cards/ArticleCard'
 import Banner from '@/components/Banner'
-import { RelayPoolSelector } from '@/components/Filters/RelayPoolSelector'
 import type { NDKFilter } from '@nostr-dev-kit/ndk'
 import { useEffect, useState } from 'react'
 import { useSubscribe } from '@nostr-dev-kit/ndk-hooks'
@@ -78,13 +76,8 @@ function CarouselSection({
 
   return (
     <PageSection>
-      <div className="flex items-center justify-between mb-4">
+      <div className="mb-4">
         <h2 className="voice-3l">{name}</h2>
-        <RelayPoolSelector
-          className="w-64"
-          label=""
-          placeholder="Select relays..."
-        />
       </div>
       <Carousel
         visibleItems={visibleItems}
@@ -94,8 +87,6 @@ function CarouselSection({
           <div className="animate-pulse">No events received from relays</div>
         ) : (
           localEvents.map((e, index) => {
-            console.log('Event: ')
-            console.log(e.tags)
             switch (type) {
               case CardType.ArticleCard:
                 return <ArticleCard key={index} event={e} />

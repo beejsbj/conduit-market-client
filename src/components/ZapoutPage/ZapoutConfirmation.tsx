@@ -9,7 +9,6 @@ import { useAccountStore } from '@/stores/useAccountStore'
 import { useParams } from 'wouter'
 import { createOrder } from '@/lib/nostr/createOrder'
 import postOrder from '@/lib/nostr/postOrder'
-import { NDKEvent } from '@nostr-dev-kit/ndk'
 import { useLocation } from 'wouter'
 
 const LoadingBar: React.FC<{
@@ -90,7 +89,6 @@ const ZapoutConfirmation: React.FC = () => {
   ]
 
   const handleLoadingComplete = useCallback(() => {
-    console.log('Loading complete!')
     setIsLoading(false)
     setIsComplete(true)
   }, [])
@@ -108,21 +106,10 @@ const ZapoutConfirmation: React.FC = () => {
   )
 
   const sendOrder = useCallback(async () => {
-    // Prevent multiple concurrent order creations
     if (isOrderInProgress || hasOrderBeenSent.current) {
-      console.log(
-        '[ZapoutConfirmation] Order already in progress or sent, skipping...'
-      )
+      // Order already in progress or sent, skipping
       return
     }
-
-    console.log('DEBUG ZapoutConfirmation Values:', {
-      cartItems,
-      shippingInfo,
-      paymentMethod,
-      pubkey,
-      merchantPubkey
-    })
 
     if (
       !cartItems ||
@@ -135,7 +122,6 @@ const ZapoutConfirmation: React.FC = () => {
       return
     }
 
-    // Set the flag to prevent multiple orders
     setIsOrderInProgress(true)
     hasOrderBeenSent.current = true
 
@@ -153,8 +139,6 @@ const ZapoutConfirmation: React.FC = () => {
         message: `Order from Pubkey: ${pubkey}`
       }
 
-      console.log('Creating order...')
-      console.log(orderData)
       const order = await createOrder(orderData, merchantPubkey)
 
       if (!order || 'success' in order) {
@@ -162,13 +146,10 @@ const ZapoutConfirmation: React.FC = () => {
         return
       }
 
-      console.log('Posting order...')
       await postOrder(order, merchantPubkey)
-      console.log('Order successfully posted.')
     } catch (error) {
       console.error('[ZapoutConfirmation] Order error:', error)
     } finally {
-      // Always reset the flag when the operation completes (success or failure)
       setIsOrderInProgress(false)
     }
   }, [cartItems, shippingInfo, paymentMethod, pubkey, merchantPubkey])
@@ -177,7 +158,7 @@ const ZapoutConfirmation: React.FC = () => {
     if (isLoading && !hasOrderBeenSent.current) {
       sendOrder()
     }
-  }, [isLoading]) // Only depend on isLoading
+  }, [isLoading])
 
   const currentStep = loadingSteps[currentStepIndex]
 

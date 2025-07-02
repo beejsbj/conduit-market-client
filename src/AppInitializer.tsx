@@ -39,7 +39,6 @@ const AppInitializer: React.FC<{ children: React.ReactNode }> = ({
     ndk
       .connect()
       .then(() => {
-        console.log('NDK connected and ready')
         setNdkReady(true)
       })
       .catch((err) => {
@@ -67,7 +66,6 @@ const AppInitializer: React.FC<{ children: React.ReactNode }> = ({
   useEffect(() => {
     const initialize = async () => {
       if (isNdkReady && isLoggedIn && !user) {
-        console.log('NDK is ready. App initializing: Fetching user data')
         try {
           await fetchUser()
         } catch (error) {

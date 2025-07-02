@@ -3,13 +3,7 @@ import {
   type CartItem as StoreCartItem
 } from '@/stores/useCartStore'
 import ShippingForm from '@/components/ZapoutPage/ShippingForm.tsx'
-import { createOrder } from '@/lib/nostr/createOrder.ts'
-import { useCallback, useEffect } from 'react'
-import { NDKEvent } from '@nostr-dev-kit/ndk'
-import postOrder from '@/lib/nostr/postOrder.ts'
-import { useAccountStore } from '@/stores/useAccountStore'
-import useWindowState, { WindowTypes } from '@/stores/useWindowState'
-import BackButton from '@/components/Buttons/BackButton'
+import { useEffect } from 'react'
 import PageSection from '@/layouts/PageSection'
 import OrderSummary from '@/components/ZapoutPage/OrderSummary'
 import { useParams, useSearch, useLocation } from 'wouter'
@@ -19,7 +13,7 @@ import Icon from '@/components/Icon'
 import ZapoutConfirmation from '@/components/ZapoutPage/ZapoutConfirmation'
 import { useAutoAnimate } from '@formkit/auto-animate/react'
 import { useZapoutStore } from '@/stores/useZapoutStore'
-
+import AuthGuard from '@/components/AuthGuard'
 
 type ZapoutStep = {
   label: string
@@ -40,7 +34,6 @@ const ZapoutPage: React.FC = () => {
       }
     }
   }, [merchantPubkey])
-
 
   const query = useSearch()
   const step = query.split('=')[1] ?? 'shipping'
@@ -88,30 +81,32 @@ const ZapoutPage: React.FC = () => {
   const [animate] = useAutoAnimate()
 
   return (
-    <PageSection width="normal">
-      <div className="grid md:grid-cols-2 items-start gap-12">
-        <div ref={animate}>
-          <div className="flex gap-2 items-center border-b border-ink pb-4">
-            <Button
-              variant="ghost"
-              size="icon"
-              onClick={handleBack}
-              className="lg:-ml-12"
-            >
-              <Icon.ChevronLeft className="size-10" />
-            </Button>
-            <h1 className="voice-2l">{currentStep?.label}</h1>
+    <AuthGuard>
+      <PageSection width="normal">
+        <div className="grid md:grid-cols-2 items-start gap-12">
+          <div ref={animate}>
+            <div className="flex gap-2 items-center border-b border-ink pb-4">
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={handleBack}
+                className="lg:-ml-12"
+              >
+                <Icon.ChevronLeft className="size-10" />
+              </Button>
+              <h1 className="voice-2l">{currentStep?.label}</h1>
+            </div>
+            {CurrentStep && <CurrentStep />}
+
+            <p className="voice-sm text-muted-foreground mt-8 text-balance">
+              {`Your data stays between you and the Merchant. Order details and shipping info are sent directly to them via NIP-17 Private Message. We don't store it. We don't see it.`}
+            </p>
           </div>
-          {CurrentStep && <CurrentStep />}
 
-          <p className="voice-sm text-muted-foreground mt-8 text-balance">
-            {`Your data stays between you and the Merchant. Order details and shipping info are sent directly to them via NIP-17 Private Message. We don’t store it. We don’t see it.`}
-          </p>
+          <OrderSummary merchantPubkey={merchantPubkey as string} />
         </div>
-
-        <OrderSummary merchantPubkey={merchantPubkey as string} />
-      </div>
-    </PageSection>
+      </PageSection>
+    </AuthGuard>
   )
 }
 

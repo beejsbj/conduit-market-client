@@ -14,6 +14,9 @@ import type { NostrEvent } from '@nostr-dev-kit/ndk'
 import OrderPayQR from '@/components/OrderPayQR'
 import Avatar from '@/components/Avatar'
 import { useNostrProfile } from '@/hooks/useNostrProfile'
+import { usePaymentExpiration } from '@/hooks/usePaymentExpiration'
+import AuthGuard from '@/components/AuthGuard'
+import { useRelayState } from '@/stores/useRelayState'
 
 enum OrderTab {
   ALL = 'all',
@@ -38,13 +41,14 @@ const OrdersPage: React.FC = () => {
     getShippingUpdates,
     getReceipts,
     getUnreadCount,
-    getOrderById
+    getOrderById,
+    clearAllOrders
   } = useOrderStore()
 
-  // Use the subscription hook directly
-  const { isLoading, error } = useOrderSubscription()
+  const { relayPoolVersion } = useRelayState()
+  const currentPaymentRequests = getPaymentRequests()
+  const { isLoading, error, refreshSubscription } = useOrderSubscription()
 
-  // Get all orders for the current tab
   const getFilteredOrders = (): StoredOrderEvent[] => {
     switch (activeTab) {
       case OrderTab.PAYMENT_REQUESTS:
@@ -57,7 +61,6 @@ const OrdersPage: React.FC = () => {
         return getReceipts()
       case OrderTab.ALL:
       default:
-        // Combine all orders and sort by timestamp
         const allOrders = [
           ...getOrders(),
           ...getPaymentRequests(),
@@ -69,7 +72,7 @@ const OrdersPage: React.FC = () => {
     }
   }
 
-  // Handler for Pay Now (always opens QR modal)
+  // Handler for Pay Now (opens QR modal)
   const handlePayNow = (order: StoredOrderEvent) => {
     setSelectedOrder(order)
     setShowQRModal(true)
@@ -160,106 +163,133 @@ const OrdersPage: React.FC = () => {
   }, [selectedOrder])
 
   return (
-    <PageSection>
-      <div className="grid gap-8 lg:flex lg:justify-between">
-        <div className="flex-1">
-          <div className="flex flex-wrap justify-between items-end">
-            <h1 className="voice-4l">Orders</h1>
-            <p className="voice-sm font-bold">
-              {filteredOrders.length} order
-              {filteredOrders.length !== 1 ? 's' : ''}
-            </p>
-          </div>
-
-          {/* Tab Navigation */}
-          <div className="flex border-b border-muted mt-8 overflow-x-auto">
-            {Object.values(OrderTab).map((tab) => {
-              const unreadCount = getUnreadCountForTab(tab)
-              return (
-                <button
-                  key={tab}
-                  className={`flex items-center gap-2 px-4 py-3 whitespace-nowrap transition-colors ${
-                    activeTab === tab
-                      ? 'border-b-2 border-primary text-primary'
-                      : 'text-muted-foreground hover:text-ink'
-                  }`}
-                  onClick={() => setActiveTab(tab)}
-                >
-                  {getTabIcon(tab)}
-                  <span>{getTabLabel(tab)}</span>
-                  {unreadCount > 0 && (
-                    <span className="bg-primary text-primary-foreground text-xs px-2 py-1 rounded-full min-w-[20px] text-center">
-                      {unreadCount}
-                    </span>
-                  )}
-                </button>
-              )
-            })}
-          </div>
-
-          {/* Loading state */}
-          {isLoading && (
-            <div className="flex items-center justify-center p-12">
-              <div className="text-lg text-muted-foreground">
-                Loading orders...
-              </div>
-            </div>
-          )}
-
-          {/* Error state */}
-          {error && (
-            <div className="bg-destructive/10 border border-destructive text-destructive p-4 rounded-lg mb-6">
-              Error: {error}
-            </div>
-          )}
-
-          {/* Order list */}
-          <div className="mt-8 space-y-4">
-            {filteredOrders.length === 0 ? (
-              <div className="text-center py-12">
-                <Icon.ShoppingBag className="size-16 text-muted-foreground mx-auto mb-4" />
-                <h3 className="voice-2l text-muted-foreground mb-2">
-                  No orders yet
-                </h3>
-                <p className="voice-base text-muted-foreground">
-                  Your order notifications will appear here
+    <AuthGuard>
+      <PageSection>
+        <div className="grid gap-8 lg:flex lg:justify-between">
+          <div className="flex-1">
+            <div className="flex flex-wrap justify-between items-end">
+              <h1 className="voice-4l">Orders</h1>
+              <div className="flex flex-col items-end gap-2">
+                <p className="voice-sm font-bold">
+                  {filteredOrders.length} order
+                  {filteredOrders.length !== 1 ? 's' : ''}
                 </p>
+
+                {/* Debug section */}
+                <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                  <span>Payment Requests: {currentPaymentRequests.length}</span>
+                  <span>Relay Pool v{relayPoolVersion}</span>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => {
+                      clearAllOrders()
+                      refreshSubscription()
+                    }}
+                    className="text-xs px-2 py-1"
+                  >
+                    Clear Cache & Refresh
+                  </Button>
+                  {isLoading && (
+                    <span className="text-primary">Loading...</span>
+                  )}
+                  {error && (
+                    <span className="text-red-500">Error: {error}</span>
+                  )}
+                </div>
               </div>
-            ) : (
-              filteredOrders.map((order) => (
-                <OrderCard
-                  key={order.id}
-                  order={order}
-                  onClick={() => handleView(order)}
-                  onPayNow={() => handlePayNow(order)}
-                />
-              ))
+            </div>
+
+            {/* Tab Navigation */}
+            <div className="flex border-b border-muted mt-8 overflow-x-auto">
+              {Object.values(OrderTab).map((tab) => {
+                const unreadCount = getUnreadCountForTab(tab)
+                return (
+                  <button
+                    key={tab}
+                    className={`flex items-center gap-2 px-4 py-3 whitespace-nowrap transition-colors ${
+                      activeTab === tab
+                        ? 'border-b-2 border-primary text-primary'
+                        : 'text-muted-foreground hover:text-ink'
+                    }`}
+                    onClick={() => setActiveTab(tab)}
+                  >
+                    {getTabIcon(tab)}
+                    <span>{getTabLabel(tab)}</span>
+                    {unreadCount > 0 && (
+                      <span className="bg-primary text-primary-foreground text-xs px-2 py-1 rounded-full min-w-[20px] text-center">
+                        {unreadCount}
+                      </span>
+                    )}
+                  </button>
+                )
+              })}
+            </div>
+
+            {/* Loading state */}
+            {isLoading && (
+              <div className="flex items-center justify-center p-12">
+                <div className="text-lg text-muted-foreground">
+                  Loading orders...
+                </div>
+              </div>
             )}
+
+            {/* Error state */}
+            {error && (
+              <div className="bg-destructive/10 border border-destructive text-destructive p-4 rounded-lg mb-6">
+                Error: {error}
+              </div>
+            )}
+
+            {/* Order list */}
+            <div className="mt-8 space-y-4">
+              {filteredOrders.length === 0 ? (
+                <div className="text-center py-12">
+                  <Icon.ShoppingBag className="size-16 text-muted-foreground mx-auto mb-4" />
+                  <h3 className="voice-2l text-muted-foreground mb-2">
+                    No orders yet
+                  </h3>
+                  <p className="voice-base text-muted-foreground">
+                    Your order notifications will appear here
+                  </p>
+                </div>
+              ) : (
+                filteredOrders.map((order) => (
+                  <OrderCard
+                    key={`${order.type}-${order.id}-${order.orderId}`}
+                    order={order}
+                    onClick={() => handleView(order)}
+                    onPayNow={() => handlePayNow(order)}
+                  />
+                ))
+              )}
+            </div>
           </div>
         </div>
-      </div>
-      {/* QR Modal for Pay Now */}
-      {showQRModal && selectedOrder && (
-        <OrderDetailsModal
-          order={selectedOrder}
-          onClose={() => setShowQRModal(false)}
-          showQROnly={true}
-        />
-      )}
-      {/* Details Modal for View */}
-      {showDetailsModal && selectedOrder && (
-        <OrderDetailsModal
-          order={selectedOrder}
-          onClose={() => setShowDetailsModal(false)}
-          showQROnly={false}
-          getOrderDetailsEvent={getOrderDetailsEvent}
-          onPayNow={() => {
-            setShowDetailsModal(false)
-            setShowQRModal(true)
-          }}
-        />
-      )}
-    </PageSection>
+        {/* QR Modal for Pay Now */}
+        {showQRModal && selectedOrder && (
+          <OrderDetailsModal
+            order={selectedOrder}
+            onClose={() => setShowQRModal(false)}
+            showQROnly={true}
+          />
+        )}
+        {/* Details Modal for View */}
+        {showDetailsModal && selectedOrder && (
+          <OrderDetailsModal
+            order={selectedOrder}
+            onClose={() => setShowDetailsModal(false)}
+            showQROnly={false}
+            getOrderDetailsEvent={getOrderDetailsEvent}
+            onPayNow={() => {
+              setShowDetailsModal(false)
+              setShowQRModal(true)
+            }}
+          />
+        )}
+      </PageSection>
+    </AuthGuard>
   )
 }
 
@@ -289,37 +319,20 @@ const OrderDetailsModal: React.FC<{
     ? getOrderDetailsEvent(order)
     : undefined
   if (order.type === OrderEventType.PAYMENT_REQUEST) {
-    if (orderDetailsEvent) {
-      // Debug log: found associated order
-      // eslint-disable-next-line no-console
-      console.log(
-        '[OrderDetailsModal] Matched Payment Request to Order:',
-        order.orderId,
-        orderDetailsEvent
-      )
-    } else {
-      // Debug log: order not found
-      // eslint-disable-next-line no-console
-      console.warn(
-        '[OrderDetailsModal] No associated Order found for Payment Request:',
-        order.orderId
-      )
-    }
   }
-  // For the details modal, show the associated order event (not the payment request event)
   const detailsEventToShow =
     order.type === OrderEventType.PAYMENT_REQUEST && orderDetailsEvent
       ? orderDetailsEvent
       : order.event
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm">
       <div
         ref={modalRef}
-        className="bg-paper rounded-lg shadow-lg max-w-2xl w-full p-0 relative animate-fade-in"
+        className="bg-paper rounded-lg shadow-lg max-w-4xl w-full max-h-full p-0 relative animate-fade-in"
       >
         <button
-          className="absolute top-4 right-4 text-2xl text-muted-foreground hover:text-ink"
+          className="absolute top-4 right-4 text-2xl text-muted-foreground hover:text-ink z-10"
           onClick={onClose}
           aria-label="Close"
         >
@@ -331,8 +344,6 @@ const OrderDetailsModal: React.FC<{
         ) : (
           <OrderDetails
             event={detailsEventToShow}
-            orderDetailsEvent={undefined}
-            onPayNow={onPayNow}
             orderNotFound={
               order.type === OrderEventType.PAYMENT_REQUEST &&
               !orderDetailsEvent
@@ -344,30 +355,10 @@ const OrderDetailsModal: React.FC<{
   )
 }
 
-// OrderCard Component
 interface OrderCardProps {
   order: StoredOrderEvent
   onClick: () => void
   onPayNow?: () => void
-}
-
-function useExpirationCountdown(expiration?: number) {
-  const [remaining, setRemaining] = React.useState<number | null>(null)
-  React.useEffect(() => {
-    if (!expiration) return
-    const update = () => {
-      const now = Math.floor(Date.now() / 1000)
-      setRemaining(Math.max(0, expiration - now))
-    }
-    update()
-    const interval = setInterval(update, 1000)
-    return () => clearInterval(interval)
-  }, [expiration])
-  if (remaining === null) return null
-  if (remaining <= 0) return 'Expired'
-  const m = Math.floor(remaining / 60)
-  const s = remaining % 60
-  return `${m > 0 ? m + 'm ' : ''}${s}s` + ' left'
 }
 
 const OrderCard: React.FC<OrderCardProps> = ({ order, onClick, onPayNow }) => {
@@ -377,7 +368,7 @@ const OrderCard: React.FC<OrderCardProps> = ({ order, onClick, onPayNow }) => {
     switch (type) {
       case OrderEventType.ORDER:
         return {
-          title: 'New Order',
+          title: 'Order',
           icon: <Icon.ShoppingBag className="size-5" />,
           color: 'text-blue-600',
           bgColor: 'bg-blue-50',
@@ -428,13 +419,11 @@ const OrderCard: React.FC<OrderCardProps> = ({ order, onClick, onPayNow }) => {
 
   const typeInfo = getOrderTypeInfo()
   const amount = OrderUtils.getOrderAmount(event as any)
-  console.log('Event: ')
-  console.log(JSON.stringify(event))
   const formattedTime = OrderUtils.formatOrderTime(timestamp)
 
   // Add merchant info and expiration for payment requests
   let merchantInfo = null
-  let expirationCountdown = null
+  let expirationInfo = null
   if (type === OrderEventType.PAYMENT_REQUEST) {
     // Always use the DM's pubkey (event.pubkey, the 'rumor' sender) for merchant info
     const merchant = useNostrProfile(event.pubkey)
@@ -466,9 +455,36 @@ const OrderCard: React.FC<OrderCardProps> = ({ order, onClick, onPayNow }) => {
         </a>
       </div>
     )
-    const expirationTag = event.tags.find((t) => t[0] === 'expiration')
-    const expiration = expirationTag ? parseInt(expirationTag[1]) : undefined
-    expirationCountdown = useExpirationCountdown(expiration)
+
+    // Use enhanced expiration hook
+    const {
+      formattedTime: expirationTime,
+      isExpired,
+      expirationSource
+    } = usePaymentExpiration(event)
+    expirationInfo = (
+      <div
+        className={`font-mono text-base mb-2 mt-2 px-2 py-1 rounded-lg shadow-sm ${
+          isExpired
+            ? 'bg-red-900 text-red-300'
+            : 'bg-orange-900 text-orange-300'
+        }`}
+      >
+        <span className="font-bold">{isExpired ? 'Expired' : 'Expires:'}</span>{' '}
+        {isExpired
+          ? expirationTime || 'Expired'
+          : expirationTime || 'No expiration'}
+        {expirationSource !== 'none' && (
+          <span className="ml-2 text-xs opacity-75">
+            (Source:{' '}
+            {expirationSource === 'lightning'
+              ? 'Lightning Invoice'
+              : 'Nostr Event'}
+            )
+          </span>
+        )}
+      </div>
+    )
   }
 
   // Handler: clicking Payment Request opens Pay Now, others open View
@@ -517,12 +533,8 @@ const OrderCard: React.FC<OrderCardProps> = ({ order, onClick, onPayNow }) => {
             </div>
             {/* Merchant info on its own line, inline */}
             {type === OrderEventType.PAYMENT_REQUEST && merchantInfo}
-            {/* Expiration countdown for payment requests */}
-            {type === OrderEventType.PAYMENT_REQUEST && expirationCountdown && (
-              <div className="text-orange-400 font-mono text-xs mb-1 mt-1">
-                Expires: {expirationCountdown}
-              </div>
-            )}
+            {/* Enhanced expiration countdown for payment requests */}
+            {type === OrderEventType.PAYMENT_REQUEST && expirationInfo}
             {/* Show tracking info for shipping updates */}
             {type === OrderEventType.SHIPPING_UPDATE && (
               <div className="mt-3">

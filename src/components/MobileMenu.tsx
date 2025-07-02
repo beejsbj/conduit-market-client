@@ -4,6 +4,7 @@ import SlideDrawer from './SlideDrawer'
 import Button from './Buttons/Button'
 import Icon from './Icon'
 import Field from './Form/Field'
+import { RelayPoolSelector } from '@/components/Filters/RelayPoolSelector'
 
 const MobileMenu: React.FC = () => {
   const { isLoggedIn } = useAccountStore()
@@ -95,6 +96,15 @@ const MobileMenu: React.FC = () => {
               <span>Login</span>
             </Button>
           )}
+        </div>
+
+        {/* Relay Editor at bottom of sidebar */}
+        <div className="pt-4 border-t border-base-700">
+          <RelayPoolSelector
+            className="w-full"
+            label="Relay Settings"
+            placeholder="Select relays..."
+          />
         </div>
       </div>
     </SlideDrawer>

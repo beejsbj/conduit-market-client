@@ -9,6 +9,7 @@ import Logo from './Logo'
 import MobileMenu from './MobileMenu'
 import PageSection from '@/layouts/PageSection'
 import Breadcrumbs from '@/components/Breadcumbs'
+import { RelayPoolSelector } from '@/components/Filters/RelayPoolSelector'
 
 const Header: React.FC = () => {
   const [dropdownOpen, setDropdownOpen] = useState(false)
@@ -87,7 +88,7 @@ const Header: React.FC = () => {
   }, [user, isLoggedIn])
 
   return (
-    <header className="relative">
+    <header className="relative flex flex-col">
       <PageSection width="wide">
         <div className="flex justify-between items-center gap-4">
           <Logo className="max-w-50" />
@@ -153,6 +154,13 @@ const Header: React.FC = () => {
 
           {/* Mobile Menu */}
           <MobileMenu />
+        </div>
+        <div className="absolute top-24 left-14 z-50 hidden lg:block w-screen">
+          <RelayPoolSelector
+            className="w-80 mx-auto"
+            label=""
+            placeholder="Select relays..."
+          />
         </div>
         <Breadcrumbs />
       </PageSection>
