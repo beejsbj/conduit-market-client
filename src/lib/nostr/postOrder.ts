@@ -17,7 +17,6 @@ function getActiveRelayPool(): string[] {
 }
 
 const postOrder = async (orderEvent: NDKEvent, merchantPubkey: string) => {
-  console.log('Posting order event to merchant:', merchantPubkey)
   const ndk = await getNdk()
 
   // Get merchant's preferred DM relays from their kind:10050 event
@@ -36,7 +35,7 @@ const postOrder = async (orderEvent: NDKEvent, merchantPubkey: string) => {
     relayUrls = [...merchantRelays, ...relayUrls]
   }
 
-  console.log('Using relay pool for order posting:', relayUrls)
+  console.log('📤 [PostOrder] Publishing to relays:', relayUrls)
 
   const relays = relayUrls.map((url) => {
     const relay = new NDKRelay(url, undefined, ndk)
@@ -48,9 +47,13 @@ const postOrder = async (orderEvent: NDKEvent, merchantPubkey: string) => {
   orderEvent.ndk = ndk
 
   // Publish the order event to the connected relays
-  await orderEvent.publish()
-
-  console.log('Order event published to relays:', relayUrls)
+  try {
+    await orderEvent.publish()
+    console.log('✅ [PostOrder] Order published successfully')
+  } catch (publishError) {
+    console.error('❌ [PostOrder] Publishing failed:', publishError)
+    throw publishError
+  }
 
   return true
 }

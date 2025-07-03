@@ -17,10 +17,10 @@ const PageSection: React.FC<PageSectionProps> = ({
 }) => {
   const widthClass = {
     full: 'max-w-full',
-    wide: 'max-w-350',
-    normal: 'max-w-275',
-    narrow: 'max-w-200',
-    xNarrow: 'max-w-150'
+    wide: 'max-w-7xl',
+    normal: 'max-w-4xl',
+    narrow: 'max-w-2xl',
+    xNarrow: 'max-w-xl'
   }[width]
 
   const gapClass = {

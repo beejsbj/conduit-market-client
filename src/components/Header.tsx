@@ -155,14 +155,16 @@ const Header: React.FC = () => {
           {/* Mobile Menu */}
           <MobileMenu />
         </div>
-        <div className="absolute top-24 left-14 z-50 hidden lg:block w-screen">
-          <RelayPoolSelector
-            className="w-80 mx-auto"
-            label=""
-            placeholder="Select relays..."
-          />
+        <div className="flex items-center">
+          <Breadcrumbs />
+          <div className="ml-auto z-50 hidden lg:block">
+            <RelayPoolSelector
+              className="w-80 mx-auto"
+              label=""
+              placeholder="Select relays..."
+            />
+          </div>
         </div>
-        <Breadcrumbs />
       </PageSection>
     </header>
   )

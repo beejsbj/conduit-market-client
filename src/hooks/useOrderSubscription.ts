@@ -46,9 +46,7 @@ export const useOrderSubscription = () => {
   const { events, createSubscription, removeSubscription } =
     useSubscription(subId)
 
-  // Manual refresh function
   const refreshSubscription = useCallback(() => {
-    // Manual refresh requested
     removeSubscription()
     hasInitializedRef.current = false
     setIsSubscribed(false)
@@ -68,7 +66,6 @@ export const useOrderSubscription = () => {
 
   // Create the subscription
   useEffect(() => {
-    // Skip if already subscribed, loading, or initialization already attempted
     if (isSubscribed || isLoading || hasInitializedRef.current || !user) return
 
     // Mark as initialized to prevent duplicate attempts
@@ -90,10 +87,8 @@ export const useOrderSubscription = () => {
 
         createSubscription(filters)
 
-        // Update both states at once to minimize re-renders
         setIsSubscribed(true)
         setIsLoading(false)
-        // NIP-17 subscription created
       } catch (err) {
         console.error('Error creating subscription:', err)
         setError(String(err))
@@ -217,8 +212,7 @@ export const useOrderSubscription = () => {
               event: decryptedEvent,
               type: orderType!,
               unread: true,
-              timestamp:
-                decryptedEvent.created_at || Math.floor(Date.now() / 1000),
+              timestamp: decryptedEvent.created_at || event.created_at || 0,
               processingStatus: OrderProcessingStatus.PENDING
             }
 
