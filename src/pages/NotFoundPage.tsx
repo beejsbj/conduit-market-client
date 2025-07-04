@@ -36,7 +36,7 @@ const NotFoundPage: React.FC = () => {
         <Button
           variant="muted"
           size="lg"
-          className="flex-1 voice-6l text-3xl font-display px-8 py-4"
+          className="flex-1 text-3xl font-display px-8 py-4"
           onClick={() => navigate('/')}
           rounded={false}
         >
