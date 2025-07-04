@@ -2,14 +2,9 @@ import { useLocation } from 'wouter'
 import Button from '@/components/Buttons/Button'
 import Icon from '@/components/Icon'
 import Logo from '@/components/Logo'
-import { cn } from '@/lib/utils'
 
 const NotFoundPage: React.FC = () => {
   const [_, navigate] = useLocation()
-
-  const wrapperClasses = cn(
-    'fixed inset-0 bg-paper z-50 transition-all duration-300'
-  )
 
   return (
     <div className="rounded-lg px-8 py-12 grid h-full place-content-center place-items-center gap-8">
