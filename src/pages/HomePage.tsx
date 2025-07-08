@@ -10,13 +10,24 @@ import type { NDKFilter } from '@nostr-dev-kit/ndk'
 import { useEffect, useState } from 'react'
 import { useSubscribe } from '@nostr-dev-kit/ndk-hooks'
 import { useRelayState } from '@/stores/useRelayState'
+import ItemGrid from '@/layouts/ItemGrid'
 
 const HomePage: React.FC = () => {
   return (
     <>
       {/* <Hero /> */}
+		<ItemGrid 
+        type="ProductCard"
+        name="All Products"
+        filters={[
+          {
+            kinds: [30402], // Product kind
+            limit: 60
+          }
+        ]}
+      />
 
-      <CarouselSection
+      {/* <CarouselSection
         name="All Products"
         type={CardType.ProductCard}
         variant="card"
@@ -26,7 +37,7 @@ const HomePage: React.FC = () => {
             limit: 60
           }
         ]}
-      />
+      /> */}
 
       <Banner />
     </>
@@ -57,8 +68,8 @@ function CarouselSection({
   type,
   filters,
   variant,
-  visibleItems = undefined,
-  visibleItemsMobile = undefined
+  visibleItems = 4,
+  visibleItemsMobile = 1
 }: CarouselSectionProps) {
   const { relayPoolVersion } = useRelayState()
   const { events } = useSubscribe(filters)
