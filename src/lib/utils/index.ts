@@ -45,7 +45,9 @@ export function formatNumber(number: number) {
   return new Intl.NumberFormat('en-US').format(number)
 }
 
-const formatPubkey = (pubkey: string) => {
+export const formatPubkey = (pubkey: string) => {
   if (!pubkey) return ''
-  return `${pubkey.substring(0, 8)}...${pubkey.substring(pubkey.length - 4)}`
+  return `${pubkey.substring(0, 6)}...${pubkey.substring(pubkey.length - 4)}`
 }
+
+
