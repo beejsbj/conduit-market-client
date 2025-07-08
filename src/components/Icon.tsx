@@ -42,19 +42,31 @@ import {
 import { cn } from '@/lib/utils'
 
 // custom icon components
-const SatoshiIcon: React.ComponentType<any> = ( { className, fill }: IconProps) => (
-	<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill={fill} className={cn(className)}
-	
-	strokeWidth={1}
-	stroke='currentColor'
-	>
-	<path fillRule="evenodd" clipRule="evenodd" d="M12.75 18.5V21H11.25V18.5H12.75Z" />
-	<path fillRule="evenodd" clipRule="evenodd" d="M17 16.75H7V15.25H17V16.75Z" />
-	<path fillRule="evenodd" clipRule="evenodd" d="M17 12.7499H7V11.2499H17V12.7499Z" />
-	<path fillRule="evenodd" clipRule="evenodd" d="M17 8.75H7V7.25H17V8.75Z" />
-	<path fillRule="evenodd" clipRule="evenodd" d="M12.75 3V5.5H11.25V3H12.75Z" />
-	</svg>
+const SatoshiIcon: React.ComponentType<any> = ({
+  className,
+  fill
+}: IconProps) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    viewBox="0 0 10 17"
+    fill={fill}
+    className={cn(className)}
+    strokeWidth={1}
+    stroke="currentColor"
+  >
+    {/* Top vertical line */}
+    <rect x="4.25" y="0" width="1.5" height="2.5" />
+    {/* Top horizontal line */}
+    <rect x="0" y="4.25" width="10" height="1.5" />
+    {/* Middle horizontal line */}
+    <rect x="0" y="7.25" width="10" height="1.5" />
+    {/* Bottom horizontal line */}
+    <rect x="0" y="10.25" width="10" height="1.5" />
+    {/* Bottom vertical line */}
+    <rect x="4.25" y="13.5" width="1.5" height="2.5" />
+  </svg>
 )
+
 
 
 // Individual icon component interface
@@ -112,13 +124,7 @@ const Icon = {
   Landmark: createIconComponent(Landmark),
   Home: createIconComponent(Home),
   MessageCircle: createIconComponent(MessageCircle),
-  Satoshi: createIconComponent(SatoshiIcon)
+  Satoshi: createIconComponent(SatoshiIcon),
 }
 
 export default Icon
-
-
-
-
-
-

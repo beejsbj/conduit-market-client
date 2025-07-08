@@ -28,7 +28,7 @@ export function formatPrice(
 ): React.ReactNode | string {
   if (currency === 'SAT' || currency === 'SATS') {
     return React.createElement('span', { className: 'flex items-center gap-1' }, [
-      React.createElement(Icon.Satoshi, { key: 'icon', className: 'size-7 -ml-1.5' }),
+      React.createElement(Icon.Satoshi, { key: 'icon', className: 'w-4' }),
       React.createElement('span', { key: 'amount' }, new Intl.NumberFormat('en-US').format(price))
     ])
   }
@@ -37,7 +37,7 @@ export function formatPrice(
   if (convertToSats && currency.toUpperCase() === 'USD') {
     const sats = convertToSats(currency, price)
     return React.createElement('span', { className: 'flex items-center gap-1' }, [
-      React.createElement(Icon.Satoshi, { key: 'icon', className: 'size-7 -ml-1.5' }),
+      React.createElement(Icon.Satoshi, { key: 'icon', className: ' w-4  ' }),
       React.createElement('span', { key: 'amount' }, new Intl.NumberFormat('en-US').format(sats))
     ])
   }
