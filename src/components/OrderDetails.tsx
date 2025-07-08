@@ -125,7 +125,7 @@ const OrderDetails: React.FC<OrderDetailsProps> = ({
                 : type === '4'
                 ? 'Shipping Update'
                 : event.kind === 17
-                ? 'Payment Receipt'
+                ? 'Receipt'
                 : 'Unknown'}
             </span>
           </div>

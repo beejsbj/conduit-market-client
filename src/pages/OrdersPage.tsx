@@ -36,21 +36,10 @@ const OrdersPage: React.FC = () => {
   const [showQRModal, setShowQRModal] = useState(false)
   const [showDetailsModal, setShowDetailsModal] = useState(false)
   // Add state for toggling older items
-  const [showOlderItems, setShowOlderItems] = useState(false)
 
-  const {
-    getOrders,
-    getPaymentRequests,
-    getStatusUpdates,
-    getShippingUpdates,
-    getReceipts,
-    getUnreadCount,
-    getOrderById,
-    clearAllOrders
-  } = useOrderStore()
+  const { getUnreadCount, getOrderById, clearAllOrders } = useOrderStore()
 
-  const { relayPoolVersion, activeRelayPool } = useRelayState()
-  const currentPaymentRequests = getPaymentRequests()
+  const { relayPoolVersion } = useRelayState()
   const { isLoading, error, refreshSubscription } = useOrderSubscription()
 
   // Use Zustand selectors for reactivity
@@ -240,6 +229,7 @@ const OrdersPage: React.FC = () => {
                       order={order}
                       onClick={() => handleView(order)}
                       onPayNow={() => handlePayNow(order)}
+                      receipts={receipts} // Pass receipts for paid status
                     />
                   ))
                 )}

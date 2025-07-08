@@ -255,7 +255,8 @@ const OrderTimeline: React.FC<{
           if (
             event.type === OrderEventType.PAYMENT_REQUEST &&
             paymentRequestIsExpired &&
-            event.id === lastPaymentRequestEvent?.id
+            event.id === lastPaymentRequestEvent?.id &&
+            !hasReceipt // <-- Only show expired if no receipt exists
           ) {
             return (
               <div

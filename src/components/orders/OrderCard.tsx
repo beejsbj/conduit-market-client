@@ -11,10 +11,25 @@ const OrderCard: React.FC<{
   order: StoredOrderEvent
   onClick: () => void
   onPayNow?: () => void
-}> = ({ order, onClick, onPayNow }) => {
+  receipts?: StoredOrderEvent[]
+}> = ({ order, onClick, onPayNow, receipts }) => {
   const { event, orderId, type, unread, timestamp } = order
 
+  const isPaidInvoice =
+    type === OrderEventType.PAYMENT_REQUEST &&
+    receipts &&
+    receipts.some((r) => r.orderId === orderId)
+
   const getOrderTypeInfo = () => {
+    if (isPaidInvoice) {
+      return {
+        title: 'Paid Invoice',
+        icon: <Icon.ReceiptText className="size-5" />,
+        color: 'text-emerald-600',
+        bgColor: 'bg-emerald-50',
+        borderColor: 'border-emerald-200'
+      }
+    }
     switch (type) {
       case OrderEventType.ORDER:
         return {
@@ -50,7 +65,7 @@ const OrderCard: React.FC<{
         }
       case OrderEventType.PAYMENT_RECEIPT:
         return {
-          title: 'Payment Receipt',
+          title: 'Receipt',
           icon: <Icon.ReceiptText className="size-5" />,
           color: 'text-emerald-600',
           bgColor: 'bg-emerald-50',
@@ -106,35 +121,39 @@ const OrderCard: React.FC<{
       </div>
     )
 
-    // Use enhanced expiration hook
-    const {
-      formattedTime: expirationTime,
-      isExpired,
-      expirationSource
-    } = usePaymentExpiration(event)
-    expirationInfo = (
-      <div
-        className={`font-mono text-base mb-2 mt-2 px-2 py-1 rounded-lg shadow-sm ${
-          isExpired
-            ? 'bg-red-900 text-red-300'
-            : 'bg-orange-900 text-orange-300'
-        }`}
-      >
-        <span className="font-bold">{isExpired ? 'Expired' : 'Expires:'}</span>{' '}
-        {isExpired
-          ? expirationTime || 'Expired'
-          : expirationTime || 'No expiration'}
-        {expirationSource !== 'none' && (
-          <span className="ml-2 text-xs opacity-75">
-            (Source:{' '}
-            {expirationSource === 'lightning'
-              ? 'Lightning Invoice'
-              : 'Nostr Event'}
-            )
-          </span>
-        )}
-      </div>
-    )
+    // Only show expiration if not paid
+    if (!isPaidInvoice) {
+      const {
+        formattedTime: expirationTime,
+        isExpired,
+        expirationSource
+      } = usePaymentExpiration(event)
+      expirationInfo = (
+        <div
+          className={`font-mono text-base mb-2 mt-2 px-2 py-1 rounded-lg shadow-sm ${
+            isExpired
+              ? 'bg-red-900 text-red-300'
+              : 'bg-orange-900 text-orange-300'
+          }`}
+        >
+          <span className="font-bold">
+            {isExpired ? 'Expired' : 'Expires:'}
+          </span>{' '}
+          {isExpired
+            ? expirationTime || 'Expired'
+            : expirationTime || 'No expiration'}
+          {expirationSource !== 'none' && (
+            <span className="ml-2 text-xs opacity-75">
+              (Source:{' '}
+              {expirationSource === 'lightning'
+                ? 'Lightning Invoice'
+                : 'Nostr Event'}
+              )
+            </span>
+          )}
+        </div>
+      )
+    }
   }
 
   // Handler: clicking Payment Request opens Pay Now, others open View
@@ -162,7 +181,12 @@ const OrderCard: React.FC<{
               <h3 className={`voice-2l font-semibold ${typeInfo.color}`}>
                 {typeInfo.title}
               </h3>
-              {unread && (
+              {isPaidInvoice && (
+                <span className="bg-emerald-600 text-white text-xs px-2 py-1 rounded-full">
+                  Paid
+                </span>
+              )}
+              {!isPaidInvoice && unread && (
                 <span className="bg-primary text-primary-foreground text-xs px-2 py-1 rounded-full">
                   New
                 </span>
@@ -183,8 +207,10 @@ const OrderCard: React.FC<{
             </div>
             {/* Merchant info on its own line, inline */}
             {type === OrderEventType.PAYMENT_REQUEST && merchantInfo}
-            {/* Enhanced expiration countdown for payment requests */}
-            {type === OrderEventType.PAYMENT_REQUEST && expirationInfo}
+            {/* Show expiration only if not paid */}
+            {type === OrderEventType.PAYMENT_REQUEST &&
+              !isPaidInvoice &&
+              expirationInfo}
             {/* Show tracking info for shipping updates */}
             {type === OrderEventType.SHIPPING_UPDATE && (
               <div className="mt-3">
@@ -212,7 +238,8 @@ const OrderCard: React.FC<{
 
         {/* Action Buttons */}
         <div className="flex flex-col gap-2 ml-4">
-          {type === OrderEventType.PAYMENT_REQUEST && (
+          {/* Only show Pay Now if not paid */}
+          {type === OrderEventType.PAYMENT_REQUEST && !isPaidInvoice && (
             <Button
               variant="primary"
               size="sm"
