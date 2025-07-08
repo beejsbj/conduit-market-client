@@ -10,6 +10,7 @@ import CollectionCard from '@/components/Cards/CollectionCard'
 import PromoCard from '@/components/Cards/PromoCard'
 import StoreCard from '@/components/Cards/StoreCard'
 import { isValidProductEvent } from '@/lib/utils/productValidation'
+import Icon from '@/components/Icon'
 
 const CardType = {
 	ArticleCard: ArticleCard,
@@ -100,7 +101,7 @@ const ItemGrid: React.FC<ItemGridProps> = ({ filters, type, variant, name = 'Ite
 
   return (
     <PageSection>
-      <h2 className="voice-3l">{name}</h2>
+      <h2 className="voice-3l">{name} </h2>
       <ul className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 list-none p-0">
         {validEvents.map((event) => (
           <li key={event.id}>
