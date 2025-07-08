@@ -67,8 +67,6 @@ const SatoshiIcon: React.ComponentType<any> = ({
   </svg>
 )
 
-
-
 // Individual icon component interface
 interface IconProps {
   className?: string
@@ -124,7 +122,7 @@ const Icon = {
   Landmark: createIconComponent(Landmark),
   Home: createIconComponent(Home),
   MessageCircle: createIconComponent(MessageCircle),
-  Satoshi: createIconComponent(SatoshiIcon),
+  Satoshi: createIconComponent(SatoshiIcon)
 }
 
 export default Icon

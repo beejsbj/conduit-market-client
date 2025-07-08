@@ -27,19 +27,35 @@ export function formatPrice(
   convertToSats?: (currency: string, value: number) => number
 ): React.ReactNode | string {
   if (currency === 'SAT' || currency === 'SATS') {
-    return React.createElement('span', { className: 'flex items-center gap-1' }, [
-      React.createElement(Icon.Satoshi, { key: 'icon', className: 'w-4' }),
-      React.createElement('span', { key: 'amount' }, new Intl.NumberFormat('en-US').format(price))
-    ])
+    return React.createElement(
+      'span',
+      { className: 'flex items-center gap-1' },
+      [
+        React.createElement(Icon.Satoshi, { key: 'icon', className: 'w-4' }),
+        React.createElement(
+          'span',
+          { key: 'amount' },
+          new Intl.NumberFormat('en-US').format(price)
+        )
+      ]
+    )
   }
 
   // If we have a convertToSats function and the currency is USD, convert to sats
   if (convertToSats && currency.toUpperCase() === 'USD') {
     const sats = convertToSats(currency, price)
-    return React.createElement('span', { className: 'flex items-center gap-1' }, [
-      React.createElement(Icon.Satoshi, { key: 'icon', className: ' w-4  ' }),
-      React.createElement('span', { key: 'amount' }, new Intl.NumberFormat('en-US').format(sats))
-    ])
+    return React.createElement(
+      'span',
+      { className: 'flex items-center gap-1' },
+      [
+        React.createElement(Icon.Satoshi, { key: 'icon', className: ' w-4  ' }),
+        React.createElement(
+          'span',
+          { key: 'amount' },
+          new Intl.NumberFormat('en-US').format(sats)
+        )
+      ]
+    )
   }
 
   return new Intl.NumberFormat('en-US', {
@@ -47,8 +63,6 @@ export function formatPrice(
     currency: currency
   }).format(price)
 }
-
-
 
 export function formatNumber(number: number) {
   return new Intl.NumberFormat('en-US').format(number)
@@ -58,5 +72,3 @@ export const formatPubkey = (pubkey: string) => {
   if (!pubkey) return ''
   return `${pubkey.substring(0, 6)}...${pubkey.substring(pubkey.length - 4)}`
 }
-
-
