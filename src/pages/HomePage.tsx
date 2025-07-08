@@ -17,7 +17,7 @@ const HomePage: React.FC = () => {
   return (
     <>
       {/* <Hero /> */}
-		<ItemGrid 
+      <ItemGrid
         type="ProductCard"
         name="All Products"
         filters={[
@@ -87,10 +87,10 @@ function CarouselSection({
   }, [events])
 
   // Filter events based on card type - only filter ProductCards
-	const validEvents = type === 'ProductCard' 
-	? localEvents.filter(isValidProductEvent)
-	: localEvents
-
+  const validEvents =
+    type === 'ProductCard'
+      ? localEvents.filter(isValidProductEvent)
+      : localEvents
 
   return (
     <PageSection>
