@@ -11,6 +11,7 @@ import { useEffect, useState } from 'react'
 import { useSubscribe } from '@nostr-dev-kit/ndk-hooks'
 import { useRelayState } from '@/stores/useRelayState'
 import ItemGrid from '@/layouts/ItemGrid'
+import { isValidProductEvent } from '@/lib/utils/productValidation'
 
 const HomePage: React.FC = () => {
   return (
@@ -85,6 +86,12 @@ function CarouselSection({
     setLocalEvents(events)
   }, [events])
 
+  // Filter events based on card type - only filter ProductCards
+	const validEvents = type === 'ProductCard' 
+	? localEvents.filter(isValidProductEvent)
+	: localEvents
+
+
   return (
     <PageSection>
       <div className="mb-4">
@@ -94,10 +101,10 @@ function CarouselSection({
         visibleItems={visibleItems}
         visibleItemsMobile={visibleItemsMobile}
       >
-        {!localEvents || localEvents.length === 0 ? (
+        {!validEvents || validEvents.length === 0 ? (
           <div className="animate-pulse">No events received from relays</div>
         ) : (
-          localEvents.map((e, index) => {
+          validEvents.map((e, index) => {
             switch (type) {
               case CardType.ArticleCard:
                 return <ArticleCard key={index} event={e} />
