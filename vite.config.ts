@@ -18,11 +18,7 @@ export default defineConfig({
   resolve: {
     alias: {
       '@': resolve(__dirname, './src'),
-      '@root': resolve(__dirname, '.'),
-      'nostr-commerce-schema': resolve(
-        __dirname,
-        'external/nostr-commerce-schema/dist/index.mjs'
-      )
+      '@root': resolve(__dirname, '.')
     }
   }
 })

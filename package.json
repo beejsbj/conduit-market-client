@@ -3,9 +3,8 @@
   "version": "1.0.0",
   "type": "module",
   "scripts": {
-    "dev": "bun run build:schema && vite",
-    "build": "bun run build:schema && vite build",
-    "build:schema": "bun --cwd external/nostr-commerce-schema run build",
+    "dev": "vite",
+    "build": "vite build",
     "preview": "vite preview"
   },
   "dependencies": {
@@ -17,7 +16,7 @@
     "clsx": "^2.1.1",
     "lucide-react": "^0.469.0",
     "ndk": "^1.0.0",
-    "nostr-commerce-schema": "file:external/nostr-commerce-schema",
+    "nostr-commerce-schema": "^1.0.0",
     "nostr-hooks": "^4.3.3",
     "nostr-tools": "^2.15.0",
     "qrcode.react": "^4.2.0",

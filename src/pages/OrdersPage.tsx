@@ -35,6 +35,8 @@ const OrdersPage: React.FC = () => {
   )
   const [showQRModal, setShowQRModal] = useState(false)
   const [showDetailsModal, setShowDetailsModal] = useState(false)
+  // Add state for toggling older items
+  const [showOlderItems, setShowOlderItems] = useState(false)
 
   const {
     getOrders,
@@ -71,6 +73,7 @@ const OrdersPage: React.FC = () => {
     [activeTab, paymentRequests, statusUpdates, shippingUpdates, receipts]
   )
 
+  // Memoized all order timelines
   const allOrderTimelines = React.useMemo(
     () =>
       getAllOrderTimelines(
@@ -203,9 +206,14 @@ const OrdersPage: React.FC = () => {
                       </p>
                     </div>
                   ) : (
-                    // Render a timeline for each orderId
-                    Object.entries(allOrderTimelines).map(
-                      ([orderId, events]) => (
+                    // Render a timeline for each orderId, sorted newest-to-oldest
+                    Object.entries(allOrderTimelines)
+                      .sort((a, b) => {
+                        const aLatest = a[1][0]?.timestamp || 0
+                        const bLatest = b[1][0]?.timestamp || 0
+                        return bLatest - aLatest
+                      })
+                      .map(([orderId, events]) => (
                         <OrderTimeline
                           key={orderId}
                           orderId={orderId}
@@ -213,8 +221,7 @@ const OrdersPage: React.FC = () => {
                           onPayNow={handlePayNow}
                           onView={handleView}
                         />
-                      )
-                    )
+                      ))
                   )
                 ) : filteredOrders.length === 0 ? (
                   <div className="text-center py-12">

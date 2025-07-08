@@ -1,6 +1,6 @@
 export const DEFAULT_RELAYS = [
   'ws://localhost:7777',
-  'wss://relay.conduit.net',
+  'wss://relay.conduit.market',
   'wss://relay.damus.io'
 ]
 // import.meta.env.DEV
