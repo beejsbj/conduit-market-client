@@ -103,7 +103,7 @@ const CartDrawer: React.FC = () => {
     )
 
   const cartDrawerDragWrapperClassName = cn(
-    'translate-y-[var(--translateY)] translate-x-[var(--translateX)] transition-all duration-200 ease-bounce'
+    'scale-80 translate-y-[var(--translateY)] translate-x-[var(--translateX)] transition-all duration-200 ease-bounce'
   )
 
   const cartDrawerClassName = cn(
