@@ -31,7 +31,7 @@ export async function createOrder(
 ): Promise<NDKEvent | { success: false; message: string }> {
   try {
     const { items } = orderData
-    if (!items || items.length === 0)
+    if (!items || items?.length === 0)
       return { success: false, message: 'No items in order' }
 
     const totalAmount = items.reduce(

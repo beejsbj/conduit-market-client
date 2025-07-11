@@ -9,7 +9,7 @@ function getActiveRelayPool(): string[] {
     if (stored) {
       try {
         const parsed = JSON.parse(stored)
-        if (Array.isArray(parsed) && parsed.length > 0) return parsed
+        if (Array.isArray(parsed) && parsed?.length > 0) return parsed
       } catch {}
     }
   }

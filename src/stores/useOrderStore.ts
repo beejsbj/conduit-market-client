@@ -349,15 +349,15 @@ export const useOrderStore = create<OrderState>()(
 
         switch (type) {
           case OrderEventType.ORDER:
-            return state.orders.filter((o) => o.unread).length
+            return state.orders.filter((o) => o.unread)?.length
           case OrderEventType.PAYMENT_REQUEST:
-            return state.paymentRequests.filter((o) => o.unread).length
+            return state.paymentRequests.filter((o) => o.unread)?.length
           case OrderEventType.STATUS_UPDATE:
-            return state.statusUpdates.filter((o) => o.unread).length
+            return state.statusUpdates.filter((o) => o.unread)?.length
           case OrderEventType.SHIPPING_UPDATE:
-            return state.shippingUpdates.filter((o) => o.unread).length
+            return state.shippingUpdates.filter((o) => o.unread)?.length
           case OrderEventType.PAYMENT_RECEIPT:
-            return state.receipts.filter((o) => o.unread).length
+            return state.receipts.filter((o) => o.unread)?.length
           default:
             return 0
         }

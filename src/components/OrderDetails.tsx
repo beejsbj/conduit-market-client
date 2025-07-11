@@ -141,7 +141,7 @@ const OrderDetails: React.FC<OrderDetailsProps> = ({
       </div>
 
       {/* Items Section */}
-      {items.length > 0 && (
+      {items?.length > 0 && (
         <div className="mb-8">
           <h3 className="text-lg font-semibold mb-4 text-primary-200 border-b border-primary-700 pb-2">
             Items

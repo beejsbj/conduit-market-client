@@ -153,7 +153,7 @@ const OrderTimeline: React.FC<{
   // Animation state: how many steps of the timeline are "drawn"
   const [drawnSteps, setDrawnSteps] = useState(0)
   const [pulsingIdx, setPulsingIdx] = useState<number | null>(null)
-  const steps = timelineEvents.length
+  const steps = timelineEvents?.length
   const ANIMATION_DURATION = 400 // ms per step
 
   useEffect(() => {
@@ -187,7 +187,7 @@ const OrderTimeline: React.FC<{
         {timelineEvents.map((event, idx) => {
           const isPulsing = pulsingIdx === idx
           const showLine = idx < steps - 1 && idx < drawnSteps - 1
-          const isLast = idx === timelineEvents.length - 1
+          const isLast = idx === timelineEvents?.length - 1
 
           // Custom rendering for synthetic event
           if (event.id === 'awaiting-merchant') {

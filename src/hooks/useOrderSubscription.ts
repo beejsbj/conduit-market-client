@@ -108,7 +108,7 @@ export const useOrderSubscription = () => {
 
   // Process events when they arrive
   useEffect(() => {
-    if (!events || events.length === 0) return
+    if (!events || events?.length === 0) return
 
     const processEvents = async () => {
       for (const event of events) {

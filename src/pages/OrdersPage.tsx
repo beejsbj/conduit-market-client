@@ -184,7 +184,7 @@ const OrdersPage: React.FC = () => {
               {/* Order list or timeline */}
               <div className="mt-8 space-y-4 max-w-full">
                 {activeTab === OrderTab.ALL ? (
-                  Object.keys(allOrderTimelines).length === 0 ? (
+                  Object.keys(allOrderTimelines)?.length === 0 ? (
                     <div className="text-center py-12">
                       <Icon.ShoppingBag className="size-16 text-muted-foreground mx-auto mb-4" />
                       <h3 className="voice-2l text-muted-foreground mb-2">
@@ -212,7 +212,7 @@ const OrdersPage: React.FC = () => {
                         />
                       ))
                   )
-                ) : filteredOrders.length === 0 ? (
+                ) : filteredOrders?.length === 0 ? (
                   <div className="text-center py-12">
                     <Icon.ShoppingBag className="size-16 text-muted-foreground mx-auto mb-4" />
                     <h3 className="voice-2l text-muted-foreground mb-2">

@@ -77,7 +77,7 @@ export function useOrderProductListings(items: OrderItem[]) {
         setLoading(false)
       }
     }
-    if (items.length > 0) fetchListings()
+    if (items?.length > 0) fetchListings()
     else setLoading(false)
     return () => {
       isMounted = false
