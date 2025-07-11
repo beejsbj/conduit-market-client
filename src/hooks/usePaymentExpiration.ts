@@ -20,17 +20,18 @@ interface UsePaymentExpirationReturn {
  * @returns Expiration information and countdown
  */
 export function usePaymentExpiration(
-  event: NostrEvent
+  event: NostrEvent | undefined | null
 ): UsePaymentExpirationReturn {
   const [timeRemaining, setTimeRemaining] = useState<number | null>(null)
   const [expirationSource, setExpirationSource] = useState<
     'nostr' | 'lightning' | 'none'
   >('none')
 
-  const paymentMethod = OrderUtils.getPaymentMethod(event)
+  // Extract payment information only if event exists
+  const paymentMethod = event ? OrderUtils.getPaymentMethod(event) : null
   const isLightningPayment = paymentMethod?.type === 'lightning'
 
-  const expirationTag = event.tags.find((t) => t[0] === 'expiration')
+  const expirationTag = event?.tags?.find?.((t) => t[0] === 'expiration')
   const nostrExpiration = expirationTag ? parseInt(expirationTag[1]) : undefined
 
   const lightningExpiration =
@@ -47,7 +48,7 @@ export function usePaymentExpiration(
     : 'none'
 
   const updateTimeRemaining = useCallback(() => {
-    if (!effectiveExpiration) {
+    if (!event || !event.tags || !effectiveExpiration) {
       setTimeRemaining(null)
       setExpirationSource('none')
       return
@@ -58,7 +59,7 @@ export function usePaymentExpiration(
 
     setTimeRemaining(remaining)
     setExpirationSource(source)
-  }, [effectiveExpiration, source])
+  }, [event, effectiveExpiration, source])
 
   useEffect(() => {
     updateTimeRemaining()

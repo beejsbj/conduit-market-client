@@ -106,16 +106,10 @@ const OrderTimeline: React.FC<{
   const lastPaymentRequestEvent =
     lastPaymentRequestIdx !== -1 ? timelineEvents[lastPaymentRequestIdx] : null
 
-  // Determine expiration state for the most recent Payment Request
-  let paymentRequestExpiration = null
-  let paymentRequestIsExpired = false
-  let paymentRequestExpirationSource = 'none'
-  if (lastPaymentRequestEvent) {
-    const exp = usePaymentExpiration(lastPaymentRequestEvent.event)
-    paymentRequestExpiration = exp.formattedTime
-    paymentRequestIsExpired = exp.isExpired
-    paymentRequestExpirationSource = exp.expirationSource
-  }
+  const exp = usePaymentExpiration(lastPaymentRequestEvent?.event)
+  const paymentRequestExpiration = exp.formattedTime
+  const paymentRequestIsExpired = exp.isExpired
+  const paymentRequestExpirationSource = exp.expirationSource
 
   // Insert 'Awaiting payment...' if PaymentRequest exists but no Receipt and not expired
   if (
@@ -153,7 +147,7 @@ const OrderTimeline: React.FC<{
   // Animation state: how many steps of the timeline are "drawn"
   const [drawnSteps, setDrawnSteps] = useState(0)
   const [pulsingIdx, setPulsingIdx] = useState<number | null>(null)
-  const steps = timelineEvents?.length
+  const steps = timelineEvents?.length || 0
   const ANIMATION_DURATION = 400 // ms per step
 
   useEffect(() => {
@@ -187,7 +181,7 @@ const OrderTimeline: React.FC<{
         {timelineEvents.map((event, idx) => {
           const isPulsing = pulsingIdx === idx
           const showLine = idx < steps - 1 && idx < drawnSteps - 1
-          const isLast = idx === timelineEvents?.length - 1
+          const isLast = idx === (timelineEvents?.length || 0) - 1
 
           // Custom rendering for synthetic event
           if (event.id === 'awaiting-merchant') {
