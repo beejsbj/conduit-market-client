@@ -43,7 +43,7 @@ export const ProductExplorerPage: React.FC = () => {
         <h2 className="voice-2l">Popular Searches in {shopName}</h2>
         <div className="flex flex-wrap gap-2">
           {Array.from({ length: 20 }, (_, index) => (
-            <IconPill leftIcon="search" text={`Product ${index + 1}`} />
+            <IconPill leftIcon="Search" text={`Product ${index + 1}`} />
           ))}
         </div>
       </PageSection>

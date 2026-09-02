@@ -11,7 +11,7 @@ export default defineConfig({
   plugins: [
     react(),
     visualizer({
-      open: true,
+      open: false,
       filename: './.diagnostics/bundle-visualization.html'
     })
   ],

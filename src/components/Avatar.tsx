@@ -3,7 +3,9 @@ import { cn } from '@/lib/utils'
 
 interface AvatarProps {
   picture?: string
+  imageUrl?: string | null
   alt?: string
+  fallback?: string
   size?: 'sm' | 'md' | 'lg' | 'xl' | '2xl' | number
   npub?: string
   href?: string
@@ -20,7 +22,9 @@ const sizeMap = {
 
 const Avatar: React.FC<AvatarProps> = ({
   picture,
+  imageUrl,
   alt,
+  fallback,
   size = 'md',
   npub,
   href,
@@ -32,8 +36,8 @@ const Avatar: React.FC<AvatarProps> = ({
       : sizeMap[size] || sizeMap.md
   const avatarImg = (
     <img
-      src={picture || '/public/images/logo/logo-icon.svg'}
-      alt={alt || 'Avatar'}
+      src={picture || imageUrl || '/images/logo/logo-icon.svg'}
+      alt={alt || fallback || 'Avatar'}
       className={`rounded-full object-cover bg-primary-800 border border-primary-700 ${sizeClass} ${
         className || ''
       }`}

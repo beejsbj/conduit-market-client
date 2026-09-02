@@ -11,6 +11,7 @@ import useWindowState, {
 import LoginWindow from './layouts/windows/LoginWindow.tsx'
 import NDKHeadless from './components/ndk.ts'
 import { useRelayState } from './stores/useRelayState.ts'
+import { SHOWCASE_MODE } from '@/lib/showcase.ts'
 
 const AppInitializer: React.FC<{ children: React.ReactNode }> = ({
   children
@@ -24,6 +25,8 @@ const AppInitializer: React.FC<{ children: React.ReactNode }> = ({
   const { initNdk, ndk } = useNdk()
 
   useEffect(() => {
+    if (SHOWCASE_MODE) return
+
     const relayUrls =
       activeRelayPool.length > 0 ? activeRelayPool : DEFAULT_RELAYS
 
@@ -34,6 +37,7 @@ const AppInitializer: React.FC<{ children: React.ReactNode }> = ({
   }, [initNdk, activeRelayPool])
 
   useEffect(() => {
+    if (SHOWCASE_MODE) return
     if (!ndk) return
     new NDKService(ndk) // NDK instance for non-hook usage
     ndk
@@ -64,6 +68,8 @@ const AppInitializer: React.FC<{ children: React.ReactNode }> = ({
    * Account initialization - only after NDK is ready
    */
   useEffect(() => {
+    if (SHOWCASE_MODE) return
+
     const initialize = async () => {
       if (isNdkReady && isLoggedIn && !user) {
         try {
@@ -79,7 +85,7 @@ const AppInitializer: React.FC<{ children: React.ReactNode }> = ({
 
   return (
     <>
-      <NDKHeadless />
+      {!SHOWCASE_MODE && <NDKHeadless />}
       {children}
     </>
   )

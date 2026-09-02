@@ -5,6 +5,7 @@ import NewsletterSignup from './NewsletterSignup'
 import PageSection from '@/layouts/PageSection'
 import ContactHelp from './Buttons/ContactHelp'
 import Logo from './Logo'
+import { SHOWCASE_MODE } from '@/lib/showcase.ts'
 
 interface NavLink {
   name: string
@@ -216,6 +217,39 @@ const legalLinks = [
 ]
 
 const Footer = () => {
+  if (SHOWCASE_MODE) {
+    return (
+      <footer className="bg-paper overflow-hidden mt-10 border-t border-muted">
+        <PageSection width="wide">
+          <div className="py-8 flex flex-wrap items-center justify-between gap-6">
+            <Logo className="max-w-40" />
+            <nav className="flex flex-wrap items-center gap-4">
+              <Button variant="link" size="sm" isLink to="/" rounded={false}>
+                Marketplace
+              </Button>
+              <Button variant="link" size="sm" isLink to="/carts" rounded={false}>
+                Carts
+              </Button>
+              <Button variant="link" size="sm" isLink to="/style-guide" rounded={false}>
+                Design system
+              </Button>
+              <a className="voice-sm underline underline-offset-4" href="https://github.com/beejsbj/conduit-market-client" target="_blank" rel="noreferrer">
+                Source
+              </a>
+              <a className="voice-sm underline underline-offset-4" href="https://conduit.market/" target="_blank" rel="noreferrer">
+                Current Conduit
+              </a>
+            </nav>
+          </div>
+          <p className="voice-sm text-muted-foreground pb-8">
+            Unofficial historical portfolio showcase. Collaborative work;
+            attribution is preserved in Git history.
+          </p>
+        </PageSection>
+      </footer>
+    )
+  }
+
   return (
     <footer className="bg-paper overflow-hidden mt-10">
       <PageSection width="wide">

@@ -6,10 +6,7 @@ import CollectionCard from '@/components/Cards/CollectionCard'
 import StoreCard from '@/components/Cards/StoreCard'
 import ArticleCard from '@/components/Cards/ArticleCard'
 import Banner from '@/components/Banner'
-import type { NDKFilter } from '@nostr-dev-kit/ndk'
-import { useEffect, useState } from 'react'
-import { useSubscribe } from '@nostr-dev-kit/ndk-hooks'
-import { useRelayState } from '@/stores/useRelayState'
+import { showcaseProducts } from '@/data/showcaseProducts'
 
 const HomePage: React.FC = () => {
   return (
@@ -20,12 +17,6 @@ const HomePage: React.FC = () => {
         name="All Products"
         type={CardType.ProductCard}
         variant="card"
-        filters={[
-          {
-            kinds: [30402],
-            limit: 60
-          }
-        ]}
       />
 
       <Banner />
@@ -46,7 +37,6 @@ const CardType = {
 interface CarouselSectionProps {
   name: string
   type: string
-  filters: NDKFilter[]
   variant?: string
   visibleItems?: number
   visibleItemsMobile?: number
@@ -55,25 +45,10 @@ interface CarouselSectionProps {
 function CarouselSection({
   name,
   type,
-  filters,
   variant,
   visibleItems = undefined,
   visibleItemsMobile = undefined
 }: CarouselSectionProps) {
-  const { relayPoolVersion } = useRelayState()
-  const { events } = useSubscribe(filters)
-  const [localEvents, setLocalEvents] = useState(events)
-
-  // Clear events when relayPoolVersion changes
-  useEffect(() => {
-    setLocalEvents([])
-  }, [relayPoolVersion])
-
-  // Keep localEvents in sync with events
-  useEffect(() => {
-    setLocalEvents(events)
-  }, [events])
-
   return (
     <PageSection>
       <div className="mb-4">
@@ -83,10 +58,7 @@ function CarouselSection({
         visibleItems={visibleItems}
         visibleItemsMobile={visibleItemsMobile}
       >
-        {!localEvents || localEvents.length === 0 ? (
-          <div className="animate-pulse">No events received from relays</div>
-        ) : (
-          localEvents.map((e, index) => {
+        {showcaseProducts.map((e, index) => {
             switch (type) {
               case CardType.ArticleCard:
                 return <ArticleCard key={index} event={e} />
@@ -112,8 +84,7 @@ function CarouselSection({
               default:
                 return <StoreCard key={index} event={e} />
             }
-          })
-        )}
+          })}
       </Carousel>
     </PageSection>
   )

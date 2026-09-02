@@ -33,6 +33,8 @@ const OrderDetails: React.FC<OrderDetailsProps> = ({
     type === '1'
       ? rawItems.map((item: any) => ({
           productId: OrderUtils.getProductIdFromOrderItem(item),
+          eventId: item.eventId ?? item.productRef ?? '',
+          price: Number(item.price ?? 0),
           type: '30402',
           quantity: item.quantity,
           productRef: item.productRef

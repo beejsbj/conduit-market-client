@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback, useRef } from 'react'
+import { SHOWCASE_MODE } from '@/lib/showcase.ts'
 
 interface ExchangeRate {
   rate: number
@@ -14,7 +15,9 @@ interface UseSatsReturn {
 }
 
 // Cache for the exchange rate to avoid multiple API calls
-let rateCache: ExchangeRate | null = null
+let rateCache: ExchangeRate | null = SHOWCASE_MODE
+  ? { rate: 1000, lastUpdated: Date.now() }
+  : null
 let fetchPromise: Promise<number> | null = null
 
 const CACHE_DURATION = 10000 // 10 seconds in milliseconds
@@ -123,6 +126,11 @@ export function useSats(): UseSatsReturn {
 
   // Initial fetch and periodic updates
   useEffect(() => {
+    if (SHOWCASE_MODE) {
+      setLastUpdated(rateCache?.lastUpdated ?? Date.now())
+      return
+    }
+
     let cancelled = false
 
     const fetchRate = async () => {

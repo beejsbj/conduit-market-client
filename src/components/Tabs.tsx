@@ -6,7 +6,7 @@ interface TabsProps extends React.HTMLAttributes<HTMLDivElement> {
   value?: string
   onValueChange?: (value: string) => void
   children: React.ReactNode
-  ref?: React.RefObject<HTMLDivElement>
+  ref?: React.Ref<HTMLDivElement>
 }
 
 interface TabsListProps extends React.HTMLAttributes<HTMLDivElement> {

@@ -123,7 +123,12 @@ const CreateAccountPage: React.FC = () => {
             // todo get merchant pubkey somehow
             <div>
               <h2 className="voice-lg font-bold">Continue to Zapout</h2>
-              <ZapoutButton className="mt-4" size="lg" rounded={false}>
+              <ZapoutButton
+                merchantPubkey=""
+                className="mt-4"
+                size="lg"
+                rounded={false}
+              >
                 Zapout
               </ZapoutButton>
             </div>

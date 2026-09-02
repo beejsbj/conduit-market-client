@@ -5,6 +5,7 @@ import Button from './Buttons/Button'
 import Icon from './Icon'
 import Field from './Form/Field'
 import { RelayPoolSelector } from '@/components/Filters/RelayPoolSelector'
+import { SHOWCASE_MODE } from '@/lib/showcase.ts'
 
 const MobileMenu: React.FC = () => {
   const { isLoggedIn } = useAccountStore()
@@ -12,13 +13,15 @@ const MobileMenu: React.FC = () => {
   return (
     <SlideDrawer>
       <div className="space-y-4 mt-4">
-        <Field
-          name="search"
-          type="text"
-          rightIcon="Search"
-          className="w-full"
-          placeholder="Search..."
-        />
+        {!SHOWCASE_MODE && (
+          <Field
+            name="search"
+            type="text"
+            rightIcon="Search"
+            className="w-full"
+            placeholder="Search..."
+          />
+        )}
 
         <div className="flex flex-col gap-2">
           <Button
@@ -45,11 +48,11 @@ const MobileMenu: React.FC = () => {
             <Button
               variant="ghost"
               isLink
-              to="/how-it-works"
+              to={SHOWCASE_MODE ? '/carts' : '/how-it-works'}
               className="w-full justify-start"
             >
-              <Icon.Wand className="max-w-5 mr-2" />
-              <span>How it works</span>
+              <Icon.ShoppingBag className="max-w-5 mr-2" />
+              <span>{SHOWCASE_MODE ? 'Carts' : 'How it works'}</span>
             </Button>
           )}
 
@@ -68,11 +71,11 @@ const MobileMenu: React.FC = () => {
           <Button
             variant="ghost"
             isLink
-            to="/sell"
+            to={SHOWCASE_MODE ? '/style-guide' : '/sell'}
             className="w-full justify-start"
           >
             <Icon.Wand className="max-w-5 mr-2" />
-            <span>Sell</span>
+            <span>{SHOWCASE_MODE ? 'Design system' : 'Sell'}</span>
           </Button>
 
           {isLoggedIn ? (
@@ -84,6 +87,11 @@ const MobileMenu: React.FC = () => {
             >
               <Icon.User className="max-w-5 mr-2" />
               <span>Profile</span>
+            </Button>
+          ) : SHOWCASE_MODE ? (
+            <Button variant="primary" disabled className="w-full justify-start">
+              <Icon.User className="max-w-5 mr-2" />
+              <span>Demo mode</span>
             </Button>
           ) : (
             <Button
@@ -99,13 +107,15 @@ const MobileMenu: React.FC = () => {
         </div>
 
         {/* Relay Editor at bottom of sidebar */}
-        <div className="pt-4 border-t border-base-700">
-          <RelayPoolSelector
-            className="w-full"
-            label="Relay Settings"
-            placeholder="Select relays..."
-          />
-        </div>
+        {!SHOWCASE_MODE && (
+          <div className="pt-4 border-t border-base-700">
+            <RelayPoolSelector
+              className="w-full"
+              label="Relay Settings"
+              placeholder="Select relays..."
+            />
+          </div>
+        )}
       </div>
     </SlideDrawer>
   )

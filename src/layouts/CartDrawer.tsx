@@ -54,7 +54,7 @@ const CartDrawer: React.FC = () => {
   // ===========================================================================
   // Constants
   // ===========================================================================
-  const PLACEHOLDER_IMAGE = 'https://avatar.iran.liara.run/public'
+  const PLACEHOLDER_IMAGE = '/images/logo/logo-icon.svg'
 
   // ===========================================================================
   // Handlers & Helpers

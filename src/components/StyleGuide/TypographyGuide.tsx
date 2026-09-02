@@ -16,25 +16,25 @@ import {
 
 const families = [
   {
-    name: 'ABC Whyte Inktrap',
+    name: 'System Rounded',
     twClass: 'font-display',
     role: 'Display Typeface',
     description:
-      'The ABC Whyte Inktrap is a display typeface that is used for headings and titles.'
+      'The system rounded stack is used for headings and titles in this public showcase.'
   },
   {
-    name: 'Poppins',
+    name: 'System Sans',
     twClass: 'font-body',
     role: 'Body Typeface',
     description:
-      'The Poppins is a body typeface that is used for paragraphs and text.'
+      'The system sans stack is used for paragraphs and interface text.'
   },
   {
-    name: 'Whyte Mono Inktrap',
+    name: 'System Mono',
     twClass: 'font-mono',
     role: 'Mono Typeface',
     description:
-      'The Whyte Mono Inktrap is a monospace typeface that is used for code and other technical text.'
+      'The system monospace stack is used for code and technical text.'
   }
 ]
 
@@ -382,7 +382,9 @@ function Voices() {
             <Card className="grid gap-2">
               <CardContent className="basis-1/3">
                 <p
-                  ref={(el) => (elementRefs.current[voice] = el)}
+                  ref={(el) => {
+                    elementRefs.current[voice] = el
+                  }}
                   className={voice}
                 >
                   {isMobile ? 'Mobile' : 'Desktop'} Voice{' '}

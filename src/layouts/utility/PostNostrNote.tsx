@@ -20,6 +20,9 @@ const PostNostrNote: React.FC = () => {
     try {
       // Extract private key from nsec
       const { data: privateKey } = nip19.decode(nsec)
+      if (typeof privateKey !== 'string' && !(privateKey instanceof Uint8Array)) {
+        throw new Error('Expected an nsec private key')
+      }
 
       // Create a signer with the private key
       const signer = new NDKPrivateKeySigner(privateKey)
@@ -37,7 +40,7 @@ const PostNostrNote: React.FC = () => {
       setStatus('Note published successfully!')
       setContent('') // Clear content after successful post
     } catch (error) {
-      setStatus(`Error: ${error.message}`)
+      setStatus(`Error: ${error instanceof Error ? error.message : 'Unknown error'}`)
     }
   }
 

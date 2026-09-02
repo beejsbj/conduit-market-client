@@ -2,6 +2,7 @@ import React from 'react'
 import Button from './Button'
 import type { ButtonProps } from './Button'
 import Icon from '../Icon'
+import { SHOWCASE_MODE } from '@/lib/showcase.ts'
 
 export interface ZapoutButtonProps extends Omit<ButtonProps, 'isLink' | 'to'> {
   merchantPubkey: string
@@ -22,7 +23,7 @@ const ZapoutButton: React.FC<ZapoutButtonProps> = ({
       {...props}
       variant={variant}
       size={size}
-      disabled={disabled}
+      disabled={disabled || SHOWCASE_MODE}
       isLink={true}
       to={`/zapout/${merchantPubkey}`}
       rounded={rounded}
@@ -31,7 +32,7 @@ const ZapoutButton: React.FC<ZapoutButtonProps> = ({
         <Icon.Zap />
       </picture>
 
-      {children}
+      {SHOWCASE_MODE ? 'Checkout disabled' : children}
     </Button>
   )
 }

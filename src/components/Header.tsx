@@ -10,6 +10,7 @@ import MobileMenu from './MobileMenu'
 import PageSection from '@/layouts/PageSection'
 import Breadcrumbs from '@/components/Breadcumbs'
 import { RelayPoolSelector } from '@/components/Filters/RelayPoolSelector'
+import { SHOWCASE_MODE } from '@/lib/showcase.ts'
 
 const Header: React.FC = () => {
   const [dropdownOpen, setDropdownOpen] = useState(false)
@@ -112,18 +113,24 @@ const Header: React.FC = () => {
                 )}
               </Button>
             ) : (
-              <Button variant="ghost" isLink to="/how-it-works">
-                <Icon.Wand />
-                <span className="">How it works</span>
+              <Button
+                variant="ghost"
+                isLink
+                to={SHOWCASE_MODE ? '/carts' : '/how-it-works'}
+              >
+                <Icon.ShoppingBag />
+                <span>{SHOWCASE_MODE ? 'Carts' : 'How it works'}</span>
               </Button>
             )}
 
-            <Field
-              name="search"
-              type="text"
-              rightIcon="Search"
-              className="w-full"
-            />
+            {!SHOWCASE_MODE && (
+              <Field
+                name="search"
+                type="text"
+                rightIcon="Search"
+                className="w-full"
+              />
+            )}
 
             {/* messages button if logged in */}
             {isLoggedIn && (
@@ -134,15 +141,24 @@ const Header: React.FC = () => {
             )}
 
             {/* sell button */}
-            <Button variant="ghost" isLink to="/shop">
+            <Button
+              variant="ghost"
+              isLink
+              to={SHOWCASE_MODE ? '/style-guide' : '/shop'}
+            >
               <Icon.Wand />
-              <span className="">Sell</span>
+              <span>{SHOWCASE_MODE ? 'Design system' : 'Sell'}</span>
             </Button>
 
             {/* login button, else user button */}
             {isLoggedIn ? (
               <Button variant="ghost" size="icon" isLink to="/user">
                 <Icon.User />
+              </Button>
+            ) : SHOWCASE_MODE ? (
+              <Button variant="primary" disabled>
+                <Icon.User />
+                <span>Demo mode</span>
               </Button>
             ) : (
               <Button variant="primary" isLink to="/auth">
@@ -157,13 +173,15 @@ const Header: React.FC = () => {
         </div>
         <div className="flex items-center">
           <Breadcrumbs />
-          <div className="ml-auto z-50 hidden lg:block">
-            <RelayPoolSelector
-              className="w-80 mx-auto"
-              label=""
-              placeholder="Select relays..."
-            />
-          </div>
+          {!SHOWCASE_MODE && (
+            <div className="ml-auto z-50 hidden lg:block">
+              <RelayPoolSelector
+                className="w-80 mx-auto"
+                label=""
+                placeholder="Select relays..."
+              />
+            </div>
+          )}
         </div>
       </PageSection>
     </header>
