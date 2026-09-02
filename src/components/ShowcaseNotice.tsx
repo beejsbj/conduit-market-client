@@ -7,7 +7,7 @@ const ShowcaseNotice: React.FC = () => (
       Visit current Conduit
     </a>
     {' · '}
-    <a className="underline underline-offset-4" href="https://github.com/beejsbj/conduit-market-client" target="_blank" rel="noreferrer">
+    <a className="underline underline-offset-4" href="https://github.com/beejsbj/conduit-market-client/tree/portfolio/showcase-2025" target="_blank" rel="noreferrer">
       View source and attribution
     </a>
   </aside>

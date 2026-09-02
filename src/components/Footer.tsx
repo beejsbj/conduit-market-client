@@ -233,7 +233,7 @@ const Footer = () => {
               <Button variant="link" size="sm" isLink to="/style-guide" rounded={false}>
                 Design system
               </Button>
-              <a className="voice-sm underline underline-offset-4" href="https://github.com/beejsbj/conduit-market-client" target="_blank" rel="noreferrer">
+              <a className="voice-sm underline underline-offset-4" href="https://github.com/beejsbj/conduit-market-client/tree/portfolio/showcase-2025" target="_blank" rel="noreferrer">
                 Source
               </a>
               <a className="voice-sm underline underline-offset-4" href="https://conduit.market/" target="_blank" rel="noreferrer">
