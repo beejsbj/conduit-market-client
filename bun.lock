@@ -1,5 +1,6 @@
 {
   "lockfileVersion": 1,
+  "configVersion": 0,
   "workspaces": {
     "": {
       "name": "conduit-market",
@@ -26,6 +27,7 @@
       },
       "devDependencies": {
         "@babel/plugin-transform-react-jsx-development": "^7.27.1",
+        "@playwright/test": "^1.62.1",
         "@preact/preset-vite": "^2.10.1",
         "@tailwindcss/postcss": "latest",
         "@types/node": "^22.15.32",
@@ -182,6 +184,8 @@
     "@nostr-dev-kit/ndk-hooks": ["@nostr-dev-kit/ndk-hooks@1.2.3", "", { "dependencies": { "@nostr-dev-kit/ndk": "^2.14.29", "@nostr-dev-kit/ndk-wallet": "0.6.2", "@testing-library/react": "^14.1.2", "zustand": "^5" }, "peerDependencies": { "react": "*" } }, "sha512-FMlitm4urlBofINfBG8A8L4kH4EaXIPZUOVEYAYJWuHF2WPp37JKPycgSrWdZlRheDH48hkSGGiSBbRcGL/2sQ=="],
 
     "@nostr-dev-kit/ndk-wallet": ["@nostr-dev-kit/ndk-wallet@0.6.2", "", { "dependencies": { "@nostr-dev-kit/ndk": "^2.14.11", "debug": "^4.3.4", "light-bolt11-decoder": "^3.0.0", "tseep": "^1.1.1", "typescript": "^5.8.2", "webln": "^0.3.2" }, "peerDependencies": { "@cashu/cashu-ts": "^2.1", "@cashu/crypto": "*" } }, "sha512-vJ2rpX3Zprff+BD47O00omWakHwuybNmb7dp9TunQilQTEKKApZ5y0t/B0766qtqkTwHD4ME/LU3wujNnCaIKg=="],
+
+    "@playwright/test": ["@playwright/test@1.62.1", "", { "dependencies": { "playwright": "1.62.1" }, "bin": { "playwright": "cli.js" } }, "sha512-DTcUc8qii+cpHvtOwggMtBRMjKZHXYWdw8syRYu2vtzuq4Wxphqq4NfCs5Zt44L6mA8rfDfj+PHnxFc/FeK6mQ=="],
 
     "@preact/preset-vite": ["@preact/preset-vite@2.10.2", "", { "dependencies": { "@babel/plugin-transform-react-jsx": "^7.22.15", "@babel/plugin-transform-react-jsx-development": "^7.22.5", "@prefresh/vite": "^2.4.1", "@rollup/pluginutils": "^4.1.1", "babel-plugin-transform-hook-names": "^1.0.2", "debug": "^4.3.4", "picocolors": "^1.1.1", "vite-prerender-plugin": "^0.5.3" }, "peerDependencies": { "@babel/core": "7.x", "vite": "2.x || 3.x || 4.x || 5.x || 6.x || 7.x" } }, "sha512-K9wHlJOtkE+cGqlyQ5v9kL3Ge0Ql4LlIZjkUTL+1zf3nNdF88F9UZN6VTV8jdzBX9Fl7WSzeNMSDG7qECPmSmg=="],
 
@@ -649,6 +653,10 @@
 
     "picomatch": ["picomatch@4.0.2", "", {}, "sha512-M7BAV6Rlcy5u+m6oPhAPFgJTzAioX/6B0DxyvDlo9l8+T3nLKbrczg2WLUyzd45L8RqfUMyGPzekbMvX2Ldkwg=="],
 
+    "playwright": ["playwright@1.62.1", "", { "dependencies": { "playwright-core": "1.62.1" }, "optionalDependencies": { "fsevents": "2.3.2" }, "bin": { "playwright": "cli.js" } }, "sha512-0M+L3LAD8/nm554LOla9Ayx0j0tmFZ0FBcoQ7F1VuVHpM/XpiC8RcDzBQB8W5+hA8L22THxELzeF+2WcUzvcLg=="],
+
+    "playwright-core": ["playwright-core@1.62.1", "", { "bin": { "playwright-core": "cli.js" } }, "sha512-wPYSwEBJY9GHraISXqyqtx0na0LpO3XEX7jNDhntbex7tzUS7kLnZsOlFruFJB4Hi/rhDMjXGqHewDZ68nYZVw=="],
+
     "possible-typed-array-names": ["possible-typed-array-names@1.1.0", "", {}, "sha512-/+5VFTchJDoVj3bhoqi6UeymcD00DAwb1nJwamzPvHEszJ4FpF6SNNbUbOS8yI56qHzdV8eK0qEfOSiodkTdxg=="],
 
     "postcss": ["postcss@8.5.6", "", { "dependencies": { "nanoid": "^3.3.11", "picocolors": "^1.1.1", "source-map-js": "^1.2.1" } }, "sha512-3Ybi1tAuwAP9s0r1UQ2J4n5Y0G05bJkpUIO0/bI9MhwmD70S5aTWbXGBwxHrelT+XM1k6dM0pk+SwNkpTRN7Pg=="],
@@ -818,6 +826,8 @@
     "nostr-tools/@noble/hashes": ["@noble/hashes@1.3.1", "", {}, "sha512-EbqwksQwz9xDRGfDST86whPBgM65E0OH/pCgqW0GBVzO22bNE+NuIbeTb714+IfSjU3aRk47EUvXIb5bTsenKA=="],
 
     "nostr-tools/@scure/base": ["@scure/base@1.1.1", "", {}, "sha512-ZxOhsSyxYwLJj3pLZCefNitxsj093tb2vq90mp2txoYeBqbcjDjqFhyM8eUjq/uFm6zJ+mUuqxlS2FkuSY1MTA=="],
+
+    "playwright/fsevents": ["fsevents@2.3.2", "", { "os": "darwin" }, "sha512-xiqMQR4xAeHTuB9uWm+fFRcIOgKBMiOBP+eXiyT7jsgVCq1bkVygt00oASowB7EdtpOHaaPgKt812P9ab+DDKA=="],
 
     "pretty-format/ansi-styles": ["ansi-styles@5.2.0", "", {}, "sha512-Cxwpt2SfTzTtXcfOlzGEee8O+c+MmUgGrNiBcXnuWxuFJHe6a5Hz7qwhwe5OgaSYI0IJvkLqWX1ASG+cJOkEiA=="],
 

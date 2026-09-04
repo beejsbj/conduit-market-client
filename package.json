@@ -5,7 +5,8 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "test:e2e": "playwright test"
   },
   "dependencies": {
     "@formkit/auto-animate": "^0.8.2",
@@ -30,6 +31,7 @@
   },
   "devDependencies": {
     "@babel/plugin-transform-react-jsx-development": "^7.27.1",
+    "@playwright/test": "^1.62.1",
     "@preact/preset-vite": "^2.10.1",
     "@tailwindcss/postcss": "latest",
     "@types/node": "^22.15.32",

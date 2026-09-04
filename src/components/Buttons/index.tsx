@@ -13,6 +13,7 @@ import Icon from '../Icon'
 import Button from './Button'
 import { cn } from '@/lib/utils'
 import Field from '../Form/Field'
+import { useInterfaceStore } from '@/stores/useInterfaceStore'
 // Add to cart button
 interface AddToCartButtonProps {
   product: CartItem
@@ -25,10 +26,16 @@ const AddToCartButton = ({
   variant = 'default'
 }: AddToCartButtonProps) => {
   const { addItemToCart, getItemQuantity } = useCartStore()
+  const { toggleCartHUD } = useInterfaceStore()
   const itemQuantity = getItemQuantity(
     product.merchantPubkey,
     product.productId
   )
+
+  const handleAddToCart = () => {
+    addItemToCart(product)
+    toggleCartHUD(true)
+  }
 
   if (itemQuantity > 0) {
     return <UpdateCartItemQuantityButtons product={product} />
@@ -37,7 +44,7 @@ const AddToCartButton = ({
   if (variant === 'slide') {
     return (
       <Button
-        onClick={() => addItemToCart(product)}
+        onClick={handleAddToCart}
         disabled={disabled}
         rounded={false}
         variant="outline"
@@ -51,7 +58,7 @@ const AddToCartButton = ({
 
   return (
     <Button
-      onClick={() => addItemToCart(product)}
+      onClick={handleAddToCart}
       disabled={disabled}
       rounded={false}
     >
