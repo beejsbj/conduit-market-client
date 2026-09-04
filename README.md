@@ -4,6 +4,9 @@
 [Historical production site](https://alpha.conduit.market/) ·
 [Current Conduit](https://conduit.market/)
 
+**Status:** Live, deterministic, and independent of the original relays and
+backend services.
+
 This repository preserves a July 2025 version of the original Conduit Market
 client and adapts it into a stable, self-contained portfolio showcase.
 
@@ -89,6 +92,13 @@ Create and preview a production build with:
 bunx tsc --noEmit
 bun run build
 bun run preview
+```
+
+Run the cart-HUD browser regression tests with:
+
+```bash
+bunx playwright install chromium
+bun run test:e2e
 ```
 
 ## Attribution and license

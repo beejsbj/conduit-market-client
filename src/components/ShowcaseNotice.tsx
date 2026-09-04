@@ -1,15 +1,29 @@
 const ShowcaseNotice: React.FC = () => (
-  <aside className="bg-ink text-paper px-4 py-2 text-center voice-sm">
-    <span className="font-bold">2025 portfolio showcase.</span>{' '}
-    Sample listings and browser-only interactions; no wallets, orders, or
-    payments are connected.{' '}
-    <a className="underline underline-offset-4" href="https://conduit.market/" target="_blank" rel="noreferrer">
-      Visit current Conduit
-    </a>
-    {' · '}
-    <a className="underline underline-offset-4" href="https://github.com/beejsbj/conduit-market-client/tree/portfolio/showcase-2025" target="_blank" rel="noreferrer">
-      View source and attribution
-    </a>
+  <aside
+    aria-label="Portfolio showcase notice"
+    className="h-9 overflow-x-auto bg-ink px-4 text-paper voice-sm"
+  >
+    <div className="mx-auto flex h-full min-w-max items-center justify-center gap-1 whitespace-nowrap">
+      <span className="font-bold">2025 portfolio showcase.</span>
+      <span>Sample listings; wallets, orders, and payments are disabled.</span>
+      <a
+        className="inline underline underline-offset-4"
+        href="https://conduit.market/"
+        target="_blank"
+        rel="noreferrer"
+      >
+        Current Conduit
+      </a>
+      <span aria-hidden="true">·</span>
+      <a
+        className="inline underline underline-offset-4"
+        href="https://github.com/beejsbj/conduit-market-client/tree/portfolio/showcase-2025"
+        target="_blank"
+        rel="noreferrer"
+      >
+        Source &amp; attribution
+      </a>
+    </div>
   </aside>
 )
 
